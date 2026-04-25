@@ -1,6 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const pool = require('./db');
+
+// Import routes
+const authRoutes = require('./src/routes/authRoutes');
 
 const app = express();
 const corsOptions = {
@@ -11,16 +14,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Contoh API endpoint
-app.get("/api/users", async (req, res) => {
-  try {
-    const connection = await pool.getConnection();
-    const [rows] = await connection.query('SELECT * FROM users');
-    connection.release();
-    res.json(rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+// Routes
+app.use('/api/auth', authRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Ruang-Rasa API is running' });
 });
 
 const PORT = process.env.PORT || 8080;
