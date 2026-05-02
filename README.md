@@ -1,6 +1,6 @@
 # Ruang-Rasa
 
-Aplikasi web untuk journaling emosi dan mood tracking. Capstone Project — Departemen Ilmu Komputer, Universitas Diponegoro.
+Aplikasi web untuk journaling emosi dan mood tracking.
 
 ## Tech Stack
 
@@ -104,7 +104,3 @@ npm run lint    # cek eslint
 1. Buat branch baru dari `main`
 2. Commit perubahan
 3. Push dan buat Pull Request
-
----
-
-Capstone Project 2026 — Universitas Diponegoro
