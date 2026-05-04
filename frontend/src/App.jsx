@@ -1,122 +1,388 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { useState, useEffect } from "react";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+// navbar
+
+function Navbar({ page, setPage }) {
+  const links = [
+    { key: "home", label: "Fitur" },
+    { key: "cara-kerja", label: "Cara Kerja" },
+    { key: "about", label: "Tentang Kami" },
+  ];
+
+  return (
+    <nav className="navbar">
+      <span className="navbar-logo" onClick={() => setPage("home")}>
+        RuangRasa
+      </span>
+      <div className="navbar-links">
+        {links.map((l) => (
+          <button
+            key={l.key}
+            className={`nav-link ${page === l.key ? "active" : ""}`}
+            onClick={() => setPage(l.key)}
+          >
+            {l.label}
+          </button>
+        ))}
+        <button className="nav-link-masuk">Masuk</button>
+      </div>
+    </nav>
+  );
+}
+
+// chatbot preview
+function ChatPreview() {
+  return (
+    <div className="chat-preview">
+      <div className="chat-titlebar">
+        <span className="dot dot-r" />
+        <span className="dot dot-y" />
+        <span className="dot dot-g" />
+        <span className="chat-tab">Chatbot</span>
+      </div>
+      <div className="chat-body">
+        <div className="chat-bubble-ai">
+          <div className="chat-avatar"> </div>
+          <div>
+            <div className="bubble-ai">
+              Hei, selamat datang kembali. Bagaimana kabarmu hari ini?
+            </div>
+            <div className="mood-chips">
+              <button className="mood-chip chip-senang">Senang</button>
+              <button className="mood-chip chip-netral">Netral</button>
+              <button className="mood-chip chip-sedih">Sedih</button>
+              <button className="mood-chip chip-marah">Marah</button>
+              <button className="mood-chip chip-stres">Stres</button>
+            </div>
+          </div>
+        </div>
+
+        <div className="bubble-user">
+          Aku lagi ngerasa suntuk dan bingung mau ngapain...
+          <span className="bubble-x">✕</span>
+        </div>
+
+        <div className="chat-bubble-ai">
+          <div className="chat-avatar"> </div>
+          <div className="bubble-ai">
+            Bagaimana kalau melakukan hobi kamu?
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// stats bar
+function StatsBar() {
+  return (
+    <div className="stats-bar">
+      <div className="stat-item">
+        <div className="stat-value">
+          <span>5</span> fitur
+        </div>
+        <div className="stat-label">terintegrasi AI</div>
+      </div>
+      <div className="stat-item">
+        <div className="stat-value">
+          <span>100%</span>
+        </div>
+        <div className="stat-label">privasi & terenkripsi</div>
+      </div>
+      <div className="stat-item">
+        <div className="stat-value">Non-diagnostik</div>
+        <div className="stat-label">aman & etis</div>
+      </div>
+    </div>
+  );
+}
+
+// mood tracker chart
+// function MiniChart() {
+//   const bars = [55, 70, 45, 80, 60, 85, 72];
+//   return (
+//     <div className="feature-mini-chart">
+//       {bars.map((h, i) => (
+//         <div key={i} className="chart-bar" style={{ height: `${h}%` }} />
+//       ))}
+//     </div>
+//   );
+// }
+
+// fitur
+function FeaturesSection() {
+  const features = [
+    {
+      icon: "",
+      name: "Mood Tracker",
+      desc: "Catat mood harianmu dari hari pertama, hingga berapa waktu ke waktu. AI akan memahami tren emosimu untuk memberikan insight yang relevan.",
+      // extra: <MiniChart />,
+    },
+    {
+      icon: "",
+      name: "Jurnal",
+      desc: "Tuangkan pikiranmu dalam jurnal digital. AI akan menganalisis sentimen dan emosi dari tulisanmu.",
+      // extra: (
+      //   <div className="feature-mini-chat">
+      //     <em>Entri hari ini:</em>
+      //     <br />
+      //     "Hari ini aku lelah, tapi aku oke. Aku akan tetap berjuang..."
+      //     <div className="feature-chip-row">
+      //       {/* <span className="f-chip">Pekerjaan</span> */}
+      //     </div>
+      //   </div>
+      // ),
+    },
+    {
+      icon: "",
+      name: "Screening Kesehatan Mental",
+      desc: "Ikuti screening yang telah divalidasi secara ilmiah. Dapatkan gambaran kondisi emosionalmu dan rekomendasi langkah selanjutnya — bukan diagnosis, tetapi panduan yang aman.",
+      // extra: (
+      //   <div className="feature-chip-row">
+      //     <span className="f-chip">Hasil langsung</span>
+      //     <span className="f-chip">5–10 menit</span>
+      //     <span className="f-chip">Non-diagnostik</span>
+      //   </div>
+      // ),
+    },
+    {
+      icon: "",
+      name: "Chatbot Pendamping",
+      desc: "Bicara dengan chatbot AI yang empatik kapan saja. Pilih modenya: sekadar bantu refleksi diri, cari saran praktis, atau solusi kegiatan yang tepat.",
+      // extra: (
+      //   <div className="feature-mini-chat">
+      //     <div>Bantu aku untuk refleksi diri</div>
+      //   </div>
+      // ),
+    },
+    {
+      icon: "",
+      name: "Rekomendasi",
+      desc: "Berdasarkan pola mood, journaling, dan hasil screeningmu, AI akan merekomendasikan aktivitas sederhana dan afirmasi yang relevan dengan kondisimu saat ini.",
+      // extra: (
+      //   <div className="feature-recs">
+      //     <div className="rec-item">🌿 Coba napas dalam 4–7–8 selama 5 menit</div>
+      //     <div className="rec-item">🚶 Jalan kaki singkat di luar ruangan</div>
+      //     <div className="rec-item">✍️ Tulis 3 hal yang kamu syukuri hari ini</div>
+      //   </div>
+      // ),
+    },
+  ];
+
+  return (
+    <section className="section" id="fitur">
+      <div className="section-eyebrow">Fitur Unggulan</div>
+      <h2 className="section-title">
+        Semua yang kamu butuhkan
+        <br />
+        untuk <em>memahami dirimu</em>
+      </h2>
+      <p className="section-sub">
+        Dari screening awal hingga refleksi harian, RuangRasa hadir sebagai teman yang peka dan aman.
+      </p>
+      <div className="features-grid">
+        {features.map((f, i) => (
+          <div
+            key={i}
+            className="feature-card"
+            style={{ animationDelay: `${i * 0.08}s` }}
+          >
+            <div className="feature-icon-wrap">{f.icon}</div>
+            <div className="feature-name">{f.name}</div>
+            <div className="feature-desc">{f.desc}</div>
+            {f.extra}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// cara kerja
+function HowSection() {
+  const steps = [
+    {
+      num: "01",
+      title: "Buat akun gratis",
+      desc: "Daftar dalam hitungan detik. Datamu tersimpan dan hanya dapat diakses oleh kamu sendiri, privasi terjaga.",
+    },
+    {
+      num: "02",
+      title: "Mulai screening awal",
+      desc: "Jawab beberapa pertanyaan singkat untuk mendapatkan gambaran kondisi emosionalmu saat ini.",
+    },
+    {
+      num: "03",
+      title: "Check-in setiap hari",
+      desc: "Catat moodmu, tulis jurnal, atau ngobrol dengan chatbot. AI akan membaca polamu dari waktu ke waktu.",
+    },
+  ];
+
+  return (
+    <div className="how-section" id="cara-kerja">
+      <div className="how-inner">
+        <div className="how-eyebrow">Cara Kerja</div>
+        <h2 className="how-title">
+          Sederhana, aman, dan
+          <br />
+          <em>mulai dari dirimu</em>
+        </h2>
+        <div className="how-steps">
+          {steps.map((s, i) => (
+            <div key={i}>
+              <div className="how-step-num">{s.num}</div>
+              <div className="how-step-title">{s.title}</div>
+              <div className="how-step-desc">{s.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+// buat akun (CTA)
+function CTASection() {
+  return (
+    <section className="cta-section">
+      <div className="cta-card">
+        <h2 className="cta-title">Mulai perjalananmu sekarang</h2>
+        <p className="cta-sub">
+          Bergabung dengan kami. RuangRasa hadir sebagai ruang aman dan nyaman
+          untuk ceritamu.
+        </p>
+        <button className="btn-white">Buat Akun</button>
+        <div className="cta-note">Privasi & Enkripsi</div>
+      </div>
+    </section>
+  );
+}
+
+// pages
+function HomePage() {
+  return (
+    <>
+      <section className="hero">
+        <div className="badge">
+          <span className="badge-dot" />
+          AI-Powered Emotional Well-being
+        </div>
+        <h1 className="hero-title">
+          Beri ruang untuk setiap
+          <span className="hero-title-italic">rasa yang kamu punya</span>
+        </h1>
+        <p className="hero-sub">
+          RuangRasa membantu kamu memahami kondisi emosional sehari-hari lewat
+          screening, mood check-in, journaling, dan chatbot pendamping berbasis
+          AI.
+        </p>
+        <button className="btn-primary">Mulai Sekarang</button>
+        <div className="hero-note">
+          Gratis · Privat · Bukan pengganti profesional
+        </div>
+        <ChatPreview />
+      </section>
+
+      <StatsBar />
+      <FeaturesSection />
+      <HowSection />
+      <CTASection />
+    </>
+  );
+}
+
+function AboutPage() {
+  return (
+    <>
+      <div className="about-hero">
+        <h1 className="about-title">tentang kami</h1>
+      </div>
+
+      <div className="about-card-section">
+        <div className="about-card">
+          <p>
+            RuangRasa adalah platform digital yang dirancang untuk membantu
+            individu memahami dan menjaga kesehatan emosional mereka dengan cara
+            yang sederhana, aman, dan penuh empati. Kami percaya bahwa setiap
+            orang berhak memiliki ruang untuk mengenali perasaannya, tanpa harus
+            menunggu hingga semuanya terasa terlalu berat.
+          </p>
+          <p>
+            Melalui RuangRasa, pengguna dapat melakukan mood check-in, menulis
+            jurnal harian, serta mendapatkan insight dan rekomendasi berbasis
+            teknologi kecerdasan buatan. Fitur-fitur ini dirancang untuk
+            membantu pengguna memahami pola emosinya, memvalidasi perasaan yang
+            dirasakan, dan menemukan langkah kecil yang dapat dilakukan untuk
+            merasa lebih baik.
+          </p>
+          <p>
+            Kami mengembangkan platform ini dengan pendekatan human-centered
+            design, yang berfokus pada kebutuhan nyata pengguna dalam kehidupan
+            sehari-hari. RuangRasa bukanlah alat diagnosis medis, melainkan
+            ruang pendamping yang suportif untuk membantu pengguna lebih peka
+            terhadap kondisi dirinya sendiri.
+          </p>
+          <p>
+            Kami berharap RuangRasa dapat menjadi teman digital yang selalu
+            ada—tempat di mana kamu bisa merasa didengar, dipahami, dan
+            didukung, kapan pun dan di mana pun.
+          </p>
+        </div>
+      </div>
+
+      <h2 className="about-section-title">tim kami</h2>
+
+      <div className="about-card-section">
+        <div className="about-card">
+          <p>
+            RuangRasa dikembangkan oleh tim capstone project Coding Camp 2026
+            yang terdiri dari Data Scientist, AI Engineer, dan Full-Stack Web
+            Developer yang berkolaborasi untuk menghadirkan solusi yang utuh dan
+            berdampak.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+// app
+export default function App() {
+  const [page, setPage] = useState("home");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
+  const handleSetPage = (key) => {
+    if (key === "cara-kerja") {
+      setPage("home");
+      setTimeout(() => {
+        const el = document.getElementById("cara-kerja");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else if (key === "home") {
+      setPage("home");
+      setTimeout(() => {
+        const el = document.getElementById("fitur");
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    } else {
+      setPage(key);
+    }
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <Navbar page={page} setPage={handleSetPage} />
+      {page === "home" && <HomePage />}
+      {page === "about" && <AboutPage />}
+      <footer>
+        © 2026 RuangRasa · AI-Powered Emotional Well-being &amp; Screening
+        Platform
+      </footer>
     </>
-  )
+  );
 }
-
-export default App
