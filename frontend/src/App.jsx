@@ -60,7 +60,7 @@ function ChatPreview() {
 
         <div className="bubble-user">
           Aku lagi ngerasa suntuk dan bingung mau ngapain...
-          <span className="bubble-x">✕</span>
+          {/* <span className="bubble-x"></span> */}
         </div>
 
         <div className="chat-bubble-ai">
