@@ -1,35 +1,12 @@
 import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 
-// navbar
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 
-function Navbar({ page, setPage }) {
-  const links = [
-    { key: "home", label: "Fitur" },
-    { key: "cara-kerja", label: "Cara Kerja" },
-    { key: "about", label: "Tentang Kami" },
-  ];
-
-  return (
-    <nav className="navbar">
-      <span className="navbar-logo" onClick={() => setPage("home")}>
-        RuangRasa
-      </span>
-      <div className="navbar-links">
-        {links.map((l) => (
-          <button
-            key={l.key}
-            className={`nav-link ${page === l.key ? "active" : ""}`}
-            onClick={() => setPage(l.key)}
-          >
-            {l.label}
-          </button>
-        ))}
-        <button className="nav-link-masuk">Masuk</button>
-      </div>
-    </nav>
-  );
-}
+import LoginPage from "@/pages/login/page";
+import RegisterPage from "@/pages/register/page";
 
 // chatbot preview
 function ChatPreview() {
@@ -117,7 +94,6 @@ function FeaturesSection() {
       icon: "",
       name: "Mood Tracker",
       desc: "Catat mood harianmu dari hari pertama, hingga berapa waktu ke waktu. AI akan memahami tren emosimu untuk memberikan insight yang relevan.",
-      // extra: <MiniChart />,
     },
     {
       icon: "",
@@ -242,9 +218,9 @@ function HowSection() {
   );
 }
 
-
 // buat akun (CTA)
 function CTASection() {
+  const navigate = useNavigate();
   return (
     <section className="cta-section">
       <div className="cta-card">
@@ -253,7 +229,7 @@ function CTASection() {
           Bergabung dengan kami. RuangRasa hadir sebagai ruang aman dan nyaman
           untuk ceritamu.
         </p>
-        <button className="btn-white">Buat Akun</button>
+        <button className="btn-white" onClick={() => navigate("/register")}>Buat Akun</button>
         <div className="cta-note">Privasi & Enkripsi</div>
       </div>
     </section>
@@ -262,6 +238,7 @@ function CTASection() {
 
 // pages
 function HomePage() {
+  const navigate = useNavigate();
   return (
     <>
       <section className="hero">
@@ -278,7 +255,7 @@ function HomePage() {
           screening, mood check-in, journaling, dan chatbot pendamping berbasis
           AI.
         </p>
-        <button className="btn-primary">Mulai Sekarang</button>
+        <button className="btn-primary" onClick={() => navigate("/register")}>Mulai Sekarang</button>
         <div className="hero-note">
           Gratis · Privat · Bukan pengganti profesional
         </div>
@@ -348,41 +325,35 @@ function AboutPage() {
   );
 }
 
-// app
-export default function App() {
-  const [page, setPage] = useState("home");
+// main app layout
+function MainContent() {
+  const location = useLocation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page]);
-
-  const handleSetPage = (key) => {
-    if (key === "cara-kerja") {
-      setPage("home");
-      setTimeout(() => {
-        const el = document.getElementById("cara-kerja");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else if (key === "home") {
-      setPage("home");
-      setTimeout(() => {
-        const el = document.getElementById("fitur");
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 100);
-    } else {
-      setPage(key);
-    }
-  };
+  }, [location.pathname]);
 
   return (
-    <>
-      <Navbar page={page} setPage={handleSetPage} />
-      {page === "home" && <HomePage />}
-      {page === "about" && <AboutPage />}
-      <footer>
-        © 2026 RuangRasa · AI-Powered Emotional Well-being &amp; Screening
-        Platform
-      </footer>
-    </>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <Header />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+// app
+export default function App() {
+  return (
+    <Router>
+      <MainContent />
+    </Router>
   );
 }
