@@ -18,6 +18,8 @@
   --text-body: #4A5C52;
   --text-muted: #7A8F82;
   --white: #FFFFFF;
+  --border: #E0DDD7;
+  --input-bg: #FAFAF8;
   --shadow: 0 4px 24px rgba(61, 92, 74, 0.10);
   --shadow-lg: 0 8px 40px rgba(61, 92, 74, 0.15);
 }
@@ -51,16 +53,15 @@ body {
   to   { opacity: 1; }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .fade-up { animation: fadeUp 0.7s ease both; }
 .fade-in { animation: fadeIn 0.5s ease both; }
 
 /* navbar */
-
 .navbar {
   position: sticky;
   top: 0;
@@ -99,7 +100,6 @@ body {
   padding: 4px 0;
   border-bottom: 2px solid transparent;
   transition: color 0.2s, border-color 0.2s;
-  position: relative;
 }
 
 .nav-link:hover {
@@ -147,7 +147,8 @@ body {
   pointer-events: none;
 }
 
-.badge {
+/* hero badge — pakai custom class bukan Badge shadcn agar tetap konsisten */
+.hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -198,65 +199,29 @@ body {
   animation: fadeUp 0.6s 0.2s ease both;
 }
 
-/* buttons */
-.btn-primary {
-  display: inline-flex;
+/* hero CTA button — override shadcn Button */
+.hero-cta-btn {
+  display: inline-flex !important;
   align-items: center;
   gap: 8px;
-  background: var(--green-dark);
-  color: var(--white);
-  border: none;
-  border-radius: 28px;
-  padding: 14px 32px;
-  font-size: 15px;
-  font-weight: 500;
+  background-color: var(--green-dark) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: 28px !important;
+  padding: 14px 32px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  height: auto !important;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 4px 16px rgba(61, 92, 74, 0.25);
   animation: fadeUp 0.6s 0.3s ease both;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s !important;
 }
 
-.btn-primary:hover {
-  background: var(--green-light);
+.hero-cta-btn:hover {
+  background-color: var(--green-light) !important;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(61, 92, 74, 0.30);
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  background: var(--white);
-  color: var(--green-dark);
-  border: 2px solid var(--green-dark);
-  border-radius: 28px;
-  padding: 12px 28px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  background: var(--green-dark);
-  color: var(--white);
-}
-
-.btn-white {
-  display: inline-block;
-  background: var(--white);
-  color: var(--green-dark);
-  border: none;
-  border-radius: 28px;
-  padding: 14px 32px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-white:hover {
-  background: #E8F0EB;
-  transform: translateY(-2px);
 }
 
 .hero-note {
@@ -293,12 +258,6 @@ body {
   border-radius: 50%;
 }
 
-/* dot header chatbot */
-
-/* .dot-r { background: #FF5F57; }
-.dot-y { background: #FEBC2E; }
-.dot-g { background: #28C840; } */
-
 .chat-tab {
   margin-left: auto;
   font-size: 11px;
@@ -327,14 +286,7 @@ body {
   height: 28px;
   border-radius: 50%;
   background: var(--green-card);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-}
-
-.chat-avatar-emoji {
-  font-size: 14px;
 }
 
 .bubble-ai {
@@ -365,9 +317,9 @@ body {
 
 .chip-senang { background: #e8e3c4; color: #8b833c; }
 .chip-netral { background: #d4dee0; color: #616161; }
-.chip-sedih { background: #d4dae8; color: #3d518b; }
-.chip-marah { background: #e8d4d4; color: #6b2d2d; }
-.chip-stres { background: #e5d4e8; color: #6b2d69; }
+.chip-sedih  { background: #d4dae8; color: #3d518b; }
+.chip-marah  { background: #e8d4d4; color: #6b2d2d; }
+.chip-stres  { background: #e5d4e8; color: #6b2d69; }
 
 .bubble-user {
   align-self: flex-end;
@@ -378,14 +330,6 @@ body {
   font-size: 13px;
   max-width: 240px;
   line-height: 1.5;
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-}
-
-.bubble-x {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
 }
 
 /* stats bar */
@@ -424,6 +368,7 @@ body {
   padding: 80px 24px;
   max-width: 1000px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .section-eyebrow {
@@ -460,26 +405,34 @@ body {
   margin: 0 auto 36px;
 }
 
-/* fitur */
-
+/* fitur — shadcn Card override */
 .features-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  text-align: left;
 }
 
 .feature-card {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 28px;
-  box-shadow: var(--shadow);
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow) !important;
+  background: var(--white) !important;
   transition: transform 0.2s, box-shadow 0.2s;
   overflow: hidden;
 }
 
+.feature-card-full {
+  grid-column: 1 / -1;
+}
+
 .feature-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.feature-card-content {
+  padding: 28px !important;
 }
 
 .feature-icon-wrap {
@@ -506,78 +459,6 @@ body {
   color: var(--text-body);
   line-height: 1.6;
   font-weight: 300;
-}
-
-.feature-chip-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-}
-
-.f-chip {
-  border-radius: 10px;
-  padding: 4px 10px;
-  font-size: 11px;
-  font-weight: 500;
-  background: #EEF3F0;
-  color: var(--green-dark);
-}
-
-.feature-mini-chat {
-  margin-top: 14px;
-  background: #F5F8F6;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 12px;
-  color: var(--text-body);
-  font-style: italic;
-  line-height: 1.5;
-}
-
-.feature-mini-chart {
-  margin-top: 14px;
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 40px;
-}
-
-.chart-bar {
-  flex: 1;
-  border-radius: 3px 3px 0 0;
-  background: var(--green-mid);
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.chart-bar:hover {
-  opacity: 1;
-}
-
-.feature-question {
-  margin-top: 14px;
-  background: #F5F8F6;
-  border-radius: 10px;
-  padding: 12px;
-  font-size: 12px;
-  color: var(--text-body);
-  line-height: 1.5;
-}
-
-.feature-recs {
-  margin-top: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.rec-item {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  font-size: 12px;
-  color: var(--text-body);
 }
 
 /* cara kerja */
@@ -641,7 +522,7 @@ body {
   line-height: 1.6;
 }
 
-/* buat akun (CTA) */
+/* CTA */
 .cta-section {
   padding: 80px 24px;
 }
@@ -672,6 +553,25 @@ body {
   font-weight: 300;
 }
 
+/* CTA button — shadcn Button variant secondary override */
+.cta-btn {
+  background-color: var(--white) !important;
+  color: var(--green-dark) !important;
+  border: none !important;
+  border-radius: 28px !important;
+  padding: 14px 32px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  height: auto !important;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s !important;
+}
+
+.cta-btn:hover {
+  background-color: #E8F0EB !important;
+  transform: translateY(-2px);
+}
+
 .cta-note {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
@@ -679,7 +579,6 @@ body {
 }
 
 /* footer */
-
 footer {
   padding: 24px;
   text-align: center;
@@ -689,7 +588,6 @@ footer {
 }
 
 /* tentang kami */
-
 .about-hero {
   padding: 72px 24px 16px;
   text-align: center;
@@ -710,18 +608,24 @@ footer {
   margin: 0 auto;
 }
 
+/* about card — shadcn Card override */
 .about-card {
-  background: var(--green-card);
-  border-radius: 20px;
-  padding: 40px 48px;
-  color: var(--white);
+  border: none !important;
+  border-radius: 20px !important;
+  background: var(--green-card) !important;
+  box-shadow: var(--shadow) !important;
   animation: fadeUp 0.7s 0.1s ease both;
+}
+
+.about-card-content {
+  padding: 40px 48px !important;
 }
 
 .about-card p {
   font-size: 15px;
   line-height: 1.8;
   font-weight: 300;
+  color: var(--white);
   margin-bottom: 18px;
   text-align: center;
 }
@@ -768,7 +672,7 @@ footer {
     gap: 32px;
   }
 
-  .about-card {
-    padding: 28px 24px;
+  .about-card-content {
+    padding: 28px 24px !important;
   }
 }

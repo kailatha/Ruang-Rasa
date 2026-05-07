@@ -8,6 +8,10 @@ import Footer from "@/components/layout/footer";
 import LoginPage from "@/pages/login/page";
 import RegisterPage from "@/pages/register/page";
 
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+
 // chatbot preview
 function ChatPreview() {
   return (
@@ -20,7 +24,7 @@ function ChatPreview() {
       </div>
       <div className="chat-body">
         <div className="chat-bubble-ai">
-          <div className="chat-avatar"> </div>
+          <div className="chat-avatar" />
           <div>
             <div className="bubble-ai">
               Hei, selamat datang kembali. Bagaimana kabarmu hari ini?
@@ -37,11 +41,10 @@ function ChatPreview() {
 
         <div className="bubble-user">
           Aku lagi ngerasa suntuk dan bingung mau ngapain...
-          {/* <span className="bubble-x"></span> */}
         </div>
 
         <div className="chat-bubble-ai">
-          <div className="chat-avatar"> </div>
+          <div className="chat-avatar" />
           <div className="bubble-ai">
             Bagaimana kalau melakukan hobi kamu?
           </div>
@@ -75,18 +78,6 @@ function StatsBar() {
   );
 }
 
-// mood tracker chart
-// function MiniChart() {
-//   const bars = [55, 70, 45, 80, 60, 85, 72];
-//   return (
-//     <div className="feature-mini-chart">
-//       {bars.map((h, i) => (
-//         <div key={i} className="chart-bar" style={{ height: `${h}%` }} />
-//       ))}
-//     </div>
-//   );
-// }
-
 // fitur
 function FeaturesSection() {
   const features = [
@@ -99,50 +90,21 @@ function FeaturesSection() {
       icon: "",
       name: "Jurnal",
       desc: "Tuangkan pikiranmu dalam jurnal digital. AI akan menganalisis sentimen dan emosi dari tulisanmu.",
-      // extra: (
-      //   <div className="feature-mini-chat">
-      //     <em>Entri hari ini:</em>
-      //     <br />
-      //     "Hari ini aku lelah, tapi aku oke. Aku akan tetap berjuang..."
-      //     <div className="feature-chip-row">
-      //       {/* <span className="f-chip">Pekerjaan</span> */}
-      //     </div>
-      //   </div>
-      // ),
     },
     {
       icon: "",
       name: "Screening Kesehatan Mental",
       desc: "Ikuti screening yang telah divalidasi secara ilmiah. Dapatkan gambaran kondisi emosionalmu dan rekomendasi langkah selanjutnya — bukan diagnosis, tetapi panduan yang aman.",
-      // extra: (
-      //   <div className="feature-chip-row">
-      //     <span className="f-chip">Hasil langsung</span>
-      //     <span className="f-chip">5–10 menit</span>
-      //     <span className="f-chip">Non-diagnostik</span>
-      //   </div>
-      // ),
     },
     {
       icon: "",
       name: "Chatbot Pendamping",
       desc: "Bicara dengan chatbot AI yang empatik kapan saja. Pilih modenya: sekadar bantu refleksi diri, cari saran praktis, atau solusi kegiatan yang tepat.",
-      // extra: (
-      //   <div className="feature-mini-chat">
-      //     <div>Bantu aku untuk refleksi diri</div>
-      //   </div>
-      // ),
     },
     {
       icon: "",
       name: "Rekomendasi",
       desc: "Berdasarkan pola mood, journaling, dan hasil screeningmu, AI akan merekomendasikan aktivitas sederhana dan afirmasi yang relevan dengan kondisimu saat ini.",
-      // extra: (
-      //   <div className="feature-recs">
-      //     <div className="rec-item">🌿 Coba napas dalam 4–7–8 selama 5 menit</div>
-      //     <div className="rec-item">🚶 Jalan kaki singkat di luar ruangan</div>
-      //     <div className="rec-item">✍️ Tulis 3 hal yang kamu syukuri hari ini</div>
-      //   </div>
-      // ),
     },
   ];
 
@@ -159,16 +121,17 @@ function FeaturesSection() {
       </p>
       <div className="features-grid">
         {features.map((f, i) => (
-          <div
+          <Card
             key={i}
-            className="feature-card"
+            className={`feature-card${i === 4 ? " feature-card-full" : ""}`}
             style={{ animationDelay: `${i * 0.08}s` }}
           >
-            <div className="feature-icon-wrap">{f.icon}</div>
-            <div className="feature-name">{f.name}</div>
-            <div className="feature-desc">{f.desc}</div>
-            {f.extra}
-          </div>
+            <CardContent className="feature-card-content">
+              <div className="feature-icon-wrap">{f.icon}</div>
+              <div className="feature-name">{f.name}</div>
+              <div className="feature-desc">{f.desc}</div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </section>
@@ -229,7 +192,13 @@ function CTASection() {
           Bergabung dengan kami. RuangRasa hadir sebagai ruang aman dan nyaman
           untuk ceritamu.
         </p>
-        <button className="btn-white" onClick={() => navigate("/register")}>Buat Akun</button>
+        <Button
+          variant="secondary"
+          className="cta-btn"
+          onClick={() => navigate("/register")}
+        >
+          Buat Akun
+        </Button>
         <div className="cta-note">Privasi & Enkripsi</div>
       </div>
     </section>
@@ -242,7 +211,7 @@ function HomePage() {
   return (
     <>
       <section className="hero">
-        <div className="badge">
+        <div className="hero-badge">
           <span className="badge-dot" />
           AI-Powered Emotional Well-being
         </div>
@@ -255,7 +224,12 @@ function HomePage() {
           screening, mood check-in, journaling, dan chatbot pendamping berbasis
           AI.
         </p>
-        <button className="btn-primary" onClick={() => navigate("/register")}>Mulai Sekarang</button>
+        <Button
+          className="hero-cta-btn"
+          onClick={() => navigate("/register")}
+        >
+          Mulai Sekarang
+        </Button>
         <div className="hero-note">
           Gratis · Privat · Bukan pengganti profesional
         </div>
@@ -278,48 +252,52 @@ function AboutPage() {
       </div>
 
       <div className="about-card-section">
-        <div className="about-card">
-          <p>
-            RuangRasa adalah platform digital yang dirancang untuk membantu
-            individu memahami dan menjaga kesehatan emosional mereka dengan cara
-            yang sederhana, aman, dan penuh empati. Kami percaya bahwa setiap
-            orang berhak memiliki ruang untuk mengenali perasaannya, tanpa harus
-            menunggu hingga semuanya terasa terlalu berat.
-          </p>
-          <p>
-            Melalui RuangRasa, pengguna dapat melakukan mood check-in, menulis
-            jurnal harian, serta mendapatkan insight dan rekomendasi berbasis
-            teknologi kecerdasan buatan. Fitur-fitur ini dirancang untuk
-            membantu pengguna memahami pola emosinya, memvalidasi perasaan yang
-            dirasakan, dan menemukan langkah kecil yang dapat dilakukan untuk
-            merasa lebih baik.
-          </p>
-          <p>
-            Kami mengembangkan platform ini dengan pendekatan human-centered
-            design, yang berfokus pada kebutuhan nyata pengguna dalam kehidupan
-            sehari-hari. RuangRasa bukanlah alat diagnosis medis, melainkan
-            ruang pendamping yang suportif untuk membantu pengguna lebih peka
-            terhadap kondisi dirinya sendiri.
-          </p>
-          <p>
-            Kami berharap RuangRasa dapat menjadi teman digital yang selalu
-            ada—tempat di mana kamu bisa merasa didengar, dipahami, dan
-            didukung, kapan pun dan di mana pun.
-          </p>
-        </div>
+        <Card className="about-card">
+          <CardContent className="about-card-content">
+            <p>
+              RuangRasa adalah platform digital yang dirancang untuk membantu
+              individu memahami dan menjaga kesehatan emosional mereka dengan cara
+              yang sederhana, aman, dan penuh empati. Kami percaya bahwa setiap
+              orang berhak memiliki ruang untuk mengenali perasaannya, tanpa harus
+              menunggu hingga semuanya terasa terlalu berat.
+            </p>
+            <p>
+              Melalui RuangRasa, pengguna dapat melakukan mood check-in, menulis
+              jurnal harian, serta mendapatkan insight dan rekomendasi berbasis
+              teknologi kecerdasan buatan. Fitur-fitur ini dirancang untuk
+              membantu pengguna memahami pola emosinya, memvalidasi perasaan yang
+              dirasakan, dan menemukan langkah kecil yang dapat dilakukan untuk
+              merasa lebih baik.
+            </p>
+            <p>
+              Kami mengembangkan platform ini dengan pendekatan human-centered
+              design, yang berfokus pada kebutuhan nyata pengguna dalam kehidupan
+              sehari-hari. RuangRasa bukanlah alat diagnosis medis, melainkan
+              ruang pendamping yang suportif untuk membantu pengguna lebih peka
+              terhadap kondisi dirinya sendiri.
+            </p>
+            <p>
+              Kami berharap RuangRasa dapat menjadi teman digital yang selalu
+              ada—tempat di mana kamu bisa merasa didengar, dipahami, dan
+              didukung, kapan pun dan di mana pun.
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <h2 className="about-section-title">tim kami</h2>
 
       <div className="about-card-section">
-        <div className="about-card">
-          <p>
-            RuangRasa dikembangkan oleh tim capstone project Coding Camp 2026
-            yang terdiri dari Data Scientist, AI Engineer, dan Full-Stack Web
-            Developer yang berkolaborasi untuk menghadirkan solusi yang utuh dan
-            berdampak.
-          </p>
-        </div>
+        <Card className="about-card">
+          <CardContent className="about-card-content">
+            <p>
+              RuangRasa dikembangkan oleh tim capstone project Coding Camp 2026
+              yang terdiri dari Data Scientist, AI Engineer, dan Full-Stack Web
+              Developer yang berkolaborasi untuk menghadirkan solusi yang utuh dan
+              berdampak.
+            </p>
+          </CardContent>
+        </Card>
       </div>
     </>
   );
