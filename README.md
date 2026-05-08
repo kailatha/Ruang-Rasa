@@ -37,7 +37,13 @@ Buat database-nya dulu di PostgreSQL:
 CREATE DATABASE ruang_rasa;
 ```
 
-Jalankan:
+Jalankan migrasi database:
+
+```bash
+npm run migrate up
+```
+
+Jalankan server:
 
 ```bash
 npm run dev
@@ -50,8 +56,10 @@ Backend jalan di `http://localhost:5000`
 ```bash
 cd frontend
 npm install
+cp .env.example .env
+# pastikan VITE_API_URL mengarah ke backend (http://localhost:5000/api)
 npm run dev
-```
+``````
 
 Frontend jalan di `http://localhost:5173`
 
@@ -103,14 +111,15 @@ CREATE TABLE users (
 
 ```bash
 # backend
-npm run dev     # development (nodemon)
-npm start       # production
+npm run dev      # development (nodemon)
+npm run migrate  # perintah migrasi (tambahkan up/down/create)
+npm start        # production
 
 # frontend
-npm run dev     # development
-npm run build   # production build
-npm run lint    # cek eslint
-```
+npm run dev      # development
+npm run build    # production build
+npm run lint     # cek eslint
+``````
 
 ## Kontribusi
 
