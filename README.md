@@ -79,12 +79,25 @@ Lihat `.env.example` untuk daftar lengkap. Yang wajib diisi:
 
 | Variable | Keterangan |
 |---|---|
-| `DB_HOST` | Host PostgreSQL (default: `localhost`) |
-| `DB_PORT` | Port PostgreSQL (default: `5432`) |
-| `DB_USER` | User database |
-| `DB_PASSWORD` | Password database |
-| `DB_NAME` | Nama database |
+| `PGHOST` | Host PostgreSQL (default: `localhost`) |
+| `PGPORT` | Port PostgreSQL (default: `5432`) |
+| `PGUSER` | User database |
+| `PGPASSWORD` | Password database |
+| `PGDATABASE` | Nama database |
 | `JWT_SECRET` | Secret key untuk JWT auth |
+
+# User Database
+```sql
+CREATE TABLE users (
+    user_id VARCHAR(50) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+
 
 ## Scripts
 

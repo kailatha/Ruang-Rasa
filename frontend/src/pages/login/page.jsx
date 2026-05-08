@@ -25,14 +25,29 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log("Login attempt:", { email, password });
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    setTimeout(() => {
-      // DUMMY LOGIN: Set fake token and navigate to profile
-      localStorage.setItem("token", "dummy-token-123");
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/profile");
+      } else {
+        alert(data.message || "Login gagal. Periksa kembali email dan kata sandi Anda.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Terjadi kesalahan koneksi ke server.");
+    } finally {
       setIsLoading(false);
-      navigate("/profile");
-    }, 1500);
+    }
   };
 
   return (

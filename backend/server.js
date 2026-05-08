@@ -8,6 +8,10 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+import authRoutes from './src/routes/authRoutes.js';
+
+app.use('/api', authRoutes); // Menggunakan awalan /api untuk route autentikasi
+
 app.get('/', (_req, res) => {
   res.json({
     status: 'ok',

@@ -95,13 +95,46 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validasi konfirmasi password
+    if (formData.password !== formData.confirmPassword) {
+      alert("Kata sandi dan konfirmasi kata sandi tidak cocok!");
+      return;
+    }
+
     setIsLoading(true);
 
-    console.log("Register attempt:", formData);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          gender: formData.gender,
+          dob: formData.dob,
+          job: formData.job,
+          status: formData.status
+        }),
+      });
 
-    setTimeout(() => {
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registrasi berhasil! Silakan masuk menggunakan akun baru Anda.");
+        navigate("/login");
+      } else {
+        alert(data.message || "Registrasi gagal. Silakan coba lagi.");
+      }
+    } catch (error) {
+      console.error("Register error:", error);
+      alert("Terjadi kesalahan koneksi ke server.");
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
