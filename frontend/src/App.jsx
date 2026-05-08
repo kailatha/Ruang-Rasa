@@ -7,6 +7,7 @@ import Footer from "@/components/layout/footer";
 
 import LoginPage from "@/pages/login/page";
 import RegisterPage from "@/pages/register/page";
+import ProfilePage from "@/pages/profile/page";
 
 // chatbot preview
 function ChatPreview() {
@@ -342,6 +343,7 @@ function MainContent() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
       <Footer />
