@@ -28,7 +28,10 @@ export default function LoginPage() {
     console.log("Login attempt:", { email, password });
 
     setTimeout(() => {
+      // DUMMY LOGIN: Set fake token and navigate to profile
+      localStorage.setItem("token", "dummy-token-123");
       setIsLoading(false);
+      navigate("/profile");
     }, 1500);
   };
 

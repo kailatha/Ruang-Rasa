@@ -196,15 +196,14 @@ export default function RegisterPage() {
                 value={formData.status}
                 onChange={handleChange}
                 options={[
-                  { value: "lajang", label: "Lajang" },
-                  { value: "menikah", label: "Menikah" },
-                  { value: "lainnya", label: "Lainnya" },
+                  { value: "Belum Menikah", label: "Belum Menikah" },
+                  { value: "Menikah", label: "Menikah" },
+                  { value: "Lainnya", label: "Lainnya" },
                 ]}
               />
 
             </div>
 
-            {/* Checkbox */}
             <div className="register-checkbox-wrap">
               <input
                 type="checkbox"
