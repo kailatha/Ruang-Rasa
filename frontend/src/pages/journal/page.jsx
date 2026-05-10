@@ -2,13 +2,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  createJournalEntry,
-  getJournalEntries,
-} from "@/services/journalService";
-import { MOCK_ENTRIES, TAGS_OPTIONS, MOODS } from "@/mock/journalMock";
+import { createJournalEntry, getJournalEntries } from "@/services/journalService";
+import { MOCK_ENTRIES } from "@/mock/journalMock";
 
-// React Icons
+// React Icons - Navigation
 import { RiDashboardLine } from "react-icons/ri";
 import { RiSearchEyeLine } from "react-icons/ri";
 import { RiBookOpenLine } from "react-icons/ri";
@@ -16,6 +13,7 @@ import { RiChat3Line } from "react-icons/ri";
 import { RiSparklingLine } from "react-icons/ri";
 import { RiBarChartBoxLine } from "react-icons/ri";
 import { RiSettings3Line } from "react-icons/ri";
+// React Icons - Editor
 import { RiBold } from "react-icons/ri";
 import { RiItalic } from "react-icons/ri";
 import { RiListUnordered } from "react-icons/ri";
@@ -25,8 +23,45 @@ import { RiCheckLine } from "react-icons/ri";
 import { RiCloseLine } from "react-icons/ri";
 import { RiAddLine } from "react-icons/ri";
 import { RiArrowRightLine } from "react-icons/ri";
+// React Icons - Mood
+import { RiEmotionHappyLine } from "react-icons/ri";
+import { RiEmotionNormalLine } from "react-icons/ri";
+import { RiEmotionUnhappyLine } from "react-icons/ri";
+import { RiEmotionLine } from "react-icons/ri";
+import { RiEmotionSadLine } from "react-icons/ri";
 
 import "./page.css";
+
+// ─── Static Config (bukan mock, ini tetap di sini) ──────────────────────────
+
+const MOODS = [
+  { label: "Senang", icon: <RiEmotionHappyLine /> },
+  { label: "Netral", icon: <RiEmotionNormalLine /> },
+  { label: "Sedih",  icon: <RiEmotionUnhappyLine /> },
+  { label: "Marah",  icon: <RiEmotionLine /> },
+  { label: "Stress", icon: <RiEmotionSadLine /> },
+];
+
+const TAGS_OPTIONS = [
+  "Pekerjaan",
+  "Keluarga",
+  "Kesehatan",
+  "Hubungan",
+  "Akademik",
+];
+
+const MENU_ITEMS = [
+  { icon: <RiDashboardLine />, label: "Dashboard",    path: "/dashboard" },
+  { icon: <RiSearchEyeLine />, label: "Screening",    path: "/screening" },
+  { icon: <RiBookOpenLine />,  label: "Journal",      path: "/journal", active: true },
+  { icon: <RiChat3Line />,     label: "Chatbot",      path: "/chatbot" },
+  { icon: <RiSparklingLine />, label: "Rekomendasi",  path: "/rekomendasi" },
+];
+
+const ANALITIK_ITEMS = [
+  { icon: <RiBarChartBoxLine />, label: "Progress Mingguan", path: "/progress" },
+  { icon: <RiSettings3Line />,   label: "Pengaturan",        path: "/settings" },
+];
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -51,8 +86,8 @@ function getMoodColor(mood) {
   const map = {
     Senang: "mood-senang",
     Netral: "mood-netral",
-    Sedih: "mood-sedih",
-    Marah: "mood-marah",
+    Sedih:  "mood-sedih",
+    Marah:  "mood-marah",
     Stress: "mood-stress",
   };
   return map[mood] || "mood-netral";
@@ -61,12 +96,14 @@ function getMoodColor(mood) {
 // ─── Sub-components ─────────────────────────────────────────────────────────
 
 function EntryCard({ entry }) {
+  const moodIcon = MOODS.find((m) => m.label === entry.mood)?.icon;
+
   return (
     <div className="entry-card">
       <div className="entry-card-header">
         <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
         <span className={`mood-badge ${getMoodColor(entry.mood)}`}>
-          {entry.moodEmoji} {entry.mood}
+          {moodIcon} {entry.mood}
         </span>
       </div>
       <p className="entry-content">"{entry.content}"</p>
@@ -91,7 +128,7 @@ function MoodPicker({ selected, onSelect }) {
           onClick={() => onSelect(m.label)}
           className={`mood-option ${selected === m.label ? "mood-option-active" : ""}`}
         >
-          <span className="mood-option-emoji">{m.emoji}</span>
+          <span className="mood-option-emoji">{m.icon}</span>
           <span className="mood-option-label">{m.label}</span>
         </button>
       ))}
@@ -153,21 +190,6 @@ function TagSelector({ selected, onToggle }) {
   );
 }
 
-// ─── Sidebar config ──────────────────────────────────────────────────────────
-
-const MENU_ITEMS = [
-  { icon: <RiDashboardLine />, label: "Dashboard", path: "/dashboard" },
-  { icon: <RiSearchEyeLine />, label: "Screening", path: "/screening" },
-  { icon: <RiBookOpenLine />, label: "Journal", path: "/journal", active: true },
-  { icon: <RiChat3Line />, label: "Chatbot", path: "/chatbot" },
-  { icon: <RiSparklingLine />, label: "Rekomendasi", path: "/rekomendasi" },
-];
-
-const ANALITIK_ITEMS = [
-  { icon: <RiBarChartBoxLine />, label: "Progress Mingguan", path: "/progress" },
-  { icon: <RiSettings3Line />, label: "Pengaturan", path: "/settings" },
-];
-
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
 const USE_MOCK = true;
@@ -225,7 +247,6 @@ export default function JournalPage() {
         const newEntry = {
           id: Date.now().toString(),
           ...payload,
-          moodEmoji: MOODS.find((m) => m.label === selectedMood)?.emoji || "😐",
           sentiment: { label: "Positif", score: Math.floor(Math.random() * 40) + 60 },
           emotion: null,
           createdAt: new Date().toISOString(),
@@ -366,7 +387,7 @@ export default function JournalPage() {
 
           {saveStatus === "saved" && (
             <div className="draft-status">
-              ● Saved as draft at{" "}
+              ● Tersimpan sebagai draf pukul{" "}
               {new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
             </div>
           )}
