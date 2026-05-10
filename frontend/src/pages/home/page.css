@@ -126,6 +126,84 @@ body {
   color: var(--green-dark);
 }
 
+/* navbar private routes */
+
+.app-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 60px;
+  background: var(--cream);
+  border-bottom: 1px solid rgba(61, 92, 74, 0.08);
+}
+
+.app-navbar-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.app-nav-link {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-body);
+  background: none;
+  border: none;
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.app-nav-link:hover {
+  color: var(--green-dark);
+}
+
+.app-nav-link-active {
+  color: var(--green-dark);
+  font-weight: 600;
+  border-bottom: 2px solid var(--green-dark);
+}
+
+.app-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-nav-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.app-nav-icon-btn:hover {
+  background: rgba(61, 92, 74, 0.08);
+  color: var(--green-dark);
+}
+
+.app-nav-profile-btn {
+  background: rgba(61, 92, 74, 0.08);
+  color: var(--green-dark);
+}
+
+.app-nav-profile-btn:hover {
+  background: rgba(61, 92, 74, 0.15);
+}
+
 /* hero */
 .hero {
   min-height: 88vh;
