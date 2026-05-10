@@ -1,19 +1,10 @@
-// pages/journal/page.jsx
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { createJournalEntry, getJournalEntries } from "@/services/journalService";
 import { MOCK_ENTRIES } from "@/mock/journalMock";
 
-// React Icons - Navigation
-import { RiDashboardLine } from "react-icons/ri";
-import { RiSearchEyeLine } from "react-icons/ri";
-import { RiBookOpenLine } from "react-icons/ri";
-import { RiChat3Line } from "react-icons/ri";
-import { RiSparklingLine } from "react-icons/ri";
-import { RiBarChartBoxLine } from "react-icons/ri";
-import { RiSettings3Line } from "react-icons/ri";
-// React Icons - Editor
+// React Icons - editor
 import { RiBold } from "react-icons/ri";
 import { RiItalic } from "react-icons/ri";
 import { RiListUnordered } from "react-icons/ri";
@@ -23,16 +14,19 @@ import { RiCheckLine } from "react-icons/ri";
 import { RiCloseLine } from "react-icons/ri";
 import { RiAddLine } from "react-icons/ri";
 import { RiArrowRightLine } from "react-icons/ri";
-// React Icons - Mood
+
+// React Icons - mood
 import { RiEmotionHappyLine } from "react-icons/ri";
 import { RiEmotionNormalLine } from "react-icons/ri";
 import { RiEmotionUnhappyLine } from "react-icons/ri";
 import { RiEmotionLine } from "react-icons/ri";
 import { RiEmotionSadLine } from "react-icons/ri";
 
-import "./page.css";
+import { RiChat3Line } from "react-icons/ri";
 
-// ─── Static Config (bukan mock, ini tetap di sini) ──────────────────────────
+import "./page.css";
+import Sidebar from "@/components/layout/sidebar";
+import "@/components/layout/sidebar.css";
 
 const MOODS = [
   { label: "Senang", icon: <RiEmotionHappyLine /> },
@@ -50,20 +44,7 @@ const TAGS_OPTIONS = [
   "Akademik",
 ];
 
-const MENU_ITEMS = [
-  { icon: <RiDashboardLine />, label: "Dashboard",    path: "/dashboard" },
-  { icon: <RiSearchEyeLine />, label: "Screening",    path: "/screening" },
-  { icon: <RiBookOpenLine />,  label: "Journal",      path: "/journal", active: true },
-  { icon: <RiChat3Line />,     label: "Chatbot",      path: "/chatbot" },
-  { icon: <RiSparklingLine />, label: "Rekomendasi",  path: "/rekomendasi" },
-];
-
-const ANALITIK_ITEMS = [
-  { icon: <RiBarChartBoxLine />, label: "Progress Mingguan", path: "/progress" },
-  { icon: <RiSettings3Line />,   label: "Pengaturan",        path: "/settings" },
-];
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// utility
 
 function formatRelativeTime(isoString) {
   const date = new Date(isoString);
@@ -93,7 +74,7 @@ function getMoodColor(mood) {
   return map[mood] || "mood-netral";
 }
 
-// ─── Sub-components ─────────────────────────────────────────────────────────
+// sub components
 
 function EntryCard({ entry }) {
   const moodIcon = MOODS.find((m) => m.label === entry.mood)?.icon;
@@ -190,7 +171,7 @@ function TagSelector({ selected, onToggle }) {
   );
 }
 
-// ─── Main Page ───────────────────────────────────────────────────────────────
+// main page
 
 const USE_MOCK = true;
 
@@ -272,59 +253,9 @@ export default function JournalPage() {
 
   return (
     <div className="journal-layout">
-      {/* ── Left Sidebar ─────────────────────────── */}
-      <aside className="journal-sidebar">
-        <div className="sidebar-label">MENU</div>
-        <nav className="sidebar-nav">
-          {MENU_ITEMS.map((item) => (
-            <button
-              key={item.label}
-              className={`sidebar-item ${item.active ? "sidebar-item-active" : ""}`}
-              onClick={() => navigate(item.path)}
-            >
-              <span className="sidebar-icon">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-label sidebar-label-section">ANALITIK</div>
-        <nav className="sidebar-nav">
-          {ANALITIK_ITEMS.map((item) => (
-            <button
-              key={item.label}
-              className="sidebar-item"
-              onClick={() => navigate(item.path)}
-            >
-              <span className="sidebar-icon">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-label sidebar-label-section">STATISTIK</div>
-        <div className="sidebar-stat-card">
-          <div className="stat-card-label">Entri bulan ini</div>
-          <div className="stat-card-value">{entries.length}</div>
-          <div className="stat-card-sub">dari 30 hari</div>
-          <div className="stat-bar">
-            <div
-              className="stat-bar-fill"
-              style={{ width: `${Math.min((entries.length / 30) * 100, 100)}%` }}
-            />
-          </div>
-        </div>
-
-        <div className="sidebar-label sidebar-label-section">SCREENING TERAKHIR</div>
-        <div className="sidebar-screening-card">
-          <div className="screening-date">27 April 2026</div>
-          <div className="screening-result">Terkendali</div>
-          <div className="screening-note">Skala 5 · Dapat dilakukan lagi dalam 3 hari</div>
-        </div>
-      </aside>
-
-      {/* ── Main Content ─────────────────────────── */}
-      <main className="journal-main">
+      <Sidebar entryCount={entries.length} />
+      
+      <main className="journal-main fade-up">
         <div className="journal-form-area">
           <div className="journal-header">
             <div>
@@ -414,7 +345,7 @@ export default function JournalPage() {
         </div>
       </main>
 
-      {/* ── Right Sidebar: Past Entries ─────────── */}
+      {/* sidebar kanan khusus journal */}
       <aside className="journal-entries-sidebar">
         <div className="entries-header">
           <h3 className="entries-title">Entri Sebelumnya</h3>

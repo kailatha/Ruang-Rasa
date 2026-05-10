@@ -1,7 +1,7 @@
 import { Route, Navigate } from "react-router-dom";
 // import DashboardPage from "@/pages/dashboard/page";
 import JournalPage from "@/pages/journal/page";
-// import ScreeningPage from "@/pages/screening/page";
+import ScreeningPage from "@/pages/screening/page";
 // import ChatbotPage from "@/pages/chatbot/page";
 import ProfilePage from "@/pages/profile/page";
 
@@ -25,11 +25,11 @@ const privateRoutes = [
     path="/journal"
     element={<PrivateRoute><JournalPage /></PrivateRoute>}
   />,
-//   <Route
-//     key="screening"
-//     path="/screening"
-//     element={<PrivateRoute><ScreeningPage /></PrivateRoute>}
-//   />,
+  <Route
+    key="screening"
+    path="/screening"
+    element={<PrivateRoute><ScreeningPage /></PrivateRoute>}
+  />,
 //   <Route
 //     key="chatbot"
 //     path="/chatbot"
