@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 
+// Harusnya ke dashboard tapi sementara belom dulu
 router.get('/profile', protect, getProfile);
 
 export default router;
