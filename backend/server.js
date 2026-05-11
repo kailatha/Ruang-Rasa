@@ -22,3 +22,8 @@ app.get('/', (_req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+import journalRoutes from "./src/routes/journalRoutes.js";
+
+app.use("/api/journal", journalRoutes);
+ 
