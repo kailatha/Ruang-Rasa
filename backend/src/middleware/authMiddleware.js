@@ -19,7 +19,7 @@ export const protect = (req, res, next) => {
     // Simpan id user ke request untuk dipakai di controller
     req.user = decoded; 
     next();
-  } catch (error) {
+  } catch {
     res.status(401).json({ message: 'Token tidak valid atau sudah kadaluarsa' });
   }
 };
