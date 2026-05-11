@@ -1,25 +1,30 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import "./page.css";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, Eye, EyeOff } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import "./page.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +33,8 @@ export default function LoginPage() {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
@@ -51,97 +54,90 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="login-main">
+    <main className="login-container">
       <Card className="login-card">
-        <CardHeader className="text-center pb-2 pt-8">
-          <CardTitle className="login-title">
-            Selamat Datang
-            <br />
-            Kembali!
-          </CardTitle>
-        </CardHeader>
+        {/* Header Section */}
+        <div className="login-header">
+          <div className="login-icon-wrapper">
+            <Heart className="login-icon" fill="currentColor" />
+          </div>
+          <h1 className="login-title">Selamat Datang Kembali</h1>
+          <p className="login-subtitle">
+            Luangkan sejenak waktu untuk bernapas <br className="hidden md:block" />
+            dan kembali ke dalam diri.
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-5 pt-6 px-8">
-            {/* Email */}
-            <div className="space-y-2 login-form-content">
-              <Label htmlFor="email" className="login-label">
+        {/* Form Section */}
+        <CardContent className="p-0">
+          <form onSubmit={handleSubmit} className="login-form">
+            {/* Email Field */}
+            <div className="form-group">
+              <Label htmlFor="email" className="form-label">
                 Email
               </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="nama@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
-                className="login-input login-input-email"
+                className="form-input"
               />
             </div>
 
-            {/* Password */}
-            <div className="space-y-2 login-form-content">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="login-label">
-                  Kata Sandi
+            {/* Password Field */}
+            <div className="form-group">
+              <div className="form-label-row">
+                <Label htmlFor="password" className="form-label">
+                  Password
                 </Label>
-                <button type="button" className="login-forgot-btn">
-                  Lupa Kata Sandi?
-                </button>
+                <Link to="/forgot-password" className="forgot-password-link">
+                  Lupa kata sandi?
+                </Link>
               </div>
-              <div className="relative">
+              <div className="input-with-icon">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
                   required
-                  className="login-input login-input-password"
+                  className="form-input pr-12"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="login-eye-btn"
-                  tabIndex={-1}
+                  onClick={togglePasswordVisibility}
+                  className="password-toggle-btn"
+                  aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
 
-            {/* Submit */}
-            <div style={{ paddingTop: "4px" }}>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="login-submit-btn"
-              >
-                {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="login-spinner" />
-                    Memproses...
-                  </span>
-                ) : (
-                  "Masuk"
-                )}
-              </Button>
-            </div>
-          </CardContent>
-        </form>
-
-        <CardFooter className="justify-center pb-8 pt-2">
-          <p className="login-footer-text">
-            Belum punya akun?{" "}
-            <button
-              type="button"
-              onClick={() => navigate("/register")}
-              className="login-register-link"
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="submit-button"
             >
-              Daftar Sekarang
-            </button>
+              {isLoading ? "Memproses..." : "Masuk"}
+            </Button>
+          </form>
+        </CardContent>
+
+        {/* Footer Section */}
+        <div className="login-footer">
+          <p>
+            Belum punya akun?{" "}
+            <Link to="/register" className="register-link">
+              Daftar sekarang
+            </Link>
           </p>
-        </CardFooter>
+        </div>
       </Card>
     </main>
   );
