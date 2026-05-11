@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { createUser, findUserByEmail, findUserById } from '../models/userModel.js';
+import { createUser, findUserByEmail, findUserById, updateUser } from '../models/userModel.js';
 
 export const register = async (req, res) => {
   try {
@@ -120,6 +120,60 @@ export const getProfile = async (req, res) => {
       job: user.job,
       status: user.status,
       createdAt: user.created_at
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Terjadi kesalahan pada server', error: error.message });
+  }
+};
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, gender, dob, job, status } = req.body;
+    
+    const updatedUser = await updateUser(req.user.id, {
+      name,
+      gender,
+      dob,
+      job,
+      status
+    });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'Pengguna tidak ditemukan' });
+    }
+
+    res.json({
+      message: 'Profil berhasil diperbarui',
+      data: {
+        id: updatedUser.user_id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        gender: updatedUser.gender,
+        dob: updatedUser.dob,
+        job: updatedUser.job,
+        status: updatedUser.status,
+        createdAt: updatedUser.created_at
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Terjadi kesalahan pada server', error: error.message });
+  }
+};
+
+export const getDashboard = async (req, res) => {
+  try {
+    const user = await findUserById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'Pengguna tidak ditemukan' });
+    }
+    
+    // Nanti bisa ditambahkan summary jumlah jurnal, riwayat screening, dll
+    res.json({
+      message: 'Data dashboard berhasil diambil',
+      user: {
+        id: user.user_id,
+        name: user.name,
+        email: user.email,
+      }
     });
   } catch (error) {
     res.status(500).json({ message: 'Terjadi kesalahan pada server', error: error.message });

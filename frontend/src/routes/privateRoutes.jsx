@@ -4,6 +4,8 @@ import JournalPage from "@/pages/journal/page";
 import ScreeningPage from "@/pages/screening/page";
 // import ChatbotPage from "@/pages/chatbot/page";
 import ProfilePage from "@/pages/profile/page";
+import EditProfilePage from "@/pages/profile/edit/page";
+
 
 // Simple auth guard — set DEV_BYPASS = false ketika auth sudah siap
 const DEV_BYPASS = true;
@@ -39,6 +41,11 @@ const privateRoutes = [
     key="profile"
     path="/profile"
     element={<PrivateRoute><ProfilePage /></PrivateRoute>}
+  />,
+  <Route
+    key="edit-profile"
+    path="/profile/edit"
+    element={<PrivateRoute><EditProfilePage /></PrivateRoute>}
   />,
 ];
 

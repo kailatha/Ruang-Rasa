@@ -7,12 +7,12 @@ import {
   updateEntry,
   deleteEntry,
 } from "../controllers/journalController.js";
-import { authenticate } from "../middleware/authMiddleware.js"; // middleware auth yang sudah ada
+import { protect } from "../middleware/authMiddleware.js"; // middleware auth yang sudah ada
 
 const router = express.Router();
 
 // Semua route journal wajib authenticated
-router.use(authenticate);
+router.use(protect);
 
 /**
  * @route   GET /api/journal

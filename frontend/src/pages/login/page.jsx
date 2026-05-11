@@ -41,7 +41,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         localStorage.setItem("token", data.token);
-        navigate("/profile");
+        navigate("/dashboard");
       } else {
         alert(data.message || "Login gagal. Periksa kembali email dan kata sandi Anda.");
       }

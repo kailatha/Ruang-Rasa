@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Edit2, ChevronRight, LayoutDashboard, BarChart2, BookOpen } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -97,9 +98,11 @@ export default function ProfilePage() {
                 </Badge>
               </div>
             </div>
-            <Button className="bg-[#4a7c6d] hover:bg-[#3d665a] text-white px-6 rounded-md">
-              Edit Profil
-            </Button>
+            <Link to="/profile/edit">
+              <Button className="bg-[#4a7c6d] hover:bg-[#3d665a] text-white px-6 rounded-md">
+                Edit Profil
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 

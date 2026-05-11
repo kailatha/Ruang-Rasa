@@ -24,3 +24,14 @@ export const findUserById = async (userId) => {
   const { rows } = await pool.query(query, [userId]);
   return rows[0];
 };
+export const updateUser = async (userId, userData) => {
+  const { name, gender, dob, job, status } = userData;
+  const query = `
+    UPDATE users 
+    SET name = $1, gender = $2, dob = $3, job = $4, status = $5 
+    WHERE user_id = $6
+    RETURNING user_id, name, email, gender, dob, job, status, created_at
+  `;
+  const { rows } = await pool.query(query, [name, gender, dob, job, status, userId]);
+  return rows[0];
+};
