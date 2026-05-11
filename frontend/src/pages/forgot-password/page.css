@@ -1,5 +1,5 @@
 /* Layout & Container */
-.login-container {
+.forgot-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -11,69 +11,58 @@
 }
 
 /* Card Styling */
-.login-card {
+.forgot-card {
   width: 100%;
-  max-width: 480px; /* Slightly narrower */
+  max-width: 480px;
   background-color: #ffffff;
-  border-radius: 36px; /* Very rounded */
+  border-radius: 36px;
   border: none;
-  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.03); /* Extremely soft shadow */
-  padding: 48px 48px;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.03);
+  padding: 48px;
   display: flex;
   flex-direction: column;
 }
 
 @media (max-width: 640px) {
-  .login-card {
+  .forgot-card {
     padding: 32px 24px;
+    border-radius: 24px;
   }
 }
 
 /* Header Section */
-.login-header {
+.forgot-header {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
-.login-icon-wrapper {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background-color: #DDE8DF;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.login-icon {
-  color: #587965;
-  width: 28px;
-  height: 28px;
-  margin-top: 3px;
-}
-
-.login-title {
-  font-size: 26px;
+.forgot-title {
+  font-size: 20px;
   font-weight: 500;
-  color: #333333;
-  margin-bottom: 8px;
+  color: #4A4A4A;
+  margin-bottom: 12px;
 }
 
-.login-subtitle {
-  font-size: 15px;
-  color: #7A7A7A;
+.forgot-subtitle {
+  font-size: 14px;
+  color: #8C8C8C;
   line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.forgot-instruction {
+  font-size: 14px;
+  color: #8C8C8C;
 }
 
 /* Form Styles */
-.login-form {
+.forgot-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-group {
@@ -83,12 +72,6 @@
   text-align: left;
 }
 
-.form-label-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .form-label {
   font-size: 13px;
   font-weight: 500;
@@ -96,22 +79,7 @@
   margin-left: 0;
 }
 
-.forgot-password-link {
-  font-size: 13px;
-  color: #A87C5C; /* Warm brownish/orange color from the design */
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-
-.forgot-password-link:hover {
-  opacity: 0.8;
-}
-
 /* Inputs */
-.input-with-icon {
-  position: relative;
-}
-
 .form-input {
   height: 52px;
   width: 100%;
@@ -131,30 +99,6 @@
   box-shadow: 0 0 0 3px rgba(91, 123, 102, 0.1);
 }
 
-.form-input.pr-12 {
-  padding-right: 48px;
-}
-
-/* Password Toggle Button */
-.password-toggle-btn {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #A0A0A0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px;
-}
-
-.password-toggle-btn:hover {
-  color: #666666;
-}
-
 /* Submit Button */
 .submit-button {
   width: 100%;
@@ -166,7 +110,6 @@
   font-weight: 500;
   border: none;
   cursor: pointer;
-  margin-top: 12px;
   transition: background-color 0.2s;
 }
 
@@ -179,20 +122,29 @@
   cursor: not-allowed;
 }
 
-/* Footer Section */
-.login-footer {
-  margin-top: 32px;
+/* Success Message State */
+.forgot-success-message {
   text-align: center;
-  font-size: 13px;
-  color: #8C8C8C;
+  padding: 24px 0;
+  font-size: 15px;
+  color: #4A4A4A;
+  line-height: 1.6;
 }
 
-.register-link {
-  color: #4A4A4A;
+.forgot-back-link {
+  color: #587965;
   font-weight: 600;
   text-decoration: none;
 }
 
-.register-link:hover {
+.forgot-back-link:hover {
   text-decoration: underline;
+}
+
+/* Footer Section */
+.forgot-footer {
+  margin-top: 36px;
+  text-align: center;
+  font-size: 13px;
+  color: #A0A0A0;
 }

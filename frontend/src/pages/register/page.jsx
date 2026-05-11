@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  User,
-  Mail,
-  Lock,
-  ShieldCheck,
-  Users,
-  Calendar,
-  Briefcase,
-  Settings,
-  Shield,
+  Calendar as CalendarIcon,
+  Eye,
+  EyeOff,
   ChevronDown
 } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import "./page.css";
 
 import { Button } from "@/components/ui/button";
@@ -20,21 +22,14 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
-// Buat form input
-const FormField = ({ id, label, icon: Icon, type = "text", placeholder, value, onChange, options, colSpan2 }) => (
-  <div className={`space-y-2 register-form-content ${colSpan2 ? "md:col-span-2" : ""}`}>
+const FormField = ({ id, label, type = "text", placeholder, value, onChange, options, rightIcon: RightIcon, onRightIconClick }) => (
+  <div className="register-form-content">
     <Label htmlFor={id} className="register-label">
       {label}
     </Label>
-    <div className="relative">
-      <div className="register-icon-wrap">
-        <Icon size={18} />
-      </div>
+    <div className="relative mt-2">
       {type === "select" ? (
         <>
           <select
@@ -44,7 +39,7 @@ const FormField = ({ id, label, icon: Icon, type = "text", placeholder, value, o
             required
             className="register-select"
           >
-            <option value="" disabled>Pilih...</option>
+            <option value="" disabled>{placeholder || "Pilih..."}</option>
             {options.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
@@ -52,9 +47,36 @@ const FormField = ({ id, label, icon: Icon, type = "text", placeholder, value, o
             ))}
           </select>
           <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#7A8F82]">
-            <ChevronDown size={16} />
+            <ChevronDown size={18} />
           </div>
         </>
+      ) : type === "date" ? (
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"outline"}
+              className={cn(
+                "register-input justify-start text-left font-normal hover:bg-[#F4F3EE]",
+                !value && "text-muted-foreground"
+              )}
+            >
+              {value ? format(new Date(value), "PPP") : <span>{placeholder}</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 bg-white z-50 rounded-xl" align="start">
+            <Calendar
+              mode="single"
+              selected={value ? new Date(value) : undefined}
+              onSelect={(date) => {
+                onChange({ target: { id, value: date ? format(date, "yyyy-MM-dd") : "" } });
+              }}
+              initialFocus
+              captionLayout="dropdown"
+              startMonth={new Date(1900, 0)}
+              endMonth={new Date()}
+            />
+          </PopoverContent>
+        </Popover>
       ) : (
         <Input
           id={id}
@@ -65,6 +87,19 @@ const FormField = ({ id, label, icon: Icon, type = "text", placeholder, value, o
           required
           className="register-input"
         />
+      )}
+      {RightIcon && type !== "date" && (
+        <div 
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7A8F82] cursor-pointer"
+          onClick={onRightIconClick}
+        >
+          <RightIcon size={18} />
+        </div>
+      )}
+      {type === "date" && (
+        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7A8F82] pointer-events-none">
+          <CalendarIcon size={18} />
+        </div>
       )}
     </div>
   </div>
@@ -84,6 +119,8 @@ export default function RegisterPage() {
     agree: false,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -139,62 +176,74 @@ export default function RegisterPage() {
 
   return (
     <main className="register-main">
-      <Card className="register-card">
-        <CardHeader className="text-center pb-2 pt-6">
-          <div className="register-subtitle">Selamat Datang</div>
-          <CardTitle className="register-title">Daftar Akun</CardTitle>
-        </CardHeader>
+      <div className="register-header-text">
+        <h1 className="register-title-main">
+          Mulailah perjalanan<br />
+          ketenanganmu di <span>ruang rasa</span>
+        </h1>
+        <p className="register-subtitle-main">
+          Ruang aman untuk bercerita, bertumbuh, dan menemukan kembali harmoni dalam dirimu.
+        </p>
+      </div>
 
+      <Card className="register-card">
         <form onSubmit={handleSubmit}>
           <CardContent className="pt-6 px-4 md:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
               
               <FormField
                 id="name"
-                label="Nama Lengkap"
-                icon={User}
-                placeholder="Masukkan nama lengkap Anda"
+                label="Nama"
+                placeholder="Masukkan nama lengkap"
                 value={formData.name}
                 onChange={handleChange}
-                colSpan2
               />
 
               <FormField
                 id="email"
-                label="Alamat Email"
-                icon={Mail}
+                label="Email"
                 type="email"
-                placeholder="contoh@gmail.com"
+                placeholder="email@contoh.com"
                 value={formData.email}
                 onChange={handleChange}
-                colSpan2
               />
 
               <FormField
                 id="password"
                 label="Kata Sandi"
-                icon={Lock}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                rightIcon={showPassword ? EyeOff : Eye}
+                onRightIconClick={() => setShowPassword(!showPassword)}
               />
 
               <FormField
                 id="confirmPassword"
                 label="Konfirmasi Kata Sandi"
-                icon={ShieldCheck}
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 placeholder="••••••••"
                 value={formData.confirmPassword}
+                onChange={handleChange}
+                rightIcon={showConfirmPassword ? EyeOff : Eye}
+                onRightIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              />
+
+              <FormField
+                id="dob"
+                label="Tanggal Lahir"
+                type="date"
+                placeholder="mm / dd / yyyy"
+                value={formData.dob}
                 onChange={handleChange}
               />
 
               <FormField
                 id="gender"
                 label="Jenis Kelamin"
-                icon={Users}
                 type="select"
+                placeholder="Pilih Jenis Kelamin"
                 value={formData.gender}
                 onChange={handleChange}
                 options={[
@@ -204,34 +253,29 @@ export default function RegisterPage() {
               />
 
               <FormField
-                id="dob"
-                label="Tanggal Lahir"
-                icon={Calendar}
-                type="date"
-                value={formData.dob}
-                onChange={handleChange}
-              />
-
-              <FormField
                 id="job"
                 label="Pekerjaan"
-                icon={Briefcase}
-                placeholder="Contoh: Desainer Grafis"
+                type="select"
+                placeholder="Pilih Pekerjaan"
                 value={formData.job}
                 onChange={handleChange}
+                options={[
+                  { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
+                  { value: "Pekerja", label: "Pekerja" },
+                  { value: "Lainnya", label: "Lainnya" },
+                ]}
               />
 
               <FormField
                 id="status"
-                label="Status Pernikahan"
-                icon={Settings}
+                label="Status"
                 type="select"
+                placeholder="Pilih Status"
                 value={formData.status}
                 onChange={handleChange}
                 options={[
                   { value: "Belum Menikah", label: "Belum Menikah" },
                   { value: "Menikah", label: "Menikah" },
-                  { value: "Lainnya", label: "Lainnya" },
                 ]}
               />
 
@@ -244,14 +288,13 @@ export default function RegisterPage() {
                 checked={formData.agree}
                 onChange={handleChange}
                 required
-                className="w-4 h-4 rounded border-gray-300 text-[#3D5C4A] focus:ring-[#3D5C4A]"
+                className="w-4 h-4 rounded border-gray-300 text-[#3D5C4A] focus:ring-[#3D5C4A] mt-1"
               />
               <Label htmlFor="agree" className="register-checkbox-text cursor-pointer select-none">
-                Saya menyetujui Syarat & Ketentuan serta Kebijakan Privasi RuangRasa.
+                Saya menyetujui Kebijakan Privasi dan Syarat & Ketentuan yang berlaku di RuangRasa.
               </Label>
             </div>
 
-            {/* Submit */}
             <Button
               type="submit"
               disabled={isLoading || !formData.agree}
@@ -261,25 +304,7 @@ export default function RegisterPage() {
             </Button>
           </CardContent>
         </form>
-
-        <CardFooter className="justify-center pb-8 pt-2">
-          <p className="register-footer-text">
-            Sudah punya akun?{" "}
-            <button
-              type="button"
-              onClick={() => navigate("/login")}
-              className="register-login-link"
-            >
-              Masuk di sini
-            </button>
-          </p>
-        </CardFooter>
       </Card>
-
-      <div className="register-bottom-secure">
-        <Shield size={14} />
-        Data Anda diamankan dengan enkripsi standar industri.
-      </div>
     </main>
   );
 }

@@ -5,137 +5,143 @@
   align-items: center;
   justify-content: center;
   padding: 48px 16px;
-  background-color: #F5F2EC;
-  font-family: 'DM Sans', sans-serif;
+  background-color: #F8F7F4; /* Light beige matching design */
+  font-family: 'Manrope', 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+
+.register-header-text {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.register-title-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 46px;
+  font-weight: 600;
+  color: #1A1A1A;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.register-title-main span {
+  color: #6C8B76; /* Green for ruang rasa */
+  font-style: italic;
+  font-family: 'Playfair Display', serif;
+}
+
+.register-subtitle-main {
+  font-size: 16px;
+  color: #666;
+  max-width: 550px;
+  margin: 0 auto;
 }
 
 .register-card {
   width: 100%;
-  max-width: 600px;
-  background-color: #fff;
-  border-radius: 20px;
+  max-width: 700px;
+  background-color: #ffffff;
+  border-radius: 32px;
   border: none;
-  box-shadow: 0 4px 24px rgba(61, 92, 74, 0.10);
-  padding: 16px 24px;
-}
-
-.register-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #2C3830;
-}
-
-.register-subtitle {
-  font-size: 14px;
-  color: #5A7A65;
-  font-weight: 500;
-  margin-bottom: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+  padding: 16px;
 }
 
 .register-form-content {
+  display: flex;
+  flex-direction: column;
   text-align: left;
 }
 
 .register-label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #2C3830;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4A4A4A;
+  margin-left: 0;
 }
 
 .register-input {
-  height: 46px;
-  border-radius: 12px;
-  border: 1px solid #E0DDD7;
-  background-color: #FAFAF8;
+  height: 52px;
+  width: 100%;
+  border-radius: 26px; /* Pill shape */
+  border: 1px solid transparent;
+  background-color: #F4F3EE;
   font-size: 14px;
   color: #2C3830;
-  padding-left: 44px;
+  padding-left: 20px;
+  padding-right: 48px;
+  transition: all 0.2s ease;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #6C8B76;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(108, 139, 118, 0.1);
 }
 
 .register-select {
-  height: 46px;
-  border-radius: 12px;
-  border: 1px solid #E0DDD7;
-  background-color: #FAFAF8;
+  height: 52px;
+  width: 100%;
+  border-radius: 26px; /* Pill shape */
+  border: 1px solid transparent;
+  background-color: #F4F3EE;
   font-size: 14px;
   color: #2C3830;
-  padding-left: 44px;
-  width: 100%;
+  padding-left: 20px;
+  padding-right: 48px;
   appearance: none;
+  transition: all 0.2s ease;
 }
 
-.register-icon-wrap {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #7A8F82;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
+.register-select:focus {
+  outline: none;
+  border-color: #6C8B76;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(108, 139, 118, 0.1);
 }
 
 .register-submit-btn {
   width: 100%;
-  height: 48px;
+  height: 56px;
   border-radius: 28px;
-  background-color: #3D5C4A;
+  background-color: #4A6654;
   color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(61, 92, 74, 0.25);
-  transition: background 0.2s, transform 0.2s;
   margin-top: 16px;
+  transition: background 0.2s;
 }
 
 .register-submit-btn:hover {
-  background-color: #5A7A65;
+  background-color: #3D5C4A;
+}
+
+.register-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .register-checkbox-wrap {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
-  background-color: #FAFAF8;
-  border: 1px solid #E0DDD7;
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 16px;
+  margin-top: 24px;
   margin-bottom: 24px;
+  padding-left: 12px;
 }
 
 .register-checkbox-text {
-  font-size: 13px;
-  color: #4A5C52;
-  line-height: 1.5;
-}
-
-.register-footer-text {
-  font-size: 14px;
-  color: #4A5C52;
-}
-
-.register-login-link {
-  font-weight: 700;
-  color: #3D5C4A;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.register-bottom-secure {
-  text-align: center;
   font-size: 12px;
-  color: #7A8F82;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 24px;
+  color: #4A4A4A;
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .register-title-main {
+    font-size: 36px;
+  }
 }
