@@ -155,7 +155,7 @@
   background: var(--green-mid) !important;
 }
 
-/* ─── Editor ─────────────────────────────────────────── */
+/* editor */
 
 .editor-toolbar {
   display: flex;
@@ -215,7 +215,7 @@
   border-color: var(--green-mid);
 }
 
-/* ─── Tags ───────────────────────────────────────────── */
+/* tags di jurnal */
 
 .tags-label {
   display: flex;
@@ -309,7 +309,7 @@
   justify-content: center;
 }
 
-/* ─── Draft & Actions ────────────────────────────────── */
+/* draft dan actions */
 
 .draft-status {
   font-size: 11.5px;
@@ -344,7 +344,7 @@
   cursor: not-allowed;
 }
 
-/* ─── Right Sidebar: Past Entries ────────────────────── */
+/* SIDEBAR KANAN */
 
 .journal-entries-sidebar {
   background: var(--white);
@@ -375,7 +375,7 @@
   padding: 40px 0;
 }
 
-/* ─── Entry Card ─────────────────────────────────────── */
+/* entry card */
 
 .entry-card {
   padding: 14px 0;
