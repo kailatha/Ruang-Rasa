@@ -45,16 +45,16 @@ const SCALE_LEVELS = [
 ];
 
 const QUESTIONS = [
-  "Seberapa sering kamu merasa cemas atau khawatir berlebihan dalam seminggu terakhir?",
-  "Apakah kamu mengalami kesulitan tidur atau tidur terlalu banyak?",
-  "Seberapa sering kamu merasa lelah atau kehilangan energi?",
-  "Apakah kamu merasa sulit berkonsentrasi pada pekerjaan atau aktivitas sehari-hari?",
-  "Seberapa sering kamu merasa sedih atau kosong tanpa alasan yang jelas?",
-  "Apakah kamu kehilangan minat pada hal-hal yang biasanya kamu nikmati?",
-  "Seberapa sering kamu merasa mudah marah atau tersinggung?",
-  "Apakah kamu merasa terisolasi dari orang-orang di sekitarmu?",
-  "Seberapa sering kamu merasa tidak berdaya atau putus asa?",
-  "Apakah pikiran negatif tentang diri sendiri sering muncul?",
+  "Apakah Anda mendapatkan tidur malam yang cukup lama dalam sehari?",
+  "Seberapa sering kamu menggunakan gadget (smartphone, tab, PC) dalam sehari?",
+  "Seberapa sering kamu bermain media sosial (Instagram, X, Tiktok) dalam sehari?",
+  "Seberapa sering pikiran atau ingatan tentang pengalaman buruk masa lalu, bahkan trauma muncul kembali dan mengganggu aktivitasmu sehari-hari?",
+  "Seberapa besar dampak kondisi kesehatan mental yang pernah kamu alami (atau sedang kamu alami) terhadap kualitas hidupmu saat ini?",
+  "Seberapa banyak kamu menghabiskan waktu atau energi untuk bekerja dalam satu minggu?",
+  "Seberapa besar tekanan dan tuntutan pekerjaan membuat kamu merasa kewalahan, burnout, atau tidak mampu mengatasinya?",
+  "Seberapa sering masalah keuangan membuat kamu kehilangan tidur, sulit fokus, atau merasa putus asa tentang masa depan?",
+  "Seberapa sering suasana hatimu berubah secara tiba-tiba dan drastis tanpa alasan yang jelas hingga mengganggu hubungan atau aktivitasmu?",
+  "Seberapa sering kamu merasa tidak ada yang benar-benar memahami kamu, atau merasa sendirian meskipun berada di tengah orang banyak?",
 ];
 
 const SCALE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -176,7 +176,7 @@ function ResultView({ answers, onReset }) {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// main
 
 export default function ScreeningPage() {
   const navigate = useNavigate();
