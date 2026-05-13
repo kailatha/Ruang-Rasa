@@ -34,3 +34,5 @@ coverage/
 *.pid
 *.seed
 *.pid.lock
+
+/src/generated/prisma
