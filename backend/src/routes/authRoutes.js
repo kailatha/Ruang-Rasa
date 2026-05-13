@@ -1,5 +1,5 @@
 import express from 'express';
-import { register, login, getProfile } from '../controllers/authController.js';
+import { register, login, getProfile, updateProfile, getDashboard } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -8,7 +8,11 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 
-// Harusnya ke dashboard tapi sementara belom dulu
+// Route profil (digunakan oleh halaman Edit Profile & Profile)
 router.get('/profile', protect, getProfile);
+router.put('/profile', protect, updateProfile);
+
+// Route dashboard
+router.get('/dashboard', protect, getDashboard);
 
 export default router;

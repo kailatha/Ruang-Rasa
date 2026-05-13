@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -71,7 +71,7 @@ function LevelCard({ level, isActive }) {
   );
 }
 
-function QuestionStep({ question, index, total, value, onChange, onNext, onPrev }) {
+function QuestionStep({ question, index, total, value, onChange, onNext, onPrev, isSubmitting }) {
   return (
     <div className="question-wrapper fade-up">
       <div className="question-progress-bar">
@@ -98,33 +98,36 @@ function QuestionStep({ question, index, total, value, onChange, onNext, onPrev 
 
       <div className="question-actions">
         {index > 0 && (
-          <Button variant="outline" onClick={onPrev} className="screening-btn-outline">
+          <Button variant="outline" onClick={onPrev} className="screening-btn-outline" disabled={isSubmitting}>
             Kembali
           </Button>
         )}
         <Button
           className="screening-btn-primary"
-          disabled={!value}
+          disabled={!value || isSubmitting}
           onClick={onNext}
         >
-          {index === total - 1 ? "Lihat Hasil" : "Lanjut"}
+          {isSubmitting ? "Menyimpan..." : (index === total - 1 ? "Lihat Hasil" : "Lanjut")}
         </Button>
       </div>
     </div>
   );
 }
 
-function ResultView({ answers, onReset }) {
-  const total = answers.reduce((a, b) => a + b, 0);
-  const avg = total / answers.length;
+function ResultView({ answers, backendResult, onReset }) {
+  // Mapping dari backend level ke UI Card
+  const getLevelUI = (levelStr) => {
+    switch (levelStr) {
+      case "Minimal": return SCALE_LEVELS[0];
+      case "Ringan": return SCALE_LEVELS[1];
+      case "Sedang": return SCALE_LEVELS[2];
+      case "Berat": return SCALE_LEVELS[3];
+      default: return SCALE_LEVELS[1];
+    }
+  };
 
-  let result;
-  if (avg <= 1.5) result = SCALE_LEVELS[0];
-  else if (avg <= 3)  result = SCALE_LEVELS[1];
-  else if (avg <= 4)  result = SCALE_LEVELS[2];
-  else                result = SCALE_LEVELS[3];
-
-  const score = Math.round(avg * 2); // map ke 1–10
+  const result = backendResult ? getLevelUI(backendResult.level) : SCALE_LEVELS[1];
+  const score = backendResult ? Math.round(backendResult.total_score / 10) : 0; // map ke 1–10 visual
 
   return (
     <div className="result-wrapper fade-up">
@@ -144,9 +147,9 @@ function ResultView({ answers, onReset }) {
       </div>
 
       <div className={`result-badge ${result.color}`}>
-        <span>{result.icon}</span> {result.label}
+        <span>{result.icon}</span> {backendResult?.level || result.label}
       </div>
-      <p className="result-desc">{result.description}</p>
+      <p className="result-desc">{backendResult?.recommendation || result.description}</p>
 
       <div className="result-breakdown">
         <div className="breakdown-title">Jawaban kamu</div>
@@ -183,6 +186,8 @@ export default function ScreeningPage() {
   const [phase, setPhase] = useState("intro"); // "intro" | "questions" | "result"
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState(Array(QUESTIONS.length).fill(null));
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [backendResult, setBackendResult] = useState(null);
 
   function handleAnswer(val) {
     setAnswers((prev) => {
@@ -192,11 +197,35 @@ export default function ScreeningPage() {
     });
   }
 
-  function handleNext() {
+  async function handleNext() {
     if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((q) => q + 1);
     } else {
-      setPhase("result");
+      setIsSubmitting(true);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/screening/submit`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ answers }),
+        });
+        const data = await res.json();
+        
+        if (res.ok) {
+          setBackendResult(data.data);
+          setPhase("result");
+        } else {
+          alert("Gagal menyimpan hasil: " + data.message);
+        }
+      } catch (error) {
+        console.error(error);
+        alert("Terjadi kesalahan jaringan.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   }
 
@@ -208,6 +237,7 @@ export default function ScreeningPage() {
     setPhase("intro");
     setCurrentQ(0);
     setAnswers(Array(QUESTIONS.length).fill(null));
+    setBackendResult(null);
   }
 
   return (
@@ -256,11 +286,16 @@ export default function ScreeningPage() {
             onChange={handleAnswer}
             onNext={handleNext}
             onPrev={handlePrev}
+            isSubmitting={isSubmitting}
           />
         )}
 
         {phase === "result" && (
-          <ResultView answers={answers.map((a) => a ?? 1)} onReset={handleReset} />
+          <ResultView 
+            answers={answers.map((a) => a ?? 1)} 
+            backendResult={backendResult}
+            onReset={handleReset} 
+          />
         )}
       </main>
     </div>
