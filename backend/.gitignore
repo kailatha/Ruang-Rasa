@@ -35,4 +35,14 @@ coverage/
 *.seed
 *.pid.lock
 
+# Prisma generated client
 /src/generated/prisma
+
+# AI Model files (terlalu besar untuk git)
+model/
+*.pkl
+*.h5
+*.pt
+*.pth
+*.onnx
+*.pb

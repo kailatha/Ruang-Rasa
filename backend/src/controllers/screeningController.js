@@ -6,33 +6,33 @@ import { createScreeningResult, getScreeningHistoryByUserId } from '../models/sc
 /**
  * Fallback: Mendapatkan kategori dan rekomendasi jika AI Service tidak tersedia
  */
-// const getFallbackResult = (score) => {
-//   if (score <= 4) {
-//     return {
-//       level: 'Minimal',
-//       recommendation: 'Tingkat kecemasan Anda tergolong minimal. Tetap jaga kesehatan mental dengan istirahat cukup dan relaksasi.',
-//       activity: 'Meditasi ringan, membaca buku, atau berjalan santai di taman.'
-//     };
-//   } else if (score <= 9) {
-//     return {
-//       level: 'Ringan',
-//       recommendation: 'Anda mengalami kecemasan ringan. Mencoba teknik pernapasan dalam atau meditasi dapat membantu menenangkan pikiran.',
-//       activity: 'Latihan pernapasan dalam, yoga, atau journaling harian.'
-//     };
-//   } else if (score <= 14) {
-//     return {
-//       level: 'Sedang',
-//       recommendation: 'Tingkat kecemasan Anda tergolong sedang. Disarankan untuk berkonsultasi dengan konselor atau psikolog untuk pencegahan lebih lanjut.',
-//       activity: 'Konsultasi dengan konselor, olahraga rutin, dan teknik relaksasi otot progresif.'
-//     };
-//   } else {
-//     return {
-//       level: 'Berat',
-//       recommendation: 'Anda mengalami kecemasan berat. Sangat disarankan untuk segera mencari bantuan profesional (psikolog atau psikiater) untuk penanganan yang tepat.',
-//       activity: 'Segera hubungi psikolog atau psikiater, hindari isolasi, dan cari dukungan dari orang terdekat.'
-//     };
-//   }
-// };
+const getFallbackResult = (score) => {
+  if (score <= 4) {
+    return {
+      level: 'Minimal',
+      recommendation: 'Tingkat kecemasan Anda tergolong minimal. Tetap jaga kesehatan mental dengan istirahat cukup dan relaksasi.',
+      activity: 'Meditasi ringan, membaca buku, atau berjalan santai di taman.'
+    };
+  } else if (score <= 9) {
+    return {
+      level: 'Ringan',
+      recommendation: 'Anda mengalami kecemasan ringan. Mencoba teknik pernapasan dalam atau meditasi dapat membantu menenangkan pikiran.',
+      activity: 'Latihan pernapasan dalam, yoga, atau journaling harian.'
+    };
+  } else if (score <= 14) {
+    return {
+      level: 'Sedang',
+      recommendation: 'Tingkat kecemasan Anda tergolong sedang. Disarankan untuk berkonsultasi dengan konselor atau psikolog untuk pencegahan lebih lanjut.',
+      activity: 'Konsultasi dengan konselor, olahraga rutin, dan teknik relaksasi otot progresif.'
+    };
+  } else {
+    return {
+      level: 'Berat',
+      recommendation: 'Anda mengalami kecemasan berat. Sangat disarankan untuk segera mencari bantuan profesional (psikolog atau psikiater) untuk penanganan yang tepat.',
+      activity: 'Segera hubungi psikolog atau psikiater, hindari isolasi, dan cari dukungan dari orang terdekat.'
+    };
+  }
+};
 
 /**
  * Memanggil AI Service untuk mendapatkan prediksi screening
