@@ -1,30 +1,70 @@
+// src/controllers/screeningController.js
+
+import prisma from "../lib/prisma.js";
 import { createScreeningResult, getScreeningHistoryByUserId } from '../models/screeningModel.js';
-import pool from '../config/database.js';
 
 /**
- * Mendapatkan kategori dan rekomendasi berdasarkan skor GAD-7
+ * Fallback: Mendapatkan kategori dan rekomendasi jika AI Service tidak tersedia
  */
-const getGAD7Result = (score) => {
-  if (score <= 4) {
+// const getFallbackResult = (score) => {
+//   if (score <= 4) {
+//     return {
+//       level: 'Minimal',
+//       recommendation: 'Tingkat kecemasan Anda tergolong minimal. Tetap jaga kesehatan mental dengan istirahat cukup dan relaksasi.',
+//       activity: 'Meditasi ringan, membaca buku, atau berjalan santai di taman.'
+//     };
+//   } else if (score <= 9) {
+//     return {
+//       level: 'Ringan',
+//       recommendation: 'Anda mengalami kecemasan ringan. Mencoba teknik pernapasan dalam atau meditasi dapat membantu menenangkan pikiran.',
+//       activity: 'Latihan pernapasan dalam, yoga, atau journaling harian.'
+//     };
+//   } else if (score <= 14) {
+//     return {
+//       level: 'Sedang',
+//       recommendation: 'Tingkat kecemasan Anda tergolong sedang. Disarankan untuk berkonsultasi dengan konselor atau psikolog untuk pencegahan lebih lanjut.',
+//       activity: 'Konsultasi dengan konselor, olahraga rutin, dan teknik relaksasi otot progresif.'
+//     };
+//   } else {
+//     return {
+//       level: 'Berat',
+//       recommendation: 'Anda mengalami kecemasan berat. Sangat disarankan untuk segera mencari bantuan profesional (psikolog atau psikiater) untuk penanganan yang tepat.',
+//       activity: 'Segera hubungi psikolog atau psikiater, hindari isolasi, dan cari dukungan dari orang terdekat.'
+//     };
+//   }
+// };
+
+/**
+ * Memanggil AI Service untuk mendapatkan prediksi screening
+ * @param {Object} features - Data fitur untuk prediksi
+ * @returns {Object|null} - Hasil prediksi AI atau null jika gagal
+ */
+const callAIService = async (features) => {
+  const AI_API_URL = process.env.AI_API_URL || 'http://localhost:8000';
+
+  try {
+    const response = await fetch(`${AI_API_URL}/predict`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(features),
+      signal: AbortSignal.timeout(10000), // Timeout 10 detik
+    });
+
+    if (!response.ok) {
+      console.error(`AI Service error: ${response.status} ${response.statusText}`);
+      return null;
+    }
+
+    const data = await response.json();
     return {
-      level: 'Minimal',
-      recommendation: 'Tingkat kecemasan Anda tergolong minimal. Tetap jaga kesehatan mental dengan istirahat cukup dan relaksasi.'
+      level: data.level,
+      recommendation: data.recommendation,
+      activity: data.activity || null,
+      total_score: data.total_score || null,
     };
-  } else if (score <= 9) {
-    return {
-      level: 'Ringan',
-      recommendation: 'Anda mengalami kecemasan ringan. Mencoba teknik pernapasan dalam atau meditasi dapat membantu menenangkan pikiran.'
-    };
-  } else if (score <= 14) {
-    return {
-      level: 'Sedang',
-      recommendation: 'Tingkat kecemasan Anda tergolong sedang. Disarankan untuk berkonsultasi dengan konselor atau psikolog untuk pencegahan lebih lanjut.'
-    };
-  } else {
-    return {
-      level: 'Berat',
-      recommendation: 'Anda mengalami kecemasan berat. Sangat disarankan untuk segera mencari bantuan profesional (psikolog atau psikiater) untuk penanganan yang tepat.'
-    };
+  } catch (error) {
+    console.error('AI Service tidak tersedia, menggunakan fallback:', error.message);
+    return null;
   }
 };
 
@@ -37,9 +77,11 @@ export const submitScreening = async (req, res) => {
     const { answers } = req.body; // answers adalah array angka dari 10 pertanyaan frontend
     const userId = req.user.id;
 
-    // Ambil data user (dob & gender) untuk kolom user_age dan user_gender
-    const userQuery = await pool.query('SELECT dob, gender FROM users WHERE user_id = $1', [userId]);
-    const userData = userQuery.rows[0];
+    // Ambil data user (dob & gender) via Prisma
+    const userData = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { dob: true, gender: true },
+    });
 
     let user_age = null;
     let user_gender = userData?.gender || null;
@@ -68,10 +110,31 @@ export const submitScreening = async (req, res) => {
     // Hitung total skor (asumsi 1-10 per pertanyaan, max 100)
     const total_score = answers.reduce((acc, curr) => acc + curr, 0);
 
-    // Tentukan hasil sementara (Nanti bisa diganti dengan response dari API Python AI)
-    let result = getGAD7Result(total_score / 10); // Normalisasi sementara agar cocok dengan logika lama
+    // Siapkan data fitur untuk AI Service
+    const aiFeatures = {
+      user_age,
+      user_gender,
+      sleep_hours,
+      screen_time,
+      social_media,
+      trauma_history,
+      previously_diagnosed,
+      work_hours,
+      work_stress,
+      financial_stress,
+      mood_swings,
+      loneliness,
+    };
 
-    // Simpan ke database
+    // Panggil AI Service, kalau gagal pakai fallback
+    let result = await callAIService(aiFeatures);
+
+    if (!result) {
+      console.log('Menggunakan fallback scoring (AI Service tidak tersedia)');
+      result = getFallbackResult(total_score / 10);
+    }
+
+    // Simpan ke database via Prisma
     const savedResult = await createScreeningResult({
       userId,
       user_age,
@@ -86,9 +149,10 @@ export const submitScreening = async (req, res) => {
       financial_stress,
       mood_swings,
       loneliness,
-      total_score,
+      total_score: result.total_score || total_score,
       level: result.level,
-      recommendation: result.recommendation
+      recommendation: result.recommendation,
+      activity: result.activity || null,
     });
 
     res.status(201).json({
