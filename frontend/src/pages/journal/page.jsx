@@ -173,7 +173,7 @@ function TagSelector({ selected, onToggle }) {
 
 // main page
 
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export default function JournalPage() {
   const navigate = useNavigate();
@@ -234,8 +234,10 @@ export default function JournalPage() {
         };
         setEntries((prev) => [newEntry, ...prev]);
       } else {
-        const newEntry = await createJournalEntry(payload);
-        setEntries((prev) => [newEntry, ...prev]);
+        // const newEntry = await createJournalEntry(payload);
+        // setEntries((prev) => [newEntry, ...prev]);
+        const response = await createJournalEntry(payload);
+        setEntries((prev) => [response.entry, ...prev]);
       }
       setSelectedMood(null);
       setContent("");
