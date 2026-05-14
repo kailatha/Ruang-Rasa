@@ -91,7 +91,7 @@ npm run dev
 
 Frontend jalan di `http://localhost:5173`
 
-### 4. AI Service (Opsional)
+### 4. AI Service (Belum Dulu)
 
 ```bash
 cd ai-service
