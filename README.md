@@ -99,7 +99,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-AI Service jalan di `http://localhost:8000`
+AI Service jalan di `http://localhost:8000` (kalau udah dideploy nanti urlnya ikut yg link udah deploy)
 
 > Jika AI Service tidak berjalan, backend akan menggunakan fallback scoring.
 
@@ -111,9 +111,9 @@ AI Service jalan di `http://localhost:8000`
 |---|---|---|
 | `DATABASE_URL` | Connection string Prisma | `postgresql://user:pass@localhost:5432/ruang_rasa` |
 | `PORT` | Port backend | `5000` |
-| `JWT_SECRET` | Secret key JWT | `your_secret_key` |
+| `JWT_SECRET` | Secret key JWT | `your_secret_key` (belum diisi)|
 | `JWT_EXPIRES_IN` | Masa berlaku token | `7d` |
-| `AI_API_URL` | URL AI Service | `http://localhost:8000` |
+| `AI_API_URL` | URL AI Service | `http://localhost:8000` (Kalau dideploy diganti urlnya) |
 
 ### Frontend (`.env`)
 
