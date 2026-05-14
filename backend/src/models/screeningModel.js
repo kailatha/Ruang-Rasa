@@ -5,25 +5,25 @@ import pool from '../config/database.js';
  */
 export const createScreeningResult = async (data) => {
   const { 
-    userId, sleep_hours, screen_time, social_media, trauma_history, 
-    previously_diagnosed, work_hours, work_stress, financial_stress, 
-    mood_swings, loneliness, total_score, level, recommendation 
+    userId, user_age, user_gender, sleep_hours, screen_time, social_media, 
+    trauma_history, previously_diagnosed, work_hours, work_stress, 
+    financial_stress, mood_swings, loneliness, total_score, level, recommendation 
   } = data;
   
   const query = `
     INSERT INTO screening_results (
-      user_id, sleep_hours, screen_time, social_media, trauma_history, 
-      previously_diagnosed, work_hours, work_stress, financial_stress, 
-      mood_swings, loneliness, total_score, level, recommendation
+      user_id, user_age, user_gender, sleep_hours, screen_time, social_media, 
+      trauma_history, previously_diagnosed, work_hours, work_stress, 
+      financial_stress, mood_swings, loneliness, total_score, level, recommendation
     ) 
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) 
     RETURNING *
   `;
   
   const { rows } = await pool.query(query, [
-    userId, sleep_hours, screen_time, social_media, trauma_history, 
-    previously_diagnosed, work_hours, work_stress, financial_stress, 
-    mood_swings, loneliness, total_score, level, recommendation
+    userId, user_age, user_gender, sleep_hours, screen_time, social_media, 
+    trauma_history, previously_diagnosed, work_hours, work_stress, 
+    financial_stress, mood_swings, loneliness, total_score, level, recommendation
   ]);
   
   return rows[0];

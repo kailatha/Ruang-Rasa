@@ -1,4 +1,5 @@
 import { createScreeningResult, getScreeningHistoryByUserId } from '../models/screeningModel.js';
+import pool from '../config/database.js';
 
 /**
  * Mendapatkan kategori dan rekomendasi berdasarkan skor GAD-7
@@ -36,6 +37,23 @@ export const submitScreening = async (req, res) => {
     const { answers } = req.body; // answers adalah array angka dari 10 pertanyaan frontend
     const userId = req.user.id;
 
+    // Ambil data user (dob & gender) untuk kolom user_age dan user_gender
+    const userQuery = await pool.query('SELECT dob, gender FROM users WHERE user_id = $1', [userId]);
+    const userData = userQuery.rows[0];
+
+    let user_age = null;
+    let user_gender = userData?.gender || null;
+
+    if (userData?.dob) {
+      const birthDate = new Date(userData.dob);
+      const today = new Date();
+      user_age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        user_age--;
+      }
+    }
+
     if (!answers || !Array.isArray(answers) || answers.length !== 10) {
       return res.status(400).json({ message: 'Data screening tidak lengkap (harus 10 jawaban)' });
     }
@@ -56,6 +74,8 @@ export const submitScreening = async (req, res) => {
     // Simpan ke database
     const savedResult = await createScreeningResult({
       userId,
+      user_age,
+      user_gender,
       sleep_hours,
       screen_time,
       social_media,
