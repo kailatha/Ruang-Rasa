@@ -91,10 +91,7 @@ npm run dev
 
 Frontend jalan di `http://localhost:5173`
 
-### 4. AI Service (Belum Dulu)
-AI Service berjalan secara mandiri menggunakan FastAPI di port `8000`.
-
-Masuk ke folder `ai-service`.
+### 4. AI Service (Opsional)
 
 ```bash
 cd ai-service
@@ -117,17 +114,9 @@ Jika `uvicorn` tidak terbaca, tetap jalankan server menggunakan format berikut:
 python -m uvicorn app.main:app --reload --port 8000
 ```
 
-AI Service berjalan di:
+AI Service jalan di `http://localhost:8000`
 
-```text
-http://localhost:8000
-```
-
-Dokumentasi API FastAPI tersedia di:
-
-```text
-http://localhost:8000/docs
-```
+> Jika AI Service tidak berjalan, backend akan menggunakan fallback scoring.
 
 ## Environment Variables
 
