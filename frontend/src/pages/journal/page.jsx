@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import { createJournalEntry, getJournalEntries } from "@/services/journalService";
 import { MOCK_ENTRIES } from "@/mock/journalMock";
+import "./page.css";
+import Sidebar from "@/components/layout/sidebar";
+import "@/components/layout/sidebar.css";
 
 // React Icons - editor
 import { RiBold } from "react-icons/ri";
@@ -22,11 +26,8 @@ import { RiEmotionUnhappyLine } from "react-icons/ri";
 import { RiEmotionLine } from "react-icons/ri";
 import { RiEmotionSadLine } from "react-icons/ri";
 
+// React Icons - chatbot
 import { RiChat3Line } from "react-icons/ri";
-
-import "./page.css";
-import Sidebar from "@/components/layout/sidebar";
-import "@/components/layout/sidebar.css";
 
 const MOODS = [
   { label: "Senang", icon: <RiEmotionHappyLine /> },
