@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+
+  name      String
+  email     String   @unique
+  password  String
+
+  gender    String?
+  dob       DateTime?
+  job       String?
+  status    String?
+
+  journals          Journal[]
+  screeningResults  ScreeningResult[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Journal {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  mood    String
+  content String
+  tags    String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ScreeningResult {
+  id String @id @default(cuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Data statis dari User saat screening
+  user_age    Int?
+  user_gender String?
+
+  // 10 Kolom Pertanyaan (semua skala 1-10)
+  sleep_hours          Int
+  screen_time          Int
+  social_media         Int
+  trauma_history       Int
+  previously_diagnosed Int
+  work_hours           Int
+  work_stress          Int
+  financial_stress     Int
+  mood_swings          Int
+  loneliness           Int
+
+  // Hasil Akhir
+  total_score    Int
+  level          String
+  recommendation String
+  activity       String?
+
+  createdAt DateTime @default(now())
+}
