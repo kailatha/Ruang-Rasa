@@ -34,7 +34,7 @@ export const register = async (req, res) => {
 
     // Buat JWT Token
     const token = jwt.sign(
-      { id: newUser.user_id }, 
+      { id: newUser.id }, 
       process.env.JWT_SECRET || 'rahasia_default', 
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
@@ -43,14 +43,14 @@ export const register = async (req, res) => {
       message: 'Registrasi berhasil',
       token,
       user: {
-        id: newUser.user_id,
+        id: newUser.id,
         name: newUser.name,
         email: newUser.email,
         gender: newUser.gender,
         dob: newUser.dob,
         job: newUser.job,
         status: newUser.status,
-        createdAt: newUser.created_at
+        createdAt: newUser.createdAt
       }
     });
   } catch (error) {
@@ -80,7 +80,7 @@ export const login = async (req, res) => {
 
     // Buat JWT Token
     const token = jwt.sign(
-      { id: user.user_id }, 
+      { id: user.id }, 
       process.env.JWT_SECRET || 'rahasia_default', 
       { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
     );
@@ -89,14 +89,14 @@ export const login = async (req, res) => {
       message: 'Login berhasil',
       token,
       user: {
-        id: user.user_id,
+        id: user.id,
         name: user.name,
         email: user.email,
         gender: user.gender,
         dob: user.dob,
         job: user.job,
         status: user.status,
-        createdAt: user.created_at
+        createdAt: user.createdAt
       }
     });
   } catch (error) {
@@ -112,14 +112,14 @@ export const getProfile = async (req, res) => {
     }
     
     res.json({
-      id: user.user_id,
+      id: user.id,
       name: user.name,
       email: user.email,
       gender: user.gender,
       dob: user.dob,
       job: user.job,
       status: user.status,
-      createdAt: user.created_at
+      createdAt: user.createdAt
     });
   } catch (error) {
     res.status(500).json({ message: 'Terjadi kesalahan pada server', error: error.message });
@@ -144,14 +144,14 @@ export const updateProfile = async (req, res) => {
     res.json({
       message: 'Profil berhasil diperbarui',
       data: {
-        id: updatedUser.user_id,
+        id: updatedUser.id,
         name: updatedUser.name,
         email: updatedUser.email,
         gender: updatedUser.gender,
         dob: updatedUser.dob,
         job: updatedUser.job,
         status: updatedUser.status,
-        createdAt: updatedUser.created_at
+        createdAt: updatedUser.createdAt
       }
     });
   } catch (error) {
@@ -170,7 +170,7 @@ export const getDashboard = async (req, res) => {
     res.json({
       message: 'Data dashboard berhasil diambil',
       user: {
-        id: user.user_id,
+        id: user.id,
         name: user.name,
         email: user.email,
       }

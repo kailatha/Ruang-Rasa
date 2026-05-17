@@ -1,67 +1,94 @@
 // src/controllers/journalController.js
 
-/**
- * Journal Controller
- * 
- * Postman test endpoints:
- *   GET    /api/journal          → getEntries
- *   GET    /api/journal/:id      → getEntry
- *   POST   /api/journal          → createEntry
- *   PUT    /api/journal/:id      → updateEntry
- *   DELETE /api/journal/:id      → deleteEntry
- * 
- * All routes require Authorization: Bearer <token>
- */
+import prisma from "../lib/prisma.js";
 
-// ─── GET /api/journal ────────────────────────────────────────────────────────
+// ─── GET ALL ENTRIES ─────────────────────────────────────────────
 export async function getEntries(req, res) {
   try {
-    const userId = req.user.id; // dari middleware auth
+    const userId = req.user.id;
 
-    // TODO: ganti dengan query PostgreSQL
-    // const entries = await Journal.findAll({ where: { userId }, order: [['createdAt', 'DESC']] });
+    const entries = await prisma.journal.findMany({
+      where: {
+        userId,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
 
-    // Placeholder response untuk test Postman
+    // statistik bulan ini
+    const now = new Date();
+
+    const firstDayMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1
+    );
+
+    const thisMonthCount = entries.filter(
+      (entry) => new Date(entry.createdAt) >= firstDayMonth
+    ).length;
+
     res.status(200).json({
       success: true,
-      entries: [],
+      entries,
       meta: {
-        total: 0,
-        thisMonth: 0,
+        total: entries.length,
+        thisMonth: thisMonthCount,
       },
     });
   } catch (err) {
     console.error("[journalController] getEntries:", err);
-    res.status(500).json({ success: false, message: "Gagal memuat entri." });
+
+    res.status(500).json({
+      success: false,
+      message: "Gagal memuat entri jurnal.",
+    });
   }
 }
 
-// ─── GET /api/journal/:id ────────────────────────────────────────────────────
+// ─── GET SINGLE ENTRY ────────────────────────────────────────────
 export async function getEntry(req, res) {
   try {
     const { id } = req.params;
     const userId = req.user.id;
 
-    // TODO: const entry = await Journal.findOne({ where: { id, userId } });
-    // if (!entry) return res.status(404).json({ success: false, message: "Entri tidak ditemukan." });
+    const entry = await prisma.journal.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!entry) {
+      return res.status(404).json({
+        success: false,
+        message: "Entri tidak ditemukan.",
+      });
+    }
 
     res.status(200).json({
       success: true,
-      entry: null, // ganti dengan data dari DB
+      entry,
     });
   } catch (err) {
     console.error("[journalController] getEntry:", err);
-    res.status(500).json({ success: false, message: "Gagal memuat entri." });
+
+    res.status(500).json({
+      success: false,
+      message: "Gagal memuat entri.",
+    });
   }
 }
 
-// ─── POST /api/journal ───────────────────────────────────────────────────────
+// ─── CREATE ENTRY ────────────────────────────────────────────────
 export async function createEntry(req, res) {
   try {
     const userId = req.user.id;
+
     const { mood, content, tags = [] } = req.body;
 
-    // Validasi
+    // validasi kosong
     if (!mood || !content?.trim()) {
       return res.status(400).json({
         success: false,
@@ -69,73 +96,131 @@ export async function createEntry(req, res) {
       });
     }
 
-    const validMoods = ["Senang", "Netral", "Sedih", "Marah", "Stress"];
+    // validasi mood
+    const validMoods = [
+      "Senang",
+      "Netral",
+      "Sedih",
+      "Marah",
+      "Stress",
+    ];
+
     if (!validMoods.includes(mood)) {
       return res.status(400).json({
         success: false,
-        message: `Mood tidak valid. Pilih dari: ${validMoods.join(", ")}`,
+        message: "Mood tidak valid.",
       });
     }
 
-    // TODO: Simpan ke PostgreSQL
-    // const entry = await Journal.create({ userId, mood, content, tags });
-
-    // TODO: Opsional — panggil AI untuk analisis sentimen
-    // const sentiment = await analyzeSentiment(content);
-    // await entry.update({ sentiment });
+    // simpan ke database
+    const entry = await prisma.journal.create({
+      data: {
+        userId,
+        mood,
+        content: content.trim(),
+        tags,
+      },
+    });
 
     res.status(201).json({
       success: true,
       message: "Jurnal berhasil disimpan.",
-      entry: {
-        id: "placeholder-id",
-        userId,
-        mood,
-        content,
-        tags,
-        sentiment: null, // akan diisi setelah AI analysis
-        createdAt: new Date().toISOString(),
-      },
+      entry,
     });
   } catch (err) {
     console.error("[journalController] createEntry:", err);
-    res.status(500).json({ success: false, message: "Gagal menyimpan jurnal." });
+
+    res.status(500).json({
+      success: false,
+      message: "Gagal menyimpan jurnal.",
+    });
   }
 }
 
-// ─── PUT /api/journal/:id ────────────────────────────────────────────────────
+// ─── UPDATE ENTRY ────────────────────────────────────────────────
 export async function updateEntry(req, res) {
   try {
     const { id } = req.params;
+
     const userId = req.user.id;
+
     const { mood, content, tags } = req.body;
 
-    // TODO:
-    // const entry = await Journal.findOne({ where: { id, userId } });
-    // if (!entry) return res.status(404).json({ success: false, message: "Entri tidak ditemukan." });
-    // await entry.update({ mood, content, tags });
+    // cek entry
+    const existingEntry = await prisma.journal.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!existingEntry) {
+      return res.status(404).json({
+        success: false,
+        message: "Entri tidak ditemukan.",
+      });
+    }
+
+    // update
+    const updatedEntry = await prisma.journal.update({
+      where: {
+        id,
+      },
+      // data: {
+      //   mood,
+      //   content,
+      //   tags,
+      // },
+      data: {
+        ...(mood && { mood }),
+        ...(content && { content: content.trim() }),
+        ...(tags && { tags }),
+      },
+    });
 
     res.status(200).json({
       success: true,
       message: "Jurnal berhasil diperbarui.",
-      entry: { id, mood, content, tags, updatedAt: new Date().toISOString() },
+      entry: updatedEntry,
     });
   } catch (err) {
     console.error("[journalController] updateEntry:", err);
-    res.status(500).json({ success: false, message: "Gagal memperbarui jurnal." });
+
+    res.status(500).json({
+      success: false,
+      message: "Gagal memperbarui jurnal.",
+    });
   }
 }
 
-// ─── DELETE /api/journal/:id ─────────────────────────────────────────────────
+// ─── DELETE ENTRY ────────────────────────────────────────────────
 export async function deleteEntry(req, res) {
   try {
     const { id } = req.params;
+
     const userId = req.user.id;
 
-    // TODO:
-    // const entry = await Journal.findOne({ where: { id, userId } });
-    // if (!entry) return res.status(404).json({ success: false, message: "Entri tidak ditemukan." });
-    // await entry.destroy();
+    // cek entry
+    const existingEntry = await prisma.journal.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!existingEntry) {
+      return res.status(404).json({
+        success: false,
+        message: "Entri tidak ditemukan.",
+      });
+    }
+
+    // delete
+    await prisma.journal.delete({
+      where: {
+        id,
+      },
+    });
 
     res.status(200).json({
       success: true,
@@ -143,6 +228,10 @@ export async function deleteEntry(req, res) {
     });
   } catch (err) {
     console.error("[journalController] deleteEntry:", err);
-    res.status(500).json({ success: false, message: "Gagal menghapus jurnal." });
+
+    res.status(500).json({
+      success: false,
+      message: "Gagal menghapus jurnal.",
+    });
   }
 }

@@ -8,10 +8,7 @@ import "@/components/layout/sidebar.css";
 import "./page.css";
 
 // React Icons - keterangan
-import { FiHeart } from "react-icons/fi";
-import { FiFeather } from "react-icons/fi";
-import { FiZap } from "react-icons/fi";
-import { FiAlertTriangle } from "react-icons/fi";
+import { FiHeart, FiFeather, FiZap, FiAlertTriangle, FiX, FiStar, FiSun } from "react-icons/fi";
 
 const SCALE_LEVELS = [
   {
@@ -114,7 +111,69 @@ function QuestionStep({ question, index, total, value, onChange, onNext, onPrev,
   );
 }
 
-function ResultView({ answers, backendResult, onReset }) {
+function RecommendationModal({ backendResult, onClose }) {
+  const activityDetail = backendResult?.activityDetail;
+  const affirmation = backendResult?.affirmation;
+
+  const activityTitle = activityDetail?.title || activityDetail?.name || null;
+  const activityDesc = activityDetail?.description || null;
+  const affirmationText = affirmation?.text || affirmation?.content || 
+    (typeof affirmation === 'string' ? affirmation : null);
+
+  return (
+    <div className="reco-modal-overlay" onClick={onClose}>
+      <div className="reco-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="reco-modal-close" onClick={onClose}>
+          <FiX />
+        </button>
+
+        <h2 className="reco-modal-title">Rekomendasi untuk Kamu</h2>
+        <p className="reco-modal-subtitle">
+          Berdasarkan hasil screening, berikut saran yang bisa kamu coba.
+        </p>
+
+        {activityTitle && (
+          <div className="reco-card reco-card-activity">
+            <div className="reco-card-icon"><FiStar /></div>
+            <div className="reco-card-content">
+              <div className="reco-card-label">Aktivitas yang Disarankan</div>
+              <div className="reco-card-title">{activityTitle}</div>
+              {activityDesc && <p className="reco-card-desc">{activityDesc}</p>}
+            </div>
+          </div>
+        )}
+
+        {affirmationText && (
+          <div className="reco-card reco-card-affirmation">
+            <div className="reco-card-icon"><FiSun /></div>
+            <div className="reco-card-content">
+              <div className="reco-card-label">Afirmasi Positif</div>
+              <p className="reco-card-desc reco-affirmation-text">
+                "{affirmationText}"
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!activityTitle && !affirmationText && (
+          <div className="reco-card">
+            <div className="reco-card-content">
+              <p className="reco-card-desc">
+                {backendResult?.recommendation || 'Tetap jaga kesehatan mentalmu dengan istirahat cukup, olahraga, dan berbagi cerita dengan orang terdekat.'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <Button className="screening-btn-primary reco-modal-btn" onClick={onClose}>
+          Mengerti
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function ResultView({ answers, backendResult, onReset, onShowRecommendation }) {
   // Mapping dari backend level ke UI Card
   const getLevelUI = (levelStr) => {
     switch (levelStr) {
@@ -127,7 +186,7 @@ function ResultView({ answers, backendResult, onReset }) {
   };
 
   const result = backendResult ? getLevelUI(backendResult.level) : SCALE_LEVELS[1];
-  const score = backendResult ? Math.round(backendResult.total_score / 10) : 0; // map ke 1–10 visual
+  const score = backendResult ? Math.round(backendResult.total_score / 10) : 0;
 
   return (
     <div className="result-wrapper fade-up">
@@ -159,10 +218,10 @@ function ResultView({ answers, backendResult, onReset }) {
             <div className="breakdown-bar-wrap">
               <div
                 className="breakdown-bar-fill"
-                style={{ width: `${(ans / 5) * 100}%` }}
+                style={{ width: `${(ans / 10) * 100}%` }}
               />
             </div>
-            <span className="breakdown-val">{SCALE_OPTIONS[ans - 1]?.label}</span>
+            <span className="breakdown-val">{ans}</span>
           </div>
         ))}
       </div>
@@ -171,7 +230,7 @@ function ResultView({ answers, backendResult, onReset }) {
         <Button variant="outline" className="screening-btn-outline" onClick={onReset}>
           Ulangi Screening
         </Button>
-        <Button className="screening-btn-primary">
+        <Button className="screening-btn-primary" onClick={onShowRecommendation}>
           Lihat Rekomendasi
         </Button>
       </div>
@@ -188,6 +247,7 @@ export default function ScreeningPage() {
   const [answers, setAnswers] = useState(Array(QUESTIONS.length).fill(null));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [backendResult, setBackendResult] = useState(null);
+  const [showRecommendation, setShowRecommendation] = useState(false);
 
   function handleAnswer(val) {
     setAnswers((prev) => {
@@ -291,11 +351,20 @@ export default function ScreeningPage() {
         )}
 
         {phase === "result" && (
-          <ResultView 
-            answers={answers.map((a) => a ?? 1)} 
-            backendResult={backendResult}
-            onReset={handleReset} 
-          />
+          <>
+            <ResultView 
+              answers={answers.map((a) => a ?? 1)} 
+              backendResult={backendResult}
+              onReset={handleReset}
+              onShowRecommendation={() => setShowRecommendation(true)}
+            />
+            {showRecommendation && (
+              <RecommendationModal
+                backendResult={backendResult}
+                onClose={() => setShowRecommendation(false)}
+              />
+            )}
+          </>
         )}
       </main>
     </div>
