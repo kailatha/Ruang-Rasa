@@ -1,0 +1,67 @@
+{
+  "risk_label_map": {
+    "0": "low",
+    "1": "medium",
+    "2": "high"
+  },
+  "profile_name_map": {
+    "0": "moderate_loneliness_mood_instability",
+    "1": "moderate_mood_instability_work_stress",
+    "2": "moderate_work_stress_loneliness",
+    "3": "moderate_mood_instability_financial_pressure",
+    "4": "moderate_work_stress_financial_pressure"
+  },
+  "numeric_features": [
+    "Age",
+    "Sleep_Hours_Night",
+    "Screen_Time_Hours_Day",
+    "Social_Media_Hours_Day",
+    "Trauma_History",
+    "Previously_Diagnosed",
+    "Work_Hours_Per_Week",
+    "Work_Stress_Level",
+    "Financial_Stress",
+    "Mood_Swings",
+    "Loneliness",
+    "screening_hour",
+    "screening_dayofweek",
+    "screening_month",
+    "sleep_risk",
+    "screen_time_risk",
+    "social_media_risk",
+    "work_hours_risk",
+    "work_stress_risk",
+    "financial_risk",
+    "mood_swings_risk",
+    "loneliness_risk"
+  ],
+  "categorical_features": [
+    "Gender"
+  ],
+  "reconstruction_features": [
+    "Age",
+    "Sleep_Hours_Night",
+    "Screen_Time_Hours_Day",
+    "Social_Media_Hours_Day",
+    "Trauma_History",
+    "Previously_Diagnosed",
+    "Work_Hours_Per_Week",
+    "Work_Stress_Level",
+    "Financial_Stress",
+    "Mood_Swings",
+    "Loneliness",
+    "screening_hour",
+    "screening_dayofweek",
+    "screening_month",
+    "sleep_risk",
+    "screen_time_risk",
+    "social_media_risk",
+    "work_hours_risk",
+    "work_stress_risk",
+    "financial_risk",
+    "mood_swings_risk",
+    "loneliness_risk"
+  ],
+  "n_clusters": 5,
+  "note": "Pseudo-label risk estimation + unsupervised user profiling. Non-diagnostic support model."
+}

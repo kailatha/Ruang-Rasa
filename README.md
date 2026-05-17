@@ -91,17 +91,43 @@ npm run dev
 
 Frontend jalan di `http://localhost:5173`
 
-### 4. AI Service (Opsional)
+### 4. AI Service (Belum Dulu)
+AI Service berjalan secara mandiri menggunakan FastAPI di port `8000`.
+
+Masuk ke folder `ai-service`.
 
 ```bash
 cd ai-service
-pip install -r requirements.txt
-python app.py
 ```
 
-AI Service jalan di `http://localhost:8000`
+Buat virtual environment.
 
-> Jika AI Service tidak berjalan, backend akan menggunakan fallback scoring.
+```bash
+py -m venv .venv
+```
+Install dependency AI Service.
+
+```bash
+pip install -r requirements.txt
+```
+
+Jika `uvicorn` tidak terbaca, tetap jalankan server menggunakan format berikut:
+
+```bash
+python -m uvicorn app.main:app --reload --port 8000
+```
+
+AI Service berjalan di:
+
+```text
+http://localhost:8000
+```
+
+Dokumentasi API FastAPI tersedia di:
+
+```text
+http://localhost:8000/docs
+```
 
 ## Environment Variables
 
@@ -111,9 +137,9 @@ AI Service jalan di `http://localhost:8000`
 |---|---|---|
 | `DATABASE_URL` | Connection string Prisma | `postgresql://user:pass@localhost:5432/ruang_rasa` |
 | `PORT` | Port backend | `5000` |
-| `JWT_SECRET` | Secret key JWT | `your_secret_key` |
+| `JWT_SECRET` | Secret key JWT | `your_secret_key` (belum diisi)|
 | `JWT_EXPIRES_IN` | Masa berlaku token | `7d` |
-| `AI_API_URL` | URL AI Service | `http://localhost:8000` |
+| `AI_API_URL` | URL AI Service | `http://localhost:8000` (Kalau dideploy diganti urlnya) |
 
 ### Frontend (`.env`)
 
@@ -168,10 +194,30 @@ Ruang-Rasa/
 │   ├── server.js           # Entry point
 │   └── package.json
 │
-├── ai-service/             # Python AI Service
-│   ├── app.py              # Flask/FastAPI server
-│   ├── model/              # Trained ML model
-│   └── requirements.txt
+├──  ai-service/                   # Python FastAPI service untuk model AI
+│   ├── app/                       # Source code utama AI Service
+│   │   ├── __init__.py            # Penanda folder app sebagai Python package
+│   │   ├── main.py                # Entry point FastAPI dan endpoint API
+│   │   ├── schemas.py             # Schema validasi request dan response
+│   │   ├── custom_objects.py      # Custom layer/object TensorFlow
+│   │   ├── model_loader.py        # Loader model, metadata, dan data pendukung
+│   │   ├── inference.py           # Logic prediksi model TensorFlow
+│   │   └── recommendation.py      # Logic rekomendasi aktivitas dan afirmasi
+│   │
+│   ├── utils/                     # Utility function AI Service
+│   │   ├── __init__.py            # Penanda folder utils sebagai Python package
+│   │   └── preprocessing.py       # Mapping dan preprocessing input model
+│   │
+│   ├── model/                     # Dokumentasi model machine learning
+│   │   ├── screening_model.keras  # Model Keras hasil training
+│   │   └── model_metadata.json    # Metadata fitur, label, dan konfigurasi model
+│   │
+│   ├── data/                      # Data pendukung rekomendasi dan mapping profil
+│   │   ├── profile_name_map.json  # Mapping id profil ke nama profil user
+│   │   ├── activity_bank.json     # Daftar aktivitas rekomendasi
+│   │   └── affirmation_bank.json  # Daftar afirmasi atau kalimat dukungan
+│   │
+│   └── requirements.txt           # Dependency Python untuk AI Service
 │
 └── README.md
 ```
@@ -190,6 +236,9 @@ npx prisma studio         # GUI database browser
 npm run dev        # Development
 npm run build      # Production build
 npm run lint       # ESLint check
+
+# AI service 
+python -m uvicorn app.main:app --reload --port 8000
 ```
 
 ## Tim
