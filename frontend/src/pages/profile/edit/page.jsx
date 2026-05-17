@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Camera, Loader2, Calendar as CalendarIcon } from "lucide-react";
+import { ChevronLeft, Camera, Loader2, Calendar as CalendarIcon, Eye, EyeOff, Lock, User } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -13,7 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getProfile, updateProfile, changePassword } from "@/services/profileService";
 import "./page.css";
 
 const FormField = ({ id, label, type = "text", placeholder, value, onChange, options }) => (
@@ -78,6 +79,35 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
   </div>
 );
 
+// Komponen field password dengan toggle show/hide
+const PasswordField = ({ id, label, placeholder, value, onChange }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+        {label}
+      </Label>
+      <div className="relative">
+        <Input
+          id={id}
+          type={show ? "text" : "password"}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          className="h-11 px-4 pr-12 rounded-xl border-slate-200 focus-visible:ring-[#4a7c6d]"
+        />
+        <button
+          type="button"
+          onClick={() => setShow(!show)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          {show ? <EyeOff size={18} /> : <Eye size={18} />}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 export default function EditProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
@@ -91,6 +121,15 @@ export default function EditProfilePage() {
     status: "",
   });
 
+  // State untuk ganti password
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState({ type: "", text: "" });
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -98,14 +137,9 @@ export default function EditProfilePage() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}/profile`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
+    const fetchProfile = async () => {
+      try {
+        const data = await getProfile();
         const user = data.data || data;
         setFormData({
           name: user.name || "",
@@ -115,12 +149,14 @@ export default function EditProfilePage() {
           job: user.job || "",
           status: user.status || "",
         });
-        setLoading(false);
-      })
-      .catch(err => {
+      } catch (err) {
         console.error(err);
+      } finally {
         setLoading(false);
-      });
+      }
+    };
+
+    fetchProfile();
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -128,32 +164,61 @@ export default function EditProfilePage() {
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handlePasswordChange = (e) => {
+    const { id, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [id]: value }));
+    // Reset pesan saat user mengetik
+    if (passwordMessage.text) setPasswordMessage({ type: "", text: "" });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
 
-    const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        navigate("/profile");
-      } else {
-        const errorData = await response.json();
-        alert(errorData.message || "Gagal memperbarui profil");
-      }
+      await updateProfile(formData);
+      navigate("/profile");
     } catch (error) {
       console.error(error);
-      alert("Terjadi kesalahan koneksi");
+      alert(error.message || "Gagal memperbarui profil");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+
+    // Validasi frontend
+    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+      setPasswordMessage({ type: "error", text: "Semua field password wajib diisi" });
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      setPasswordMessage({ type: "error", text: "Password baru minimal 6 karakter" });
+      return;
+    }
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordMessage({ type: "error", text: "Konfirmasi password tidak cocok" });
+      return;
+    }
+
+    setChangingPassword(true);
+    setPasswordMessage({ type: "", text: "" });
+
+    try {
+      const result = await changePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+      setPasswordMessage({ type: "success", text: result.message || "Password berhasil diubah" });
+      setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+    } catch (error) {
+      setPasswordMessage({ type: "error", text: error.message || "Gagal mengubah password" });
+    } finally {
+      setChangingPassword(false);
     }
   };
 
@@ -186,9 +251,10 @@ export default function EditProfilePage() {
           <Card className="border-none shadow-sm bg-white">
             <CardContent className="p-8 flex flex-col items-center gap-4">
               <div className="relative">
-                <Avatar className="w-28 h-28 border-4 border-[#f0f9f5]">
-                  <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256" />
-                  <AvatarFallback>{formData.name ? formData.name.substring(0, 2).toUpperCase() : 'CN'}</AvatarFallback>
+                <Avatar className="w-28 h-28 border-4 border-[#e2f0e9] bg-[#eef7f6] flex items-center justify-center">
+                  <AvatarFallback className="bg-transparent text-[#4a7c6d]">
+                    <User size={56} />
+                  </AvatarFallback>
                 </Avatar>
                 <button 
                   type="button"
@@ -308,6 +374,69 @@ export default function EditProfilePage() {
               )}
             </Button>
           </div>
+        </form>
+
+        {/* Change Password Section */}
+        <form onSubmit={handleChangePassword} className="space-y-6">
+          <Card className="border-none shadow-sm bg-white">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg font-semibold text-slate-700 flex items-center gap-2">
+                <Lock size={18} className="text-[#4a7c6d]" />
+                Ganti Password
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <PasswordField
+                id="currentPassword"
+                label="Password Lama"
+                placeholder="Masukkan password lama"
+                value={passwordData.currentPassword}
+                onChange={handlePasswordChange}
+              />
+
+              <PasswordField
+                id="newPassword"
+                label="Password Baru"
+                placeholder="Minimal 6 karakter"
+                value={passwordData.newPassword}
+                onChange={handlePasswordChange}
+              />
+
+              <PasswordField
+                id="confirmPassword"
+                label="Konfirmasi Password Baru"
+                placeholder="Ulangi password baru"
+                value={passwordData.confirmPassword}
+                onChange={handlePasswordChange}
+              />
+
+              {/* Pesan feedback */}
+              {passwordMessage.text && (
+                <div className={`p-3 rounded-xl text-sm font-medium ${
+                  passwordMessage.type === "success" 
+                    ? "bg-[#e2f0e9] text-[#2d5a4c]" 
+                    : "bg-red-50 text-red-600"
+                }`}>
+                  {passwordMessage.text}
+                </div>
+              )}
+
+              <Button
+                type="submit"
+                disabled={changingPassword}
+                className="w-full h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium"
+              >
+                {changingPassword ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Mengubah Password...
+                  </>
+                ) : (
+                  "Ubah Password"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
         </form>
       </div>
     </div>

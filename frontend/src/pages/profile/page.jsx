@@ -1,64 +1,72 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Edit2, ChevronRight, LayoutDashboard, BarChart2, BookOpen } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Edit2, ChevronRight, LayoutDashboard, BarChart2, BookOpen, Loader2, User, LogOut } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { getProfile, getProfileStats } from "@/services/profileService";
 
 export default function ProfilePage() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
+  const [stats, setStats] = useState({ screeningCount: 0, journalCount: 0 });
+  const [screeningHistory, setScreeningHistory] = useState([]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      window.location.href = "/login";
+      navigate("/login");
       return;
     }
 
-    // // DUMMY PROFILE DATA: Mencegah error jika backend belum menyala
-    // if (token === "dummy-token-123") {
-    //   setTimeout(() => {
-    //     setProfile({
-    //       name: "Sobat Rasa",
-    //       email: "halo@ruangrasa.id",
-    //       createdAt: new Date().toISOString()
-    //     });
-    //     setLoading(false);
-    //   }, 500);
-    //   return;
-    // }
+    const fetchData = async () => {
+      try {
+        const [profileData, statsData] = await Promise.all([
+          getProfile(),
+          getProfileStats(),
+        ]);
 
-    fetch(`${import.meta.env.VITE_API_URL}/profile`, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    })
-      .then(res => {
-        if (res.status === 401) {
+        setProfile(profileData);
+        setStats(statsData);
+
+        // Ambil riwayat screening terbaru
+        const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        const screeningRes = await fetch(`${BASE_URL}/screening/history`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (screeningRes.ok) {
+          const screeningData = await screeningRes.json();
+          const items = screeningData.data || screeningData;
+          setScreeningHistory(Array.isArray(items) ? items.slice(0, 5) : []);
+        }
+      } catch (err) {
+        console.error(err);
+        // Jika token expired, redirect ke login
+        if (err.message?.includes('401') || err.message?.includes('token')) {
           localStorage.removeItem("token");
-          window.location.href = "/login";
+          navigate("/login");
           return;
         }
-        return res.json();
-      })
-      .then(data => {
-        setProfile(data);
+      } finally {
         setLoading(false);
-      })
-      .catch(err => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [navigate]);
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <div>Loading...</div>
+      <div className="flex-1 flex items-center justify-center bg-[#f8f9f4]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#4a7c6d]" />
       </div>
     );
   }
@@ -74,6 +82,17 @@ export default function ProfilePage() {
   // Handle potential nested data object from backend
   const userData = profile.data || profile;
 
+  // Helper untuk format level skrining
+  const getLevelLabel = (level) => {
+    const map = {
+      low: "Rendah",
+      medium: "Sedang",
+      high: "Tinggi",
+      minimal: "Minimal",
+    };
+    return map[level?.toLowerCase()] || level || "-";
+  };
+
   return (
     <div className="flex-1 bg-[#f8f9f4] font-sans text-slate-700 w-full">
       <main className="max-w-5xl mx-auto p-8 space-y-8">
@@ -82,9 +101,10 @@ export default function ProfilePage() {
           <CardContent className="p-8 flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div className="relative">
-                <Avatar className="w-24 h-24 border-2 border-slate-100">
-                  <AvatarImage src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256" />
-                  <AvatarFallback>{userData.name ? userData.name.substring(0, 2).toUpperCase() : 'CN'}</AvatarFallback>
+                <Avatar className="w-24 h-24 border-2 border-[#e2f0e9] bg-[#eef7f6] flex items-center justify-center">
+                  <AvatarFallback className="bg-transparent text-[#4a7c6d]">
+                    <User size={48} />
+                  </AvatarFallback>
                 </Avatar>
                 <button className="absolute bottom-0 right-0 p-1.5 bg-[#4a7c6d] text-white rounded-full border-2 border-white">
                   <Edit2 size={12} />
@@ -98,21 +118,31 @@ export default function ProfilePage() {
                 </Badge>
               </div>
             </div>
-            <Link to="/profile/edit">
-              <Button className="bg-[#4a7c6d] hover:bg-[#3d665a] text-white px-6 rounded-md">
-                Edit Profil
+            <div className="flex items-center gap-3">
+              <Button 
+                variant="outline" 
+                onClick={handleLogout}
+                className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 px-4 rounded-md flex items-center gap-2"
+              >
+                <LogOut size={16} />
+                <span className="hidden sm:inline">Keluar</span>
               </Button>
-            </Link>
+              <Link to="/profile/edit">
+                <Button className="bg-[#4a7c6d] hover:bg-[#3d665a] text-white px-6 rounded-md">
+                  Edit Profil
+                </Button>
+              </Link>
+            </div>
           </CardContent>
         </Card>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Ringkasan Aktivitas */}
+          {/* Ringkasan Aktivitas — Data Real */}
           <Card className="bg-[#eef7f6] border-none shadow-none p-6 flex items-center justify-around text-center">
             <div>
               <p className="text-xs uppercase tracking-wider text-slate-500 mb-2">Ringkasan Aktivitas</p>
               <div className="space-y-0">
-                <h2 className="text-4xl font-bold text-slate-800">24</h2>
+                <h2 className="text-4xl font-bold text-slate-800">{stats.screeningCount}</h2>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skrining</p>
               </div>
             </div>
@@ -120,7 +150,7 @@ export default function ProfilePage() {
             <div>
               <p className="text-xs invisible mb-2">Spacer</p>
               <div className="space-y-0">
-                <h2 className="text-4xl font-bold text-slate-800">112</h2>
+                <h2 className="text-4xl font-bold text-slate-800">{stats.journalCount}</h2>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jurnal</p>
               </div>
             </div>
@@ -150,44 +180,59 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Riwayat Section */}
+        {/* Riwayat Section — Data Real */}
         <Card className="border-none shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <div className="p-1.5 bg-[#eef7f6] rounded text-[#4a7c6d]">
                 <BarChart2 size={18} />
               </div>
-              <h3 className="text-lg font-semibold text-slate-700">Riwayat</h3>
+              <h3 className="text-lg font-semibold text-slate-700">Riwayat Skrining</h3>
             </div>
-            <select className="bg-slate-50 border border-slate-200 rounded-md text-xs p-2 outline-none">
-              <option>7 Hari Terakhir</option>
-            </select>
           </div>
 
           <div className="space-y-3">
-            {[
-              { title: "Skrining Kecemasan (GAD-7)", date: "14 Mei 2024", result: "Skor: 4 (Rendah)", icon: "check" },
-              { title: "Evaluasi Kualitas Tidur", date: "10 Mei 2024", result: "Skor: Baik", icon: "file" }
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className={`p-2 rounded-full ${item.icon === 'check' ? 'bg-[#eef7f6] text-[#4a7c6d]' : 'bg-blue-50 text-blue-500'}`}>
-                    {item.icon === 'check' ? <LayoutDashboard size={18} /> : <BookOpen size={18} />}
+            {screeningHistory.length > 0 ? (
+              screeningHistory.map((item, idx) => (
+                <div key={item.id || idx} className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="p-2 rounded-full bg-[#eef7f6] text-[#4a7c6d]">
+                      <LayoutDashboard size={18} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-medium text-slate-700">
+                        Skrining Kesehatan Mental
+                      </h4>
+                      <p className="text-[11px] text-slate-400">
+                        {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} • Skor: {item.total_score} ({getLevelLabel(item.level)})
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-700">{item.title}</h4>
-                    <p className="text-[11px] text-slate-400">{item.date} • {item.result}</p>
-                  </div>
+                  <ChevronRight size={18} className="text-slate-300" />
                 </div>
-                <ChevronRight size={18} className="text-slate-300" />
+              ))
+            ) : (
+              <div className="text-center py-8 text-slate-400">
+                <p className="text-sm">Belum ada riwayat skrining</p>
+                <Link to="/screening">
+                  <Button variant="outline" className="mt-3 border-[#d4eadd] text-[#4a7c6d] hover:bg-[#f0f9f5]">
+                    Mulai Skrining
+                  </Button>
+                </Link>
               </div>
-            ))}
+            )}
           </div>
 
-          <Button variant="outline" className="w-full mt-6 border-dashed border-2 border-[#d4eadd] text-[#4a7c6d] bg-transparent hover:bg-[#f0f9f5] hover:text-[#4a7c6d] h-12">
-            Lihat Semua Riwayat
-          </Button>
+          {screeningHistory.length > 0 && (
+            <Link to="/screening">
+              <Button variant="outline" className="w-full mt-6 border-dashed border-2 border-[#d4eadd] text-[#4a7c6d] bg-transparent hover:bg-[#f0f9f5] hover:text-[#4a7c6d] h-12">
+                Lihat Semua Riwayat
+              </Button>
+            </Link>
+          )}
         </Card>
+
+
       </main>
     </div>
   );

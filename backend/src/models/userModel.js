@@ -94,3 +94,15 @@ export const updateUser = async (userId, userData) => {
     },
   });
 };
+
+// UPDATE PASSWORD
+export const updatePassword = async (userId, hashedPassword) => {
+  return await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+};
