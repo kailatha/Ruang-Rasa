@@ -60,7 +60,10 @@ const callAIService = async (features) => {
       level: data.level,
       recommendation: data.recommendation,
       activity: data.activity || null,
+      affirmation: data.affirmation || null,
       total_score: data.total_score || null,
+      user_profile: data.user_profile || null,
+      risk_score: data.risk_score || null,
     };
   } catch (error) {
     console.error('AI Service tidak tersedia, menggunakan fallback:', error.message);
@@ -134,6 +137,16 @@ export const submitScreening = async (req, res) => {
       result = getFallbackResult(total_score / 10);
     }
 
+    // Normalize activity: AI Service bisa return object, Prisma butuh String
+    let activityStr = null;
+    if (result.activity) {
+      if (typeof result.activity === 'string') {
+        activityStr = result.activity;
+      } else if (typeof result.activity === 'object') {
+        activityStr = result.activity.title || result.activity.name || JSON.stringify(result.activity);
+      }
+    }
+
     // Simpan ke database via Prisma
     const savedResult = await createScreeningResult({
       userId,
@@ -152,12 +165,17 @@ export const submitScreening = async (req, res) => {
       total_score: result.total_score || total_score,
       level: result.level,
       recommendation: result.recommendation,
-      activity: result.activity || null,
+      activity: activityStr,
     });
 
     res.status(201).json({
       message: 'Screening berhasil disimpan',
-      data: savedResult
+      data: {
+        ...savedResult,
+        activityDetail: result.activity || null,
+        affirmation: result.affirmation || null,
+        user_profile: result.user_profile || null,
+      }
     });
   } catch (error) {
     console.error('Error in submitScreening:', error);
