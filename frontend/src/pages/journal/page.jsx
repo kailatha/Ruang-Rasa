@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
 import { createJournalEntry, getJournalEntries } from "@/services/journalService";
 import { MOCK_ENTRIES } from "@/mock/journalMock";
+
 import "./page.css";
 import Sidebar from "@/components/layout/sidebar";
 import "@/components/layout/sidebar.css";
@@ -18,6 +18,7 @@ import { RiCheckLine } from "react-icons/ri";
 import { RiCloseLine } from "react-icons/ri";
 import { RiAddLine } from "react-icons/ri";
 import { RiArrowRightLine } from "react-icons/ri";
+import { RiArrowLeftLine } from "react-icons/ri";
 
 // React Icons - mood
 import { RiEmotionHappyLine } from "react-icons/ri";
@@ -186,6 +187,7 @@ export default function JournalPage() {
   const [saveStatus, setSaveStatus] = useState(null);
   const [entries, setEntries] = useState([]);
   const [loadingEntries, setLoadingEntries] = useState(true);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     if (!content) return;
@@ -255,7 +257,8 @@ export default function JournalPage() {
   const canSave = selectedMood && content.trim().length > 0;
 
   return (
-    <div className="journal-layout">
+    <div className={"journal-layout" + (sidebarCollapsed ? " collapsed" : "")}>
+
       <Sidebar entryCount={entries.length} />
       
       <main className="journal-main fade-up">
@@ -349,7 +352,13 @@ export default function JournalPage() {
       </main>
 
       {/* sidebar kanan khusus journal */}
-      <aside className="journal-entries-sidebar">
+      <aside className={"journal-entries-sidebar" + (sidebarCollapsed ? " collapsed" : "")}>
+        <button
+          className="sidebar-toggle"
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+        >
+          {sidebarCollapsed ? <RiArrowLeftLine /> : <RiArrowRightLine />}
+        </button>
         <div className="entries-header">
           <h3 className="entries-title">Entri Sebelumnya</h3>
         </div>
@@ -363,9 +372,9 @@ export default function JournalPage() {
             {entries.slice(0, 4).map((entry) => (
               <EntryCard key={entry.id} entry={entry} />
             ))}
-            <button className="see-all-btn">
+            {/* <button className="see-all-btn">
               Lihat semua entri <RiArrowRightLine className="see-all-icon" />
-            </button>
+            </button> */}
           </>
         )}
       </aside>
