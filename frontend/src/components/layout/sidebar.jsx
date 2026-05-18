@@ -4,7 +4,8 @@ import "./sidebar.css";
 
 // React Icons - Navigation
 import { RiDashboardLine, RiSearchEyeLine, RiBookOpenLine, RiChat3Line, RiSparklingLine } from "react-icons/ri";
-import { FiAlignJustify } from "react-icons/fi";
+import { FiMenu } from "react-icons/fi";
+import { RiMenuUnfold2Line } from "react-icons/ri";
 
 const MENU_ITEMS = [
   { icon: <RiDashboardLine />, label: "Dashboard",   path: "/dashboard" },
@@ -130,7 +131,7 @@ export default function LeftSidebar({ entryCount }) {
           )
         }
       >
-        <FiAlignJustify />
+        {sidebarCollapsed ? <FiMenu /> : <RiMenuUnfold2Line />}
       </button>
 
       {/* MENU */}
