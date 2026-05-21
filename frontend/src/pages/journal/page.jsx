@@ -14,9 +14,6 @@ import { RiItalic } from "react-icons/ri";
 import { RiListUnordered } from "react-icons/ri";
 import { RiTable2 } from "react-icons/ri";
 import { RiPriceTag3Line } from "react-icons/ri";
-import { RiCheckLine } from "react-icons/ri";
-import { RiCloseLine } from "react-icons/ri";
-import { RiAddLine } from "react-icons/ri";
 import { RiArrowRightLine } from "react-icons/ri";
 import { RiArrowLeftLine } from "react-icons/ri";
 
@@ -120,55 +117,19 @@ function MoodPicker({ selected, onSelect }) {
 }
 
 function TagSelector({ selected, onToggle }) {
-  const [showCustomInput, setShowCustomInput] = useState(false);
-  const [customTag, setCustomTag] = useState("");
-
-  function handleAddCustom() {
-    if (customTag.trim()) {
-      onToggle(customTag.trim());
-      setCustomTag("");
-      setShowCustomInput(false);
-    }
-  }
-
   return (
     <div className="tag-selector">
       {TAGS_OPTIONS.map((tag) => (
         <button
           key={tag}
           onClick={() => onToggle(tag)}
-          className={`tag-chip ${selected.includes(tag) ? "tag-chip-active" : ""}`}
+          className={`tag-chip ${
+            selected.includes(tag) ? "tag-chip-active" : ""
+          }`}
         >
           {tag}
-          {selected.includes(tag) && <RiCloseLine className="tag-close-icon" />}
         </button>
       ))}
-      {selected
-        .filter((t) => !TAGS_OPTIONS.includes(t))
-        .map((t) => (
-          <button key={t} className="tag-chip tag-chip-active" onClick={() => onToggle(t)}>
-            {t} <RiCloseLine className="tag-close-icon" />
-          </button>
-        ))}
-      {showCustomInput ? (
-        <div className="custom-tag-input">
-          <input
-            autoFocus
-            value={customTag}
-            onChange={(e) => setCustomTag(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddCustom()}
-            placeholder="Nama tagar..."
-            className="custom-tag-field"
-          />
-          <button className="custom-tag-confirm" onClick={handleAddCustom}>
-            <RiCheckLine />
-          </button>
-        </div>
-      ) : (
-        <button className="tag-chip tag-chip-add" onClick={() => setShowCustomInput(true)}>
-          <RiAddLine />
-        </button>
-      )}
     </div>
   );
 }
