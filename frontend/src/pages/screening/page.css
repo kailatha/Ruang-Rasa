@@ -1,13 +1,17 @@
 .screening-layout {
-  display: grid;
-  grid-template-columns: 220px 1fr;
+  display: flex;
   min-height: calc(100vh - 60px);
   background: var(--cream);
 }
 
 .screening-main {
-  padding: 48px 64px;
-  margin: 0;
+  flex: 1;
+  padding: 40px 48px;
+  overflow-y: auto;
+  min-width: 0;
+
+  display: flex;
+  justify-content: center;
 }
 
 /* intro */
@@ -42,7 +46,7 @@
   max-width: 1000px;
 }
 
-/* ─── Keterangan / Level Cards ───────────────────────────────────────────── */
+/* keterangan */
 
 .screening-keterangan-title {
   font-family: 'Playfair Display', serif;
@@ -107,7 +111,7 @@
 .level-tinggi .level-icon     { color: var(--green-dark); }
 .level-kritis .level-icon     { color: #8b2c2c; }
 
-/* ─── Start Button ───────────────────────────────────────────────────────── */
+/* START SCREEEEEEEEENING */
 
 .screening-start-btn {
   width: 100%;
@@ -131,7 +135,7 @@
   box-shadow: 0 8px 28px rgba(61, 92, 74, 0.28);
 }
 
-/* ─── Common Buttons ─────────────────────────────────────────────────────── */
+/* buttons */
 
 .screening-btn-primary {
   background-color: var(--green-dark) !important;
@@ -174,7 +178,7 @@
   color: var(--green-dark) !important;
 }
 
-/* ─── Questions ──────────────────────────────────────────────────────────── */
+/* pertanyaan */
 
 .question-wrapper {
   display: flex;
@@ -216,7 +220,7 @@
   margin-bottom: 32px;
 }
 
-/* ─── Scale Options ──────────────────────────────────────────────────────── */
+/* scale options */
 
 .scale-options {
   display: flex;
@@ -288,7 +292,7 @@
   justify-content: flex-end;
 }
 
-/* ─── Result ─────────────────────────────────────────────────────────────── */
+/* HASIL */
 
 .result-wrapper {
   display: flex;
@@ -453,7 +457,7 @@
   gap: 12px;
 }
 
-/* ─── Responsive ─────────────────────────────────────────────────────────── */
+/* responsivity */
 
 @media (max-width: 768px) {
   .screening-main {
@@ -484,7 +488,7 @@
   }
 }
 
-/* ─── Recommendation Modal ───────────────────────────────────────────────── */
+/* recommendation modal */
 
 .reco-modal-overlay {
   position: fixed;

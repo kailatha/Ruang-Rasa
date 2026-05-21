@@ -1,24 +1,20 @@
 .journal-layout {
-  display: grid;
-  grid-template-columns: 220px 1fr minmax(68px, 320px);
+  display: flex;
   min-height: calc(100vh - 60px);
   background: var(--cream);
-  transition: grid-template-columns 0.2s ease;
 }
 
 /* main */
 .journal-main {
+  flex: 1;
   padding: 40px 48px;
   overflow-y: auto;
   min-width: 0;
 }
 
-.journal-layout.collapsed {
-  grid-template-columns: 220px 1fr 68px;
-}
-
 .journal-form-area {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .journal-header {
@@ -353,15 +349,20 @@
 /* SIDEBAR KANAN */
 
 .journal-entries-sidebar {
+  width: 320px;
+  min-width: 320px;
   position: relative;
   background: var(--white);
   border-left: 1px solid rgba(61, 92, 74, 0.08);
   padding: 28px 20px;
   overflow-y: auto;
   overflow-x: hidden;
+  transition: width 0.2s ease, min-width 0.2s ease;
 }
 
 .journal-entries-sidebar.collapsed {
+  width: 68px;
+  min-width: 68px;
   padding: 16px 10px;
 }
 
