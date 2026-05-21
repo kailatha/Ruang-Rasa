@@ -1,5 +1,5 @@
 import { Route, Navigate } from "react-router-dom";
-// import DashboardPage from "@/pages/dashboard/page";
+import DashboardPage from "@/pages/dashboard/page";
 import JournalPage from "@/pages/journal/page";
 import ScreeningPage from "@/pages/screening/page";
 // import ChatbotPage from "@/pages/chatbot/page";
@@ -17,11 +17,11 @@ function PrivateRoute({ children }) {
 }
 
 const privateRoutes = [
-//   <Route
-//     key="dashboard"
-//     path="/dashboard"
-//     element={<PrivateRoute><DashboardPage /></PrivateRoute>}
-//   />,
+  <Route
+    key="dashboard"
+    path="/dashboard"
+    element={<PrivateRoute><DashboardPage /></PrivateRoute>}
+  />,
   <Route
     key="journal"
     path="/journal"
