@@ -38,9 +38,9 @@ export default function Header() {
           <button className="app-nav-icon-btn" title="Dark mode">
             <RiMoonLine />
           </button>
-          <button className="app-nav-icon-btn" title="Notifikasi">
+          {/* <button className="app-nav-icon-btn" title="Notifikasi">
             <RiNotification3Line />
-          </button>
+          </button> */}
           <button className="app-nav-icon-btn app-nav-profile-btn" onClick={() => navigate("/profile")} title="Profil">
             <RiUserLine />
           </button>
