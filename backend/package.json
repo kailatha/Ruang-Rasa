@@ -4,7 +4,7 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "dev": "nodemon --watch src --watch server.js server.js",
     "start": "node server.js",
     "lint": "eslint ./src",
     "migrate": "node-pg-migrate",
@@ -22,6 +22,8 @@
     "prisma": "^6.19.3"
   },
   "dependencies": {
+    "@google/genai": "^2.6.0",
+    "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
