@@ -10,7 +10,7 @@ export async function generateGeminiReply(prompt) {
   }
 
   const response = await ai.models.generateContent({
-    model: process.env.GEMINI_MODEL || "gemini-2.5-flash-lite",
+    model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
     contents: prompt,
   });
 

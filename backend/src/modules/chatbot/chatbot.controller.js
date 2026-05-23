@@ -4,10 +4,14 @@ import {
 } from "./safety.guard.js";
 import { buildChatbotPrompt } from "./prompt.builder.js";
 import { generateGeminiReply } from "./gemini.client.js";
+import {
+  retrieveRelevantKnowledge,
+  formatKnowledgeForPrompt,
+} from "./knowledge.service.js";
 
 export async function sendChatbotMessage(req, res, next) {
   try {
-    const { message } = req.body;
+    const { message, journalContext } = req.body;
 
     if (!message || typeof message !== "string") {
       return res.status(400).json({
@@ -25,7 +29,20 @@ export async function sendChatbotMessage(req, res, next) {
       });
     }
 
-    const prompt = buildChatbotPrompt(message);
+    const knowledgeResult = retrieveRelevantKnowledge({
+      userMessage: message,
+      journalContext,
+      limit: 5,
+    });
+
+    const knowledgeText = formatKnowledgeForPrompt(knowledgeResult);
+
+    const prompt = buildChatbotPrompt({
+      message,
+      journalContext,
+      knowledgeText,
+    });
+
     const answer = await generateGeminiReply(prompt);
 
     return res.json({
@@ -34,6 +51,12 @@ export async function sendChatbotMessage(req, res, next) {
         answer,
         safety_level: safety.level,
         source: "gemini",
+        knowledge_used: knowledgeResult.documents.map((doc) => ({
+          title: doc.title,
+          file: doc.relativePath,
+          type: doc.type,
+        })),
+        inferred_context: knowledgeResult.context,
       },
     });
   } catch (error) {
