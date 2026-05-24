@@ -3,6 +3,8 @@ import 'dotenv/config';
 import dotenv from "dotenv";
 dotenv.config();
 console.log("DATABASE_URL =", process.env.DATABASE_URL);
+console.log("GEMINI_API_KEY loaded =", !!process.env.GEMINI_API_KEY);
+console.log("GEMINI_MODEL =", process.env.GEMINI_MODEL);
 
 import express from 'express';
 import cors from 'cors';
@@ -38,3 +40,8 @@ app.use("/api/journal", journalRoutes);
 import screeningRoutes from './src/routes/screeningRoutes.js';
 
 app.use('/api/screening', screeningRoutes);
+
+// untuk chatbot
+import chatbotRoutes from "./src/modules/chatbot/chatbot.routes.js";
+
+app.use("/api/chatbot", chatbotRoutes);

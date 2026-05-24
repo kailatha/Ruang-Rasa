@@ -1,0 +1,321 @@
+[
+  {
+    "activity_id":"ACT001",
+    "title":"Jeda napas 3 menit",
+    "summary":"Latihan napas untuk menenangkan pikiran.",
+    "why_recommended":"Cocok saat emosi sedang tinggi.",
+    "steps":[
+      "Duduk nyaman.",
+      "Tarik napas 4 hitungan.",
+      "Tahan 2 hitungan.",
+      "Hembuskan 6 hitungan.",
+      "Ulangi 3 menit."
+    ],
+    "reflection_prompt":"Bagian tubuh mana yang terasa lebih ringan?",
+    "duration_minutes":3,
+    "energy_level":"low",
+    "tags":[
+      "grounding",
+      "mood_swings",
+      "low_energy"
+    ],
+    "emotion_tags":[
+      "Anger",
+      "Fear",
+      "Sadness"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":0.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":1.0
+  },
+  {
+    "activity_id":"ACT002",
+    "title":"Tulis satu perasaan utama",
+    "summary":"Journaling ringan tanpa menghakimi.",
+    "why_recommended":"Membantu mengekspresikan emosi.",
+    "steps":[
+      "Buka notes.",
+      "Tulis satu emosi yang paling kuat.",
+      "Tulis satu hal yang memicunya.",
+      "Jangan koreksi tulisan.",
+      "Tutup dengan satu kalimat harapan."
+    ],
+    "reflection_prompt":"Emosi apa yang perlu lebih banyak ruang?",
+    "duration_minutes":7,
+    "energy_level":"low",
+    "tags":[
+      "self_reflection",
+      "mood_swings",
+      "grounding"
+    ],
+    "emotion_tags":[
+      "Sadness",
+      "Fear",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "activity_id":"ACT003",
+    "title":"Pesan singkat ke orang terpercaya",
+    "summary":"Menghubungi satu orang aman.",
+    "why_recommended":"Dukungan kecil membantu saat merasa sendirian.",
+    "steps":[
+      "Pilih satu orang yang aman.",
+      "Kirim pesan singkat.",
+      "Tidak perlu menjelaskan semuanya.",
+      "Cukup bilang kamu ingin ditemani.",
+      "Perhatikan perasaanmu setelahnya."
+    ],
+    "reflection_prompt":"Siapa yang paling aman untuk dihubungi?",
+    "duration_minutes":5,
+    "energy_level":"medium",
+    "tags":[
+      "loneliness",
+      "social_support",
+      "self_reflection"
+    ],
+    "emotion_tags":[
+      "Sadness",
+      "Fear",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":1.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":1.0,
+    "grounding":0.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "activity_id":"ACT004",
+    "title":"Gerakan ringan 5 menit",
+    "summary":"Peregangan atau jalan kaki singkat.",
+    "why_recommended":"Gerakan membantu melepas ketegangan.",
+    "steps":[
+      "Berdiri dan regangkan tangan.",
+      "Putar bahu 5 kali ke depan.",
+      "Putar bahu 5 kali ke belakang.",
+      "Jalan kaki di tempat 2 menit.",
+      "Tarik napas dalam 3 kali."
+    ],
+    "reflection_prompt":"Bagian tubuh mana yang perlu digerakkan?",
+    "duration_minutes":5,
+    "energy_level":"low",
+    "tags":[
+      "movement",
+      "grounding",
+      "low_energy"
+    ],
+    "emotion_tags":[
+      "Anger",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":0.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":1.0,
+    "low_energy":1.0
+  },
+  {
+    "activity_id":"ACT005",
+    "title":"5-4-3-2-1 Grounding",
+    "summary":"Teknik grounding untuk kembali ke saat ini.",
+    "why_recommended":"Membantu saat perasaan overwhelming.",
+    "steps":[
+      "Sebutkan 5 hal yang bisa dilihat.",
+      "Sebutkan 4 hal yang bisa disentuh.",
+      "Sebutkan 3 hal yang bisa didengar.",
+      "Sebutkan 2 hal yang bisa dicium.",
+      "Sebutkan 1 hal yang bisa dirasakan."
+    ],
+    "reflection_prompt":"Apa yang membuat kamu merasa lebih hadir?",
+    "duration_minutes":5,
+    "energy_level":"low",
+    "tags":[
+      "grounding",
+      "mood_swings",
+      "self_reflection"
+    ],
+    "emotion_tags":[
+      "Fear",
+      "Anger",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "activity_id":"ACT006",
+    "title":"Jeda layar 15 menit",
+    "summary":"Istirahat dari layar untuk memberi ruang tenang.",
+    "why_recommended":"Mengurangi stimulasi berlebihan.",
+    "steps":[
+      "Letakkan ponsel jauh.",
+      "Atur timer 15 menit.",
+      "Minum air putih.",
+      "Arahkan perhatian ke napas.",
+      "Perhatikan apa yang muncul."
+    ],
+    "reflection_prompt":"Apa yang kamu sadari saat tidak membuka layar?",
+    "duration_minutes":15,
+    "energy_level":"low",
+    "tags":[
+      "screen_time",
+      "grounding",
+      "low_energy"
+    ],
+    "emotion_tags":[
+      "Neutral",
+      "Anger"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":1.0,
+    "self_reflection":0.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":1.0
+  },
+  {
+    "activity_id":"ACT007",
+    "title":"Dengarkan lagu favorit",
+    "summary":"Biarkan musik menemanimu sejenak.",
+    "why_recommended":"Musik membantu mengolah emosi positif maupun negatif.",
+    "steps":[
+      "Pilih satu lagu yang kamu suka.",
+      "Duduk atau berbaring dengan nyaman.",
+      "Tutup mata dan fokus pada musiknya.",
+      "Biarkan perasaan muncul apa adanya.",
+      "Setelah selesai, tarik napas dalam."
+    ],
+    "reflection_prompt":"Perasaan apa yang muncul saat mendengarkan?",
+    "duration_minutes":5,
+    "energy_level":"low",
+    "tags":[
+      "self_reflection",
+      "low_energy",
+      "mood_swings"
+    ],
+    "emotion_tags":[
+      "Joy",
+      "Love",
+      "Sadness",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":0.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":1.0
+  },
+  {
+    "activity_id":"ACT008",
+    "title":"Catat 3 hal yang bikin kamu bersyukur",
+    "summary":"Latihan gratitude ringan untuk menggeser fokus.",
+    "why_recommended":"Gratitude practice terbukti meningkatkan mood.",
+    "steps":[
+      "Ambil kertas atau buka notes.",
+      "Tulis 3 hal kecil yang kamu syukuri hari ini.",
+      "Tidak harus besar — bisa secangkir teh, cuaca bagus.",
+      "Baca ulang pelan-pelan.",
+      "Rasakan perasaanmu setelah membacanya."
+    ],
+    "reflection_prompt":"Hal kecil apa yang sering kamu lewatkan untuk disyukuri?",
+    "duration_minutes":5,
+    "energy_level":"low",
+    "tags":[
+      "self_reflection",
+      "planning",
+      "social_support"
+    ],
+    "emotion_tags":[
+      "Joy",
+      "Love",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":1.0,
+    "grounding":0.0,
+    "planning":1.0,
+    "movement":0.0,
+    "low_energy":0.0
+  }
+]

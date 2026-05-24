@@ -1,0 +1,190 @@
+[
+  {
+    "affirmation_id":"AFF001",
+    "title":"Validasi emosi negatif",
+    "main_affirmation":"Apa yang aku rasakan sekarang valid dan boleh hadir.",
+    "supporting_message":"Emosi tidak harus langsung diselesaikan.",
+    "reflection_question":"Emosi apa yang paling butuh ruang saat ini?",
+    "closing_line":"Aku boleh merasakan ini.",
+    "tags":[
+      "mood_swings",
+      "self_reflection",
+      "grounding"
+    ],
+    "emotion_tags":[
+      "Sadness",
+      "Fear",
+      "Anger"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "affirmation_id":"AFF002",
+    "title":"Rasa bahagia layak dijaga",
+    "main_affirmation":"Aku layak merasakan kebahagiaan ini sepenuhnya.",
+    "supporting_message":"Momen positif bisa disimpan sebagai energi.",
+    "reflection_question":"Apa yang membuat hari ini terasa baik?",
+    "closing_line":"Aku boleh menikmati ini.",
+    "tags":[
+      "self_reflection",
+      "social_support"
+    ],
+    "emotion_tags":[
+      "Joy",
+      "Love",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":1.0,
+    "grounding":0.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "affirmation_id":"AFF003",
+    "title":"Tidak sendirian",
+    "main_affirmation":"Aku tidak harus menghadapi ini sendirian.",
+    "supporting_message":"Meminta dukungan adalah tanda keberanian.",
+    "reflection_question":"Siapa yang bisa hadir untukku?",
+    "closing_line":"Aku boleh menerima bantuan.",
+    "tags":[
+      "loneliness",
+      "social_support",
+      "self_reflection"
+    ],
+    "emotion_tags":[
+      "Sadness",
+      "Fear",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":1.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":1.0,
+    "grounding":0.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "affirmation_id":"AFF004",
+    "title":"Kemarahan sebagai sinyal",
+    "main_affirmation":"Marahku adalah sinyal bahwa ada sesuatu yang penting.",
+    "supporting_message":"Kemarahan bisa menjadi energi untuk perubahan.",
+    "reflection_question":"Apa yang sebenarnya ingin aku lindungi?",
+    "closing_line":"Aku boleh marah dan tetap baik-baik saja.",
+    "tags":[
+      "mood_swings",
+      "self_reflection",
+      "grounding"
+    ],
+    "emotion_tags":[
+      "Anger"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":1.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":1.0,
+    "planning":0.0,
+    "movement":0.0,
+    "low_energy":0.0
+  },
+  {
+    "affirmation_id":"AFF005",
+    "title":"Langkah kecil tetap berarti",
+    "main_affirmation":"Satu langkah kecil hari ini sudah cukup.",
+    "supporting_message":"Tidak harus menyelesaikan semuanya sekarang.",
+    "reflection_question":"Apa satu hal kecil yang bisa kulakukan?",
+    "closing_line":"Aku boleh bergerak perlahan.",
+    "tags":[
+      "planning",
+      "low_energy",
+      "self_reflection"
+    ],
+    "emotion_tags":[
+      "Sadness",
+      "Fear",
+      "Neutral"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":0.0,
+    "grounding":0.0,
+    "planning":1.0,
+    "movement":0.0,
+    "low_energy":1.0
+  },
+  {
+    "affirmation_id":"AFF006",
+    "title":"Rasa cinta dan kasih adalah kekuatan",
+    "main_affirmation":"Perasaan hangat yang aku rasakan adalah tanda aku terhubung.",
+    "supporting_message":"Koneksi dengan orang lain adalah salah satu kebutuhan terpenting manusia.",
+    "reflection_question":"Siapa yang membuatmu merasa dicintai hari ini?",
+    "closing_line":"Aku layak memberi dan menerima cinta.",
+    "tags":[
+      "social_support",
+      "self_reflection",
+      "planning"
+    ],
+    "emotion_tags":[
+      "Love",
+      "Joy"
+    ],
+    "risk_min":0.0,
+    "risk_max":1.0,
+    "loneliness":0.0,
+    "work_stress":0.0,
+    "financial_stress":0.0,
+    "sleep_issue":0.0,
+    "mood_swings":0.0,
+    "screen_time":0.0,
+    "self_reflection":1.0,
+    "social_support":1.0,
+    "grounding":0.0,
+    "planning":1.0,
+    "movement":0.0,
+    "low_energy":0.0
+  }
+]
