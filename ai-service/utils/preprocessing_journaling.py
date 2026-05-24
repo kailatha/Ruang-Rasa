@@ -67,6 +67,11 @@ SLANG_MAP = {
     "skr": "sekarang",
     "bs": "bisa",
     "bsa": "bisa",
+    "cape": "capek",
+    "capee": "capek",
+    "capeee": "capek",
+    "capekkk": "capek",
+    "lelah": "capek",
 }
 
 # =====================================================

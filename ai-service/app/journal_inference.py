@@ -218,6 +218,106 @@ def predict_journal(text):
     emotion = EMOSI_MAP_INV[
         emosi_id
     ]
+    sadness_keywords = [
+
+        "capek",
+        "cape",
+        "lelah",
+        "burnout",
+        "sedih",
+        "nangis",
+        "kesepian",
+        "sendiri",
+        "hampa",
+        "kosong"
+    ]
+    anger_keywords = [
+
+    "marah",
+    "kesal",
+    "emosi",
+    "benci"
+    ]
+
+    fear_keywords = [
+
+        "takut",
+        "cemas",
+        "khawatir",
+        "overthinking",
+        "panik"
+    ]
+
+    joy_keywords = [
+
+        "senang",
+        "bahagia",
+        "excited",
+        "semangat"
+    ]
+
+    love_keywords = [
+
+        "sayang",
+        "cinta",
+        "kangen"
+    ]
+
+    # ==========================================
+    # SADNESS
+    # ==========================================
+
+    if any(
+        word in cleaned
+        for word in sadness_keywords
+    ):
+
+        emotion = "Sadness"
+
+    # ==========================================
+    # ANGER
+    # ==========================================
+
+    elif any(
+        word in cleaned
+        for word in anger_keywords
+    ):
+
+        emotion = "Anger"
+
+    # ==========================================
+    # FEAR
+    # ==========================================
+
+    elif any(
+        word in cleaned
+        for word in fear_keywords
+    ):
+
+        emotion = "Fear"
+
+    # ==========================================
+    # JOY
+    # ==========================================
+
+    elif any(
+        word in cleaned
+        for word in joy_keywords
+    ):
+
+        emotion = "Joy"
+
+    # ==========================================
+    # LOVE
+    # ==========================================
+
+    elif any(
+        word in cleaned
+        for word in love_keywords
+    ):
+
+        emotion = "Love"
+        
 
     confidence = float(
         np.max(emosi_probs)
