@@ -1,0 +1,53 @@
+{
+  "vocab_size": 20000,
+  "max_seq_len": 80,
+  "embed_dim": 256,
+  "extra_features": [
+    "journal_hour",
+    "journal_dayofweek",
+    "journal_month",
+    "is_night",
+    "is_weekend",
+    "text_length"
+  ],
+  "emosi_map": {
+    "Anger": 0,
+    "Fear": 1,
+    "Joy": 2,
+    "Love": 3,
+    "Neutral": 4,
+    "Sadness": 5
+  },
+  "emosi_map_inv": {
+    "0": "Anger",
+    "1": "Fear",
+    "2": "Joy",
+    "3": "Love",
+    "4": "Neutral",
+    "5": "Sadness"
+  },
+  "sentiment_map": {
+    "Anger": 0.15,
+    "Fear": 0.1,
+    "Joy": 1.0,
+    "Love": 0.8,
+    "Neutral": 0.5,
+    "Sadness": 0.1
+  },
+  "n_emotions": 6,
+  "n_recon_features": 2,
+  "attention_units": 64,
+  "intensity_labels": [
+    "ringan",
+    "sedang",
+    "berat",
+    "sangat berat"
+  ],
+  "intensity_thresholds": {
+    "ringan": "< 0.25",
+    "sedang": "0.25 – 0.49",
+    "berat": "0.50 – 0.74",
+    "sangat berat": ">= 0.75"
+  },
+  "note": "Multi-task journaling model: emotion classification (6 kelas) + sentiment regression + reconstruction [sentiment, 1-sentiment] (2-dim) + dynamic emotion intensity scoring. Non-diagnostic support model."
+}
