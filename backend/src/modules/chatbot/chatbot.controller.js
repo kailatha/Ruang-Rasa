@@ -3,12 +3,19 @@ import {
   detectSafetyRisk,
   buildCrisisResponse,
 } from "./safety.guard.js";
+
 import { buildChatbotPrompt } from "./prompt.builder.js";
+
 import { generateGeminiReply } from "./gemini.client.js";
+
 import {
   retrieveRelevantKnowledge,
   formatKnowledgeForPrompt,
 } from "./knowledge.service.js";
+
+import {
+  getUserChatbotContext,
+} from "./user-context.service.js";
 
 export async function sendChatbotMessage(req, res, next) {
   try {
@@ -112,12 +119,18 @@ export async function sendChatbotMessage(req, res, next) {
         answer,
         safety_level: safety.level,
         source: "gemini",
-        knowledge_used: knowledgeResult.documents.map((doc) => ({
-          title: doc.title,
-          file: doc.relativePath,
-          type: doc.type,
-        })),
-        inferred_context: knowledgeResult.context,
+
+        knowledge_used:
+          knowledgeResult.documents.map(
+            (doc) => ({
+              title: doc.title,
+              file: doc.relativePath,
+              type: doc.type,
+            })
+          ),
+
+        inferred_context:
+          knowledgeResult.context,
       },
     });
   } catch (error) {
