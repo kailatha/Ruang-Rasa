@@ -638,3 +638,69 @@
   border-radius: 100px !important;
   height: 44px !important;
 }
+
+/* Dark Mode */
+
+html.dark .level-card {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+html.dark .level-card-active {
+  border-color: var(--green-dark);
+  box-shadow: 0 0 0 2px rgba(126, 200, 150, 0.18);
+}
+
+html.dark .scale-option {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+html.dark .scale-option:hover {
+  border-color: var(--green-light);
+  background: rgba(126, 200, 150, 0.04);
+}
+
+html.dark .scale-option-active {
+  border-color: var(--green-dark) !important;
+  background: rgba(126, 200, 150, 0.08) !important;
+}
+
+html.dark .result-breakdown {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+html.dark .breakdown-bar-wrap {
+  background: var(--input-bg);
+}
+
+html.dark .reco-modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+html.dark .reco-modal {
+  background: var(--white);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .reco-modal-close {
+  border-color: var(--border);
+  background: var(--white);
+  color: var(--text-muted);
+}
+
+html.dark .reco-modal-close:hover {
+  background: var(--input-bg);
+  color: var(--text-dark);
+}
+
+html.dark .reco-card {
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+html.dark .reco-card-icon {
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}

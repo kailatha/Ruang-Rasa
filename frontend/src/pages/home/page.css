@@ -24,6 +24,24 @@
   --shadow-lg: 0 8px 40px rgba(61, 92, 74, 0.15);
 }
 
+/* Dark Mode */
+html.dark {
+  --cream: #151718;
+  --green-dark: #7EC896;
+  --green-mid: #6BB585;
+  --green-light: #8FD4A8;
+  --green-card: #2A3D30;
+  --text-dark: #E8ECE9;
+  --text-body: #A8B5AD;
+  --text-muted: #6B7E72;
+  --white: #1C1F21;
+  --border: #2E3335;
+  --input-bg: #222628;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.30);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.40);
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -753,4 +771,115 @@ footer {
   .about-card-content {
     padding: 28px 24px !important;
   }
+}
+
+/* Dark Mode */
+
+html.dark .navbar {
+  background: var(--cream);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .app-navbar {
+  background: var(--cream);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .hero::before {
+  background: radial-gradient(ellipse 60% 50% at 50% 30%, rgba(126, 200, 150, 0.08) 0%, transparent 70%);
+}
+
+html.dark .chat-preview {
+  background: var(--white);
+  box-shadow: var(--shadow-lg);
+}
+
+html.dark .chat-titlebar {
+  background: #252829;
+  border-bottom-color: var(--border);
+}
+
+html.dark .chat-tab {
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .bubble-ai {
+  background: #222a25;
+  color: var(--text-dark);
+}
+
+html.dark .chip-senang { background: #3a3522; color: #c9bc5f; }
+html.dark .chip-netral { background: #2a2e30; color: #8a9a9e; }
+html.dark .chip-sedih  { background: #252a38; color: #7a8dc8; }
+html.dark .chip-marah  { background: #382525; color: #c87a7a; }
+html.dark .chip-stres  { background: #352538; color: #c87ac5; }
+
+html.dark .stats-bar {
+  background: var(--cream);
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .feature-card {
+  background: var(--white) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+html.dark .feature-card:hover {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+html.dark .feature-icon-wrap {
+  background: rgba(126, 200, 150, 0.12);
+}
+
+html.dark .how-section {
+  background: #0e1010;
+  color: var(--text-dark);
+}
+
+html.dark .how-step-num {
+  color: rgba(126, 200, 150, 0.3);
+}
+
+html.dark .how-step-desc {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+html.dark .how-title em {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+html.dark .cta-card {
+  background: var(--green-card);
+}
+
+html.dark .cta-btn {
+  background-color: var(--cream) !important;
+  color: var(--text-dark) !important;
+}
+
+html.dark .cta-btn:hover {
+  background-color: #222628 !important;
+}
+
+html.dark footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .hero-badge {
+  background: rgba(126, 200, 150, 0.10);
+  border-color: rgba(126, 200, 150, 0.20);
+}
+
+html.dark .app-nav-icon-btn:hover {
+  background: rgba(126, 200, 150, 0.10);
+}
+
+html.dark .app-nav-profile-btn {
+  background: rgba(126, 200, 150, 0.10);
+}
+
+html.dark .app-nav-profile-btn:hover {
+  background: rgba(126, 200, 150, 0.18);
 }

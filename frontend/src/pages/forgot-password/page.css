@@ -148,3 +148,35 @@
   font-size: 13px;
   color: #A0A0A0;
 }
+
+/* Dark Mode */
+
+html.dark .forgot-container {
+  background-color: var(--cream);
+}
+
+html.dark .forgot-card {
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+}
+
+html.dark .forgot-title {
+  color: var(--text-dark);
+}
+
+html.dark .forgot-subtitle,
+html.dark .forgot-instruction {
+  color: var(--text-muted);
+}
+
+html.dark .forgot-success-message {
+  color: var(--text-body);
+}
+
+html.dark .forgot-back-link {
+  color: var(--green-dark);
+}
+
+html.dark .forgot-footer {
+  color: var(--text-muted);
+}

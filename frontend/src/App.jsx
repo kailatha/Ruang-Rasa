@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import routes from "@/routes";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -29,8 +30,10 @@ function MainContent() {
 
 export default function App() {
   return (
-    <Router>
-      <MainContent />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <MainContent />
+      </Router>
+    </ThemeProvider>
   );
 }

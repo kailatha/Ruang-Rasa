@@ -217,3 +217,22 @@
 
   margin-top: 6px;
 }
+
+/* Dark Mode */
+
+html.dark .journal-sidebar {
+  background: var(--white);
+  border-right-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .sidebar-toggle:hover {
+  background: rgba(126, 200, 150, 0.08);
+}
+
+html.dark .sidebar-item:hover {
+  background: rgba(126, 200, 150, 0.06);
+}
+
+html.dark .sidebar-item-active {
+  background: rgba(126, 200, 150, 0.12);
+}
