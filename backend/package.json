@@ -29,6 +29,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "gray-matter": "^4.0.3",
     "jsonwebtoken": "^9.0.3",
     "nanoid": "^5.1.11",
     "node-pg-migrate": "^8.0.4",

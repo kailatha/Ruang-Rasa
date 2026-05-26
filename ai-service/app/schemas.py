@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Dict, List, Optional, Any
 
 from pydantic import BaseModel, Field
 
@@ -32,3 +32,22 @@ class PredictionResponse(BaseModel):
     profile_confidence: Optional[float] = None
     source: Optional[str] = None
     error: Optional[str] = None
+
+class JournalRequest(BaseModel):
+    text: str = Field(
+        ...,
+        min_length=1
+    )
+
+
+class JournalResponse(BaseModel):
+
+    emotion: str
+
+    sentiment: str
+
+    recommended_activities: List[Dict[str, Any]]
+
+    recommended_affirmations: List[Dict[str, Any]]
+
+    disclaimer: str

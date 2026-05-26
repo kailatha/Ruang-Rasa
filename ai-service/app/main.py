@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.schemas import ScreeningInput, PredictionResponse
+from app.schemas import ScreeningInput, PredictionResponse, JournalRequest, JournalResponse
 from app.inference import predict_screening
+from app.journal_inference import predict_journal
 from app.model_loader import load_model, load_metadata
 
 app = FastAPI(title="Ruang Rasa AI Service", version="1.0.0")
@@ -43,3 +44,17 @@ def health_check():
 def predict(data: ScreeningInput):
     payload = data.model_dump()
     return predict_screening(payload)
+
+@app.post(
+    "/journal/analyze",
+    response_model=JournalResponse
+)
+def analyze_journal(
+    data: JournalRequest
+):
+
+    result = predict_journal(
+        data.text
+    )
+
+    return result

@@ -22,7 +22,54 @@ class FeatureAttention(layers.Layer):
         config.update({"units": self.units})
         return config
 
+# Custome Object untuk jurnaling 
+@tf.keras.utils.register_keras_serializable(package="RuangRasa")
+class TemporalContextAttention(layers.Layer):
 
+    def __init__(self, units=64, **kwargs):
+        super().__init__(**kwargs)
+
+        self.units = units
+
+        self.W_text = layers.Dense(units)
+
+        self.W_ctx = layers.Dense(units)
+
+        self.V = layers.Dense(1)
+
+    def call(self, text_repr, context_repr):
+
+        text_proj = self.W_text(text_repr)
+
+        ctx_proj = self.W_ctx(context_repr)
+
+        combined = tf.nn.tanh(
+            text_proj + ctx_proj
+        )
+
+        score = self.V(combined)
+
+        gate = tf.nn.sigmoid(score)
+
+        text_out = self.W_text(text_repr)
+
+        ctx_out = self.W_ctx(context_repr)
+
+        return (
+            gate * text_out +
+            (1 - gate) * ctx_out
+        )
+
+    def get_config(self):
+
+        config = super().get_config()
+
+        config.update({
+            "units": self.units
+        })
+
+        return config
+        
 CUSTOM_OBJECTS = {
     "FeatureAttention": FeatureAttention,
     "RuangRasa>FeatureAttention": FeatureAttention,

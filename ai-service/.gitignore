@@ -47,12 +47,20 @@ coverage.xml
 .mypy_cache/
 
 # AI Model files (terlalu besar untuk git)
-# model/
-# *.keras
-# *.h5
-# *.pkl
-# *.pt
-# *.pth
-# *.onnx
-# *.pb
-# *.tflite
+model/
+models/
+*.keras
+*.h5
+*.pkl
+*.pt
+*.pth
+*.onnx
+*.pb
+*.tflite
+*.ckpt
+*.bin
+*.safetensors
+
+# PyTorch / TensorBoard logs & cache
+runs/
+.cache/
