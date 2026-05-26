@@ -94,26 +94,26 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="flex-1 bg-[#f8f9f4] font-sans text-slate-700 w-full">
+    <div className="flex-1 bg-[#f8f9f4] dark:bg-[#151718] font-sans text-slate-700 dark:text-slate-200 w-full">
       <main className="max-w-5xl mx-auto p-8 space-y-8">
         {/* Header Profile Section */}
-        <Card className="border-none shadow-sm bg-white overflow-hidden">
+        <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e] overflow-hidden">
           <CardContent className="p-8 flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div className="relative">
-                <Avatar className="w-24 h-24 border-2 border-[#e2f0e9] bg-[#eef7f6] flex items-center justify-center">
-                  <AvatarFallback className="bg-transparent text-[#4a7c6d]">
+                <Avatar className="w-24 h-24 border-2 border-[#e2f0e9] dark:border-[#2e3335] bg-[#eef7f6] dark:bg-[#222628] flex items-center justify-center">
+                  <AvatarFallback className="bg-transparent text-[#4a7c6d] dark:text-[#7EC896]">
                     <User size={48} />
                   </AvatarFallback>
                 </Avatar>
-                <button className="absolute bottom-0 right-0 p-1.5 bg-[#4a7c6d] text-white rounded-full border-2 border-white">
+                <button className="absolute bottom-0 right-0 p-1.5 bg-[#4a7c6d] text-white rounded-full border-2 border-white dark:border-[#1a1d1e]">
                   <Edit2 size={12} />
                 </button>
               </div>
               <div className="space-y-1">
-                <h1 className="text-3xl font-semibold text-[#2d5a4c]">{userData.name || "User"}</h1>
+                <h1 className="text-3xl font-semibold text-[#2d5a4c] dark:text-[#7EC896]">{userData.name || "User"}</h1>
                 <p className="text-slate-400 text-sm">{userData.email || "user@email.id"}</p>
-                <Badge variant="secondary" className="bg-[#e2f0e9] text-[#2d5a4c] hover:bg-[#d4eadd] font-normal rounded-full px-4">
+                <Badge variant="secondary" className="bg-[#e2f0e9] dark:bg-[#222628] text-[#2d5a4c] dark:text-[#7EC896] hover:bg-[#d4eadd] dark:hover:bg-[#2e3335] font-normal rounded-full px-4">
                   Anggota Sejak: {userData.createdAt ? new Date(userData.createdAt).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' }) : "Jan 2024"}
                 </Badge>
               </div>
@@ -122,13 +122,13 @@ export default function ProfilePage() {
               <Button 
                 variant="outline" 
                 onClick={handleLogout}
-                className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600 px-4 rounded-md flex items-center gap-2"
+                className="border-red-200 dark:border-red-900/50 text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-300 px-4 rounded-md flex items-center gap-2"
               >
                 <LogOut size={16} />
                 <span className="hidden sm:inline">Keluar</span>
               </Button>
               <Link to="/profile/edit">
-                <Button className="bg-[#4a7c6d] hover:bg-[#3d665a] text-white px-6 rounded-md">
+                <Button className="bg-[#4a7c6d] dark:bg-[#3a6d4a] hover:bg-[#3d665a] dark:hover:bg-[#4a8a5e] text-white px-6 rounded-md">
                   Edit Profil
                 </Button>
               </Link>
@@ -138,19 +138,19 @@ export default function ProfilePage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Ringkasan Aktivitas — Data Real */}
-          <Card className="bg-[#eef7f6] border-none shadow-none p-6 flex items-center justify-around text-center">
+          <Card className="bg-[#eef7f6] dark:bg-[#1a1d1e] border-none shadow-none p-6 flex items-center justify-around text-center">
             <div>
-              <p className="text-xs uppercase tracking-wider text-slate-500 mb-2">Ringkasan Aktivitas</p>
+              <p className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Ringkasan Aktivitas</p>
               <div className="space-y-0">
-                <h2 className="text-4xl font-bold text-slate-800">{stats.screeningCount}</h2>
+                <h2 className="text-4xl font-bold text-slate-800 dark:text-slate-100">{stats.screeningCount}</h2>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Skrining</p>
               </div>
             </div>
-            <div className="h-12 w-px bg-slate-200" />
+            <div className="h-12 w-px bg-slate-200 dark:bg-slate-700" />
             <div>
               <p className="text-xs invisible mb-2">Spacer</p>
               <div className="space-y-0">
-                <h2 className="text-4xl font-bold text-slate-800">{stats.journalCount}</h2>
+                <h2 className="text-4xl font-bold text-slate-800 dark:text-slate-100">{stats.journalCount}</h2>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Jurnal</p>
               </div>
             </div>
@@ -158,22 +158,22 @@ export default function ProfilePage() {
 
           {/* Notifikasi */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-slate-600 mb-2">Notifikasi</h3>
-            <Card className="border-none shadow-sm p-4 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-300 mb-2">Notifikasi</h3>
+            <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e] p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#eef7f6] rounded-full text-[#4a7c6d]">
+                <div className="p-2 bg-[#eef7f6] dark:bg-[#222628] rounded-full text-[#4a7c6d] dark:text-[#7EC896]">
                   <span className="text-xl">😊</span>
                 </div>
-                <span className="text-sm font-medium">Pengingat Mood Check In</span>
+                <span className="text-sm font-medium dark:text-slate-200">Pengingat Mood Check In</span>
               </div>
               <Switch defaultChecked className="data-[state=checked]:bg-[#4a7c6d]" />
             </Card>
-            <Card className="border-none shadow-sm p-4 flex items-center justify-between">
+            <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e] p-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#eef7f6] rounded-full text-[#4a7c6d]">
+                <div className="p-2 bg-[#eef7f6] dark:bg-[#222628] rounded-full text-[#4a7c6d] dark:text-[#7EC896]">
                   <BookOpen size={18} />
                 </div>
-                <span className="text-sm font-medium">Pengingat Jurnal</span>
+                <span className="text-sm font-medium dark:text-slate-200">Pengingat Jurnal</span>
               </div>
               <Switch className="data-[state=checked]:bg-[#4a7c6d]" />
             </Card>
@@ -181,26 +181,26 @@ export default function ProfilePage() {
         </div>
 
         {/* Riwayat Section — Data Real */}
-        <Card className="border-none shadow-sm p-6">
+        <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e] p-6">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 bg-[#eef7f6] rounded text-[#4a7c6d]">
+              <div className="p-1.5 bg-[#eef7f6] dark:bg-[#222628] rounded text-[#4a7c6d] dark:text-[#7EC896]">
                 <BarChart2 size={18} />
               </div>
-              <h3 className="text-lg font-semibold text-slate-700">Riwayat Skrining</h3>
+              <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200">Riwayat Skrining</h3>
             </div>
           </div>
 
           <div className="space-y-3">
             {screeningHistory.length > 0 ? (
               screeningHistory.map((item, idx) => (
-                <div key={item.id || idx} className="flex items-center justify-between p-4 border border-slate-100 rounded-xl hover:bg-slate-50 cursor-pointer transition-colors">
+                <div key={item.id || idx} className="flex items-center justify-between p-4 border border-slate-100 dark:border-[#2e3335] rounded-xl hover:bg-slate-50 dark:hover:bg-[#222628] cursor-pointer transition-colors">
                   <div className="flex items-center gap-4">
-                    <div className="p-2 rounded-full bg-[#eef7f6] text-[#4a7c6d]">
+                    <div className="p-2 rounded-full bg-[#eef7f6] dark:bg-[#222628] text-[#4a7c6d] dark:text-[#7EC896]">
                       <LayoutDashboard size={18} />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-slate-700">
+                      <h4 className="text-sm font-medium text-slate-700 dark:text-slate-200">
                         Skrining Kesehatan Mental
                       </h4>
                       <p className="text-[11px] text-slate-400">
@@ -208,14 +208,14 @@ export default function ProfilePage() {
                       </p>
                     </div>
                   </div>
-                  <ChevronRight size={18} className="text-slate-300" />
+                  <ChevronRight size={18} className="text-slate-300 dark:text-slate-500" />
                 </div>
               ))
             ) : (
               <div className="text-center py-8 text-slate-400">
                 <p className="text-sm">Belum ada riwayat skrining</p>
                 <Link to="/screening">
-                  <Button variant="outline" className="mt-3 border-[#d4eadd] text-[#4a7c6d] hover:bg-[#f0f9f5]">
+                  <Button variant="outline" className="mt-3 border-[#d4eadd] dark:border-[#2e3335] text-[#4a7c6d] dark:text-[#7EC896] hover:bg-[#f0f9f5] dark:hover:bg-[#222628]">
                     Mulai Skrining
                   </Button>
                 </Link>
@@ -225,7 +225,7 @@ export default function ProfilePage() {
 
           {screeningHistory.length > 0 && (
             <Link to="/screening">
-              <Button variant="outline" className="w-full mt-6 border-dashed border-2 border-[#d4eadd] text-[#4a7c6d] bg-transparent hover:bg-[#f0f9f5] hover:text-[#4a7c6d] h-12">
+              <Button variant="outline" className="w-full mt-6 border-dashed border-2 border-[#d4eadd] dark:border-[#2e3335] text-[#4a7c6d] dark:text-[#7EC896] bg-transparent hover:bg-[#f0f9f5] dark:hover:bg-[#222628] hover:text-[#4a7c6d] dark:hover:text-[#7EC896] h-12">
                 Lihat Semua Riwayat
               </Button>
             </Link>

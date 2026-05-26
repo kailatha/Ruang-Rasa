@@ -507,3 +507,91 @@
 .see-all-icon {
   font-size: 14px;
 }
+
+/* Dark Mode */
+
+html.dark .mood-option {
+  background: var(--white);
+  border-color: var(--border);
+}
+
+html.dark .mood-option:hover {
+  border-color: var(--green-mid);
+  background: rgba(126, 200, 150, 0.04);
+}
+
+html.dark .mood-option-active {
+  border-color: var(--green-dark);
+  background: rgba(126, 200, 150, 0.08);
+  box-shadow: 0 0 0 3px rgba(126, 200, 150, 0.12);
+}
+
+html.dark .editor-toolbar {
+  background: var(--input-bg);
+  border-color: var(--border);
+}
+
+html.dark .toolbar-btn:hover {
+  background: rgba(126, 200, 150, 0.10);
+}
+
+html.dark .journal-textarea {
+  background: var(--white);
+  border-color: var(--border);
+  color: var(--text-dark);
+}
+
+html.dark .journal-textarea:focus {
+  border-color: var(--green-mid);
+}
+
+html.dark .tag-chip {
+  background: var(--white);
+  border-color: var(--border);
+  color: var(--text-body);
+}
+
+html.dark .tag-chip:hover {
+  border-color: var(--green-mid);
+}
+
+html.dark .tag-chip-active {
+  border-color: var(--green-dark);
+  background: rgba(126, 200, 150, 0.08);
+  color: var(--green-dark);
+}
+
+html.dark .custom-tag-field {
+  border-color: var(--green-dark);
+  background: var(--white);
+  color: var(--text-dark);
+}
+
+html.dark .journal-entries-sidebar {
+  background: var(--white);
+  border-left-color: rgba(255, 255, 255, 0.06);
+}
+
+html.dark .journal-entries-sidebar .sidebar-toggle {
+  border-color: rgba(255, 255, 255, 0.08);
+  background: var(--white);
+}
+
+html.dark .entry-card {
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+}
+
+html.dark .mood-senang { background: #3a3518; color: #d4c54a; }
+html.dark .mood-netral { background: rgba(126, 200, 150, 0.06); color: var(--text-body); }
+html.dark .mood-sedih  { background: #1e2840; color: #6a9ad8; }
+html.dark .mood-marah  { background: #3a1e1e; color: #e07070; }
+html.dark .mood-stress { background: #301e3a; color: #c080e0; }
+
+html.dark .sentiment-positive { background: #1e3a24; color: #7ec896; }
+html.dark .sentiment-negative { background: #3a1e1e; color: #e07070; }
+html.dark .sentiment-neutral  { background: rgba(255, 255, 255, 0.05); color: var(--text-body); }
+
+html.dark .emotion-chip {
+  background: rgba(126, 200, 150, 0.10);
+  color: var(--green-dark);
+}

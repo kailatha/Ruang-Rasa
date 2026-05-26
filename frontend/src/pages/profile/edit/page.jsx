@@ -19,7 +19,7 @@ import "./page.css";
 
 const FormField = ({ id, label, type = "text", placeholder, value, onChange, options }) => (
   <div className="space-y-2">
-    <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+    <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-200">
       {label}
     </Label>
     <div className="relative">
@@ -28,7 +28,7 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           id={id}
           value={value}
           onChange={onChange}
-          className="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 focus:ring-2 focus:ring-[#4a7c6d] focus:border-transparent outline-none transition-all appearance-none"
+          className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-[#2e3335] bg-white dark:bg-[#222628] text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-[#4a7c6d] focus:border-transparent outline-none transition-all appearance-none"
         >
           <option value="" disabled>{placeholder || "Pilih..."}</option>
           {options.map((opt) => (
@@ -43,15 +43,15 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
             <Button
               variant={"outline"}
               className={cn(
-                "w-full h-11 px-4 justify-start text-left font-normal rounded-xl border-slate-200 hover:bg-slate-50",
-                !value && "text-muted-foreground"
+                "w-full h-11 px-4 justify-start text-left font-normal rounded-xl border-slate-200 dark:border-[#2e3335] hover:bg-slate-50 dark:hover:bg-[#1a1d1e] dark:bg-[#222628] dark:text-slate-200",
+                !value && "text-muted-foreground dark:text-slate-400"
               )}
             >
-              <CalendarIcon className="mr-2 h-4 w-4 text-[#4a7c6d]" />
+              <CalendarIcon className="mr-2 h-4 w-4 text-[#4a7c6d] dark:text-[#7EC896]" />
               {value ? format(new Date(value), "PPP") : <span>{placeholder}</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-white z-50 rounded-xl shadow-xl border-slate-100" align="start">
+          <PopoverContent className="w-auto p-0 bg-white dark:bg-[#1a1d1e] z-50 rounded-xl shadow-xl border-slate-100 dark:border-[#2e3335]" align="start">
             <Calendar
               mode="single"
               selected={value ? new Date(value) : undefined}
@@ -72,7 +72,7 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="h-11 px-4 rounded-xl border-slate-200 focus-visible:ring-[#4a7c6d]"
+          className="h-11 px-4 rounded-xl border-slate-200 dark:border-[#2e3335] dark:bg-[#222628] dark:text-slate-200 focus-visible:ring-[#4a7c6d]"
         />
       )}
     </div>
@@ -84,7 +84,7 @@ const PasswordField = ({ id, label, placeholder, value, onChange }) => {
   const [show, setShow] = useState(false);
   return (
     <div className="space-y-2">
-      <Label htmlFor={id} className="text-sm font-medium text-slate-700">
+      <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-200">
         {label}
       </Label>
       <div className="relative">
@@ -94,12 +94,12 @@ const PasswordField = ({ id, label, placeholder, value, onChange }) => {
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="h-11 px-4 pr-12 rounded-xl border-slate-200 focus-visible:ring-[#4a7c6d]"
+          className="h-11 px-4 pr-12 rounded-xl border-slate-200 dark:border-[#2e3335] dark:bg-[#222628] dark:text-slate-200 focus-visible:ring-[#4a7c6d]"
         />
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
         >
           {show ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
@@ -231,7 +231,7 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="flex-1 bg-[#f8f9f4] text-slate-700 w-full min-h-screen pb-12">
+    <div className="flex-1 bg-[#f8f9f4] dark:bg-[#151718] text-slate-700 dark:text-slate-200 w-full min-h-screen pb-12">
       <div className="max-w-2xl mx-auto p-4 sm:p-8 space-y-6">
         {/* Header */}
         <div className="flex items-center gap-4">
@@ -239,38 +239,38 @@ export default function EditProfilePage() {
             variant="ghost" 
             size="icon" 
             onClick={() => navigate("/profile")}
-            className="rounded-full hover:bg-white"
+            className="rounded-full hover:bg-white dark:hover:bg-[#1a1d1e]"
           >
             <ChevronLeft className="w-6 h-6" />
           </Button>
-          <h1 className="text-2xl font-bold text-[#2d5a4c]">Edit Profil</h1>
+          <h1 className="text-2xl font-bold text-[#2d5a4c] dark:text-[#7EC896]">Edit Profil</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Avatar Section */}
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
             <CardContent className="p-8 flex flex-col items-center gap-4">
               <div className="relative">
-                <Avatar className="w-28 h-28 border-4 border-[#e2f0e9] bg-[#eef7f6] flex items-center justify-center">
-                  <AvatarFallback className="bg-transparent text-[#4a7c6d]">
+                <Avatar className="w-28 h-28 border-4 border-[#e2f0e9] dark:border-[#2e3335] bg-[#eef7f6] dark:bg-[#222628] flex items-center justify-center">
+                  <AvatarFallback className="bg-transparent text-[#4a7c6d] dark:text-[#7EC896]">
                     <User size={56} />
                   </AvatarFallback>
                 </Avatar>
                 <button 
                   type="button"
-                  className="absolute bottom-0 right-0 p-2 bg-[#4a7c6d] text-white rounded-full border-2 border-white shadow-md hover:bg-[#3d665a] transition-colors"
+                  className="absolute bottom-0 right-0 p-2 bg-[#4a7c6d] dark:bg-[#3a6d4a] text-white rounded-full border-2 border-white dark:border-[#1a1d1e] shadow-md hover:bg-[#3d665a] dark:hover:bg-[#4a8a5e] transition-colors"
                 >
                   <Camera size={16} />
                 </button>
               </div>
-              <p className="text-xs text-slate-400 font-medium">Klik ikon kamera untuk mengubah foto profil</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Klik ikon kamera untuk mengubah foto profil</p>
             </CardContent>
           </Card>
 
           {/* Form Section */}
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-semibold text-slate-700">Informasi Pribadi</CardTitle>
+              <CardTitle className="text-lg font-semibold text-slate-700 dark:text-slate-200">Informasi Pribadi</CardTitle>
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               <FormField
@@ -354,7 +354,7 @@ export default function EditProfilePage() {
             <Button
               type="button"
               variant="outline"
-              className="flex-1 h-12 rounded-xl border-slate-200 text-slate-500 font-medium"
+              className="flex-1 h-12 rounded-xl border-slate-200 dark:border-[#2e3335] text-slate-500 dark:text-slate-300 dark:hover:bg-[#222628] dark:hover:text-slate-200 font-medium"
               onClick={() => navigate("/profile")}
             >
               Batal
@@ -362,7 +362,7 @@ export default function EditProfilePage() {
             <Button
               type="submit"
               disabled={saving}
-              className="flex-1 h-12 rounded-xl bg-[#4a7c6d] hover:bg-[#3d665a] text-white font-medium shadow-md shadow-emerald-900/10"
+              className="flex-1 h-12 rounded-xl bg-[#4a7c6d] dark:bg-[#3a6d4a] hover:bg-[#3d665a] dark:hover:bg-[#4a8a5e] text-white font-medium shadow-md shadow-emerald-900/10"
             >
               {saving ? (
                 <>
@@ -378,10 +378,10 @@ export default function EditProfilePage() {
 
         {/* Change Password Section */}
         <form onSubmit={handleChangePassword} className="space-y-6">
-          <Card className="border-none shadow-sm bg-white">
+          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-semibold text-slate-700 flex items-center gap-2">
-                <Lock size={18} className="text-[#4a7c6d]" />
+              <CardTitle className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+                <Lock size={18} className="text-[#4a7c6d] dark:text-[#7EC896]" />
                 Ganti Password
               </CardTitle>
             </CardHeader>
@@ -414,8 +414,8 @@ export default function EditProfilePage() {
               {passwordMessage.text && (
                 <div className={`p-3 rounded-xl text-sm font-medium ${
                   passwordMessage.type === "success" 
-                    ? "bg-[#e2f0e9] text-[#2d5a4c]" 
-                    : "bg-red-50 text-red-600"
+                    ? "bg-[#e2f0e9] dark:bg-[#1a2e22] text-[#2d5a4c] dark:text-[#7EC896]" 
+                    : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
                 }`}>
                   {passwordMessage.text}
                 </div>
@@ -424,7 +424,7 @@ export default function EditProfilePage() {
               <Button
                 type="submit"
                 disabled={changingPassword}
-                className="w-full h-12 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium"
+                className="w-full h-12 rounded-xl bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white font-medium"
               >
                 {changingPassword ? (
                   <>

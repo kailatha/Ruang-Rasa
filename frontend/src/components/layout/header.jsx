@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { RiMoonLine, RiNotification3Line, RiUserLine } from "react-icons/ri";
+import { RiMoonLine, RiSunLine, RiNotification3Line, RiUserLine } from "react-icons/ri";
+import { useTheme } from "@/context/ThemeContext";
 
 // Route yang pakai App Header (bukan landing)
 const APP_ROUTES = ["/dashboard", "/journal", "/screening", "/chatbot", "/rekomendasi", "/progress", "/settings", "/profile"];
@@ -7,6 +8,7 @@ const APP_ROUTES = ["/dashboard", "/journal", "/screening", "/chatbot", "/rekome
 export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isDark, toggleTheme } = useTheme();
 
   const isAppRoute = APP_ROUTES.some((r) => location.pathname.startsWith(r));
 
@@ -35,8 +37,8 @@ export default function Header() {
           ))}
         </div>
         <div className="app-navbar-actions">
-          <button className="app-nav-icon-btn" title="Dark mode">
-            <RiMoonLine />
+          <button className="app-nav-icon-btn" title={isDark ? "Light mode" : "Dark mode"} onClick={toggleTheme}>
+            {isDark ? <RiSunLine /> : <RiMoonLine />}
           </button>
           {/* <button className="app-nav-icon-btn" title="Notifikasi">
             <RiNotification3Line />
@@ -106,6 +108,9 @@ export default function Header() {
             {l.label}
           </button>
         ))}
+        <button className="nav-link" title={isDark ? "Light mode" : "Dark mode"} onClick={toggleTheme} style={{ display: "flex", alignItems: "center", fontSize: "16px" }}>
+          {isDark ? <RiSunLine /> : <RiMoonLine />}
+        </button>
         <button className="nav-link-masuk" onClick={() => handleNav("login")}>
           Masuk
         </button>

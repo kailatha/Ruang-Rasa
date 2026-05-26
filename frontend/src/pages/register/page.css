@@ -145,3 +145,56 @@
     font-size: 36px;
   }
 }
+
+/* Dark Mode */
+
+html.dark .register-main {
+  background-color: var(--cream);
+}
+
+html.dark .register-header-text .register-title-main {
+  color: var(--text-dark);
+}
+
+html.dark .register-header-text .register-title-main span {
+  color: var(--green-dark);
+}
+
+html.dark .register-subtitle-main {
+  color: var(--text-muted);
+}
+
+html.dark .register-card {
+  background-color: var(--white);
+  box-shadow: var(--shadow);
+}
+
+html.dark .register-label {
+  color: var(--text-body);
+}
+
+html.dark .register-input,
+html.dark .register-select {
+  background-color: var(--input-bg);
+  border-color: var(--border);
+  color: var(--text-dark);
+}
+
+html.dark .register-input:focus,
+html.dark .register-select:focus {
+  border-color: var(--green-dark);
+  background-color: var(--white);
+  box-shadow: 0 0 0 3px rgba(126, 200, 150, 0.12);
+}
+
+html.dark .register-submit-btn {
+  background-color: #3a6d4a;
+}
+
+html.dark .register-submit-btn:hover {
+  background-color: #4a8a5e;
+}
+
+html.dark .register-checkbox-text {
+  color: var(--text-body);
+}
