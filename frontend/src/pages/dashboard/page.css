@@ -11,19 +11,20 @@
   min-width: 0;
 }
 
-/* main */
+/* main content dashboard */
 .db-main {
   flex: 1;
   padding: 36px 48px 56px;
   overflow-y: auto;
 }
 
+/* greeting and date */
 .db-greeting {
   margin-bottom: 32px;
 }
 
 .db-greeting-title {
-  font-family: 'Playfair Display', sans-serif;
+  font-family: var(--font-heading);
   font-size: clamp(32px, 4vw, 48px);
   font-weight: 700;
   color: var(--text-dark);
@@ -31,7 +32,7 @@
 }
 
 .db-greeting-name {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-style: italic;
   font-weight: 400;
   color: var(--green-mid);
@@ -43,8 +44,7 @@
   margin: 0;
 }
 
-/* hero */
-
+/* hero cards */
 .db-hero-cards {
   display: grid;
   grid-template-columns: 1fr 1.3fr 1fr;
@@ -96,13 +96,7 @@
   font-weight: 300;
 }
 
-.db-hero-arrow {
-  font-size: 20px;
-  margin-top: 10px;
-}
-
-/* stats row */
-
+/* statistik 4 kolom */
 .db-stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -110,11 +104,17 @@
   margin-bottom: 28px;
 }
 
+/* override shadcn card untuk kartu statistik */
 .db-stat-card {
-  background: var(--white);
-  border-radius: 14px;
-  padding: 20px 20px 16px;
-  box-shadow: var(--shadow);
+  background: var(--white) !important;
+  border-radius: 14px !important;
+  box-shadow: var(--shadow) !important;
+  border: none !important;
+}
+
+/* override shadcn card-content untuk isi kartu statistik */
+.db-stat-card-content {
+  padding: 20px 20px 16px !important;
 }
 
 .db-stat-value {
@@ -132,38 +132,52 @@
   margin-bottom: 10px;
 }
 
+/* override shadcn badge untuk badge statistik */
 .db-stat-badge {
-  display: inline-block;
-  font-size: 11px;
-  padding: 2px 9px;
-  border-radius: 20px;
-  font-weight: 600;
+  display: inline-block !important;
+  font-size: 11px !important;
+  padding: 2px 9px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
+  border: none !important;
 }
 
-.badge-active { background: #FEF3E2; color: #B07000; }
-.badge-up     { background: rgba(61, 92, 74, 0.08); color: var(--green-dark); }
-.badge-done   { background: rgba(61, 92, 74, 0.08); color: var(--green-dark); }
+.badge-active {
+  background: #FEF3E2;
+  color: #B07000;
+}
 
-/* section */
+.badge-up,
+.badge-done {
+  background: rgba(61, 92, 74, 0.08);
+  color: var(--green-dark);
+}
 
+/* override shadcn card untuk section utama (chart, jurnal, rekomendasi, audio) */
 .db-section {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--shadow);
+  background: var(--white) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow) !important;
+  border: none !important;
   margin-bottom: 20px;
+}
+
+/* override shadcn card-content untuk isi section */
+.db-section-content {
+  padding: 24px !important;
+  display: block !important;
 }
 
 .db-section-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   gap: 12px;
 }
 
 .db-section-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 20px;
   font-weight: 700;
   color: var(--text-dark);
@@ -177,8 +191,13 @@
   margin: 0;
 }
 
-/* grafik */
+/* override shadcn separator di bawah section header */
+.db-section-separator {
+  margin-bottom: 16px;
+  background: var(--border);
+}
 
+/* tab pilihan rentang waktu grafik */
 .db-chart-tabs {
   display: flex;
   gap: 2px;
@@ -205,14 +224,14 @@
   font-weight: 600;
 }
 
-/* grafik bar */
-
+/* grafik bar mingguan */
 .db-chart-bars {
   display: flex;
   align-items: flex-end;
   gap: 10px;
   height: 140px;
   margin-bottom: 12px;
+  overflow: visible;
 }
 
 .db-chart-col {
@@ -222,6 +241,7 @@
   align-items: center;
   gap: 6px;
   height: 100%;
+  min-width: 0;
 }
 
 .db-bar-wrap {
@@ -230,6 +250,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  min-height: 0;
 }
 
 .db-bar {
@@ -238,6 +259,7 @@
   background: rgba(61, 92, 74, 0.15);
   min-height: 4px;
   transition: height 0.4s ease;
+  align-self: flex-end;
 }
 
 .db-bar-highlight {
@@ -250,8 +272,7 @@
   flex-shrink: 0;
 }
 
-/* motivation */
-
+/* pesan motivasi bawah grafik */
 .db-motivation-bar {
   background: var(--cream);
   border-radius: 10px;
@@ -262,8 +283,7 @@
   margin-top: 4px;
 }
 
-/* bottom grid */
-
+/* grid 2 kolom: jurnal dan rekomendasi */
 .db-bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -271,8 +291,7 @@
   margin-bottom: 20px;
 }
 
-/* see all btn */
-
+/* lihat semua entri jurnal */
 .db-see-all {
   display: flex;
   align-items: center;
@@ -292,13 +311,12 @@
   color: var(--green-dark);
 }
 
-/* journal cards */
-
+/* override shadcn card untuk kartu entri jurnal */
 .db-journal-card {
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
   margin-bottom: 10px;
+  box-shadow: none !important;
   transition: background 0.2s;
 }
 
@@ -307,7 +325,12 @@
 }
 
 .db-journal-card:hover {
-  background: rgba(61, 92, 74, 0.03);
+  background: rgba(61, 92, 74, 0.03) !important;
+}
+
+/* override shadcn card-content untuk isi kartu jurnal */
+.db-journal-card-content {
+  padding: 14px !important;
 }
 
 .db-journal-card-header {
@@ -323,21 +346,23 @@
   font-weight: 300;
 }
 
+/* override shadcn badge untuk badge mood di kartu jurnal */
 .db-mood-badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  border-radius: 20px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 3px 10px !important;
+  border-radius: 20px !important;
+  border: none !important;
 }
 
-.mood-senang { background: #FEF9E7; color: #B08A10; }
-.mood-netral  { background: rgba(61, 92, 74, 0.07); color: var(--text-muted); }
-.mood-sedih   { background: #EAF0FB; color: #3A6FB5; }
-.mood-marah   { background: #FDECEA; color: #B03020; }
-.mood-stress  { background: #F5EAFB; color: #7A3AA0; }
+.mood-senang { background: #FEF9E7 !important; color: #B08A10 !important; }
+.mood-netral { background: rgba(61, 92, 74, 0.07) !important; color: var(--text-muted) !important; }
+.mood-sedih  { background: #EAF0FB !important; color: #3A6FB5 !important; }
+.mood-marah  { background: #FDECEA !important; color: #B03020 !important; }
+.mood-stress { background: #F5EAFB !important; color: #7A3AA0 !important; }
 
 .db-journal-content {
   font-size: 13px;
@@ -358,70 +383,68 @@
   flex-wrap: wrap;
 }
 
+/* override shadcn badge untuk chip sentimen */
 .db-sentiment-chip {
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 9px;
-  border-radius: 20px;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 2px 9px !important;
+  border-radius: 20px !important;
+  border: none !important;
 }
 
-.sentiment-positive { background: rgba(61, 92, 74, 0.10); color: var(--green-dark); }
-.sentiment-negative { background: #FDECEA; color: #B03020; }
-.sentiment-neutral  { background: rgba(61, 92, 74, 0.06); color: var(--text-muted); }
+.sentiment-positive { background: rgba(61, 92, 74, 0.10) !important; color: var(--green-dark) !important; }
+.sentiment-negative { background: #FDECEA !important; color: #B03020 !important; }
+.sentiment-neutral  { background: rgba(61, 92, 74, 0.06) !important; color: var(--text-muted) !important; }
 
+/* override shadcn badge untuk chip emosi */
 .db-emotion-chip {
-  font-size: 11px;
-  padding: 2px 9px;
-  border-radius: 20px;
-  background: rgba(61, 92, 74, 0.08);
-  color: var(--green-dark);
+  font-size: 11px !important;
+  padding: 2px 9px !important;
+  border-radius: 20px !important;
+  border: none !important;
+  background: rgba(61, 92, 74, 0.08) !important;
+  color: var(--green-dark) !important;
 }
 
-/* recommendations */
-
+/* override shadcn badge untuk label ai screening */
 .db-reco-badge {
-  font-size: 11px;
-  background: rgba(61, 92, 74, 0.08);
-  color: var(--green-dark);
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-weight: 600;
+  font-size: 11px !important;
+  background: rgba(61, 92, 74, 0.08) !important;
+  color: var(--green-dark) !important;
+  padding: 4px 10px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
   white-space: nowrap;
   flex-shrink: 0;
+  border: none !important;
 }
 
+/* daftar rekomendasi */
 .db-reco-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* override shadcn card untuk item rekomendasi */
 .db-reco-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: var(--input-bg);
-  border: 1px solid var(--border);
-  transition: background 0.18s;
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  transition: background 0.2s ease;
 }
 
 .db-reco-item:hover {
-  background: rgba(61, 92, 74, 0.05);
+  background: rgba(61, 92, 74, 0.05) !important;
 }
 
-.db-reco-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(61, 92, 74, 0.10);
+/* override shadcn card-content untuk isi item rekomendasi */
+.db-reco-item-content {
+  padding: 10px 12px !important;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 17px;
-  color: var(--green-dark);
-  flex-shrink: 0;
+  gap: 12px;
 }
 
 .db-reco-info { flex: 1; }
@@ -435,7 +458,7 @@
 .db-reco-desc {
   font-size: 11px;
   color: var(--text-muted);
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .db-reco-duration {
@@ -445,7 +468,6 @@
 }
 
 /* audio */
-
 .db-audio-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -492,7 +514,7 @@
 
 .db-audio-title {
   position: relative;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 17px;
   font-weight: 600;
   color: var(--white);
@@ -521,8 +543,7 @@
   background: rgba(255, 255, 255, 0.28);
 }
 
-/* loading empty */
-
+/* state loading dan empty */
 .db-loading,
 .db-empty {
   font-size: 13px;
@@ -532,7 +553,6 @@
 }
 
 /* responsivity */
-
 @media (max-width: 900px) {
   .db-hero-cards {
     grid-template-columns: 1fr;
@@ -550,7 +570,6 @@
     grid-template-columns: 1fr;
   }
 
-  .db-topbar,
   .db-main {
     padding-left: 20px;
     padding-right: 20px;
@@ -567,8 +586,7 @@
   }
 }
 
-/* Dark Mode */
-
+/* dark mode */
 html.dark .db-hero-mood      { background: #7a5a38; }
 html.dark .db-hero-screening { background: #2a4a34; }
 html.dark .db-hero-journal   { background: #2a3844; color: #b0d0e0; }
@@ -594,39 +612,39 @@ html.dark .db-motivation-bar {
   background: var(--input-bg);
 }
 
+html.dark .db-section-separator {
+  background: var(--border);
+}
+
 html.dark .db-journal-card {
-  border-color: var(--border);
+  border-color: var(--border) !important;
 }
 
 html.dark .db-journal-card:hover {
-  background: rgba(126, 200, 150, 0.03);
+  background: rgba(126, 200, 150, 0.03) !important;
 }
 
-html.dark .mood-senang { background: #3a3518; color: #d4c54a; }
-html.dark .mood-netral { background: rgba(126, 200, 150, 0.06); color: var(--text-muted); }
-html.dark .mood-sedih  { background: #1e2840; color: #6a9ad8; }
-html.dark .mood-marah  { background: #3a1e1e; color: #e07070; }
-html.dark .mood-stress { background: #301e3a; color: #c080e0; }
+html.dark .mood-senang { background: #3a3518 !important; color: #d4c54a !important; }
+html.dark .mood-netral { background: rgba(126, 200, 150, 0.06) !important; color: var(--text-muted) !important; }
+html.dark .mood-sedih  { background: #1e2840 !important; color: #6a9ad8 !important; }
+html.dark .mood-marah  { background: #3a1e1e !important; color: #e07070 !important; }
+html.dark .mood-stress { background: #301e3a !important; color: #c080e0 !important; }
 
-html.dark .badge-active { background: #3a3018; color: #d4a040; }
-html.dark .badge-up     { background: rgba(126, 200, 150, 0.10); }
-html.dark .badge-done   { background: rgba(126, 200, 150, 0.10); }
+html.dark .badge-active { background: #3a3018 !important; color: #d4a040 !important; }
+html.dark .badge-up     { background: rgba(126, 200, 150, 0.10) !important; }
+html.dark .badge-done   { background: rgba(126, 200, 150, 0.10) !important; }
 
-html.dark .sentiment-positive { background: rgba(126, 200, 150, 0.12); color: var(--green-dark); }
-html.dark .sentiment-negative { background: #3a1e1e; color: #e07070; }
-html.dark .sentiment-neutral  { background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
+html.dark .sentiment-positive { background: rgba(126, 200, 150, 0.12) !important; color: var(--green-dark) !important; }
+html.dark .sentiment-negative { background: #3a1e1e !important; color: #e07070 !important; }
+html.dark .sentiment-neutral  { background: rgba(255, 255, 255, 0.05) !important; color: var(--text-muted) !important; }
 
 html.dark .db-reco-item {
-  background: var(--input-bg);
-  border-color: var(--border);
+  background: var(--input-bg) !important;
+  border-color: var(--border) !important;
 }
 
 html.dark .db-reco-item:hover {
-  background: rgba(126, 200, 150, 0.05);
-}
-
-html.dark .db-reco-icon {
-  background: rgba(126, 200, 150, 0.10);
+  background: rgba(126, 200, 150, 0.05) !important;
 }
 
 html.dark .db-audio-overlay {
