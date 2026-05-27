@@ -8,7 +8,8 @@ import "./page.css";
 import Sidebar from "@/components/layout/sidebar";
 import "@/components/layout/sidebar.css";
 
-// React Icons - editor
+// react icons
+// editor
 import { RiBold } from "react-icons/ri";
 import { RiItalic } from "react-icons/ri";
 import { RiListUnordered } from "react-icons/ri";
@@ -16,15 +17,13 @@ import { RiTable2 } from "react-icons/ri";
 import { RiPriceTag3Line } from "react-icons/ri";
 import { RiArrowRightLine } from "react-icons/ri";
 import { RiArrowLeftLine } from "react-icons/ri";
-
-// React Icons - mood
+// mood
 import { RiEmotionHappyLine } from "react-icons/ri";
 import { RiEmotionNormalLine } from "react-icons/ri";
 import { RiEmotionUnhappyLine } from "react-icons/ri";
 import { RiEmotionLine } from "react-icons/ri";
 import { RiEmotionSadLine } from "react-icons/ri";
-
-// React Icons - chatbot
+// chatbot
 import { RiChat3Line } from "react-icons/ri";
 
 const MOODS = [

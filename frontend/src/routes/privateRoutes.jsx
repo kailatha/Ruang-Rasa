@@ -2,7 +2,7 @@ import { Route, Navigate } from "react-router-dom";
 import DashboardPage from "@/pages/dashboard/page";
 import JournalPage from "@/pages/journal/page";
 import ScreeningPage from "@/pages/screening/page";
-// import ChatbotPage from "@/pages/chatbot/page";
+import ChatbotPage from "@/pages/chatbot/page";
 import ProfilePage from "@/pages/profile/page";
 import EditProfilePage from "@/pages/profile/edit/page";
 
@@ -32,11 +32,11 @@ const privateRoutes = [
     path="/screening"
     element={<PrivateRoute><ScreeningPage /></PrivateRoute>}
   />,
-//   <Route
-//     key="chatbot"
-//     path="/chatbot"
-//     element={<PrivateRoute><ChatbotPage /></PrivateRoute>}
-//   />,
+  <Route
+    key="chatbot"
+    path="/chatbot"
+    element={<PrivateRoute><ChatbotPage /></PrivateRoute>}
+  />,
   <Route
     key="profile"
     path="/profile"
