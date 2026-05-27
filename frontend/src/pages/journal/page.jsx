@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+
 import { createJournalEntry, getJournalEntries } from "@/services/journalService";
 import { MOCK_ENTRIES } from "@/mock/journalMock";
-
 import "./page.css";
 import Sidebar from "@/components/layout/sidebar";
 import "@/components/layout/sidebar.css";
@@ -26,6 +25,13 @@ import { RiEmotionSadLine } from "react-icons/ri";
 // chatbot
 import { RiChat3Line } from "react-icons/ri";
 
+// shadcn ui
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+
 const MOODS = [
   { label: "Senang", icon: <RiEmotionHappyLine /> },
   { label: "Netral", icon: <RiEmotionNormalLine /> },
@@ -43,7 +49,7 @@ const TAGS_OPTIONS = [
 ];
 
 // utility
-
+// format waktu relatif dari iso string
 function formatRelativeTime(isoString) {
   const date = new Date(isoString);
   const now = new Date();
@@ -55,12 +61,14 @@ function formatRelativeTime(isoString) {
   return `${date.toLocaleDateString("id-ID", { day: "numeric", month: "short" })}, ${date.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}`;
 }
 
-function getSentimentColor(label) {
+// warna kelas berdasarkan label sentimen
+function getSentimentVariant(label) {
   if (label === "Positif") return "sentiment-positive";
   if (label === "Negatif") return "sentiment-negative";
   return "sentiment-neutral";
 }
 
+// warna kelas berdasarkan mood
 function getMoodColor(mood) {
   const map = {
     Senang: "mood-senang",
@@ -72,32 +80,37 @@ function getMoodColor(mood) {
   return map[mood] || "mood-netral";
 }
 
-// sub components
-
+// sub-component
+// kartu entri jurnal sebelumnya
 function EntryCard({ entry }) {
   const moodIcon = MOODS.find((m) => m.label === entry.mood)?.icon;
 
   return (
-    <div className="entry-card">
-      <div className="entry-card-header">
+    <Card className="entry-card">
+      <CardHeader className="entry-card-header">
         <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
-        <span className={`mood-badge ${getMoodColor(entry.mood)}`}>
+        <Badge className={`mood-badge ${getMoodColor(entry.mood)}`}>
           {moodIcon} {entry.mood}
-        </span>
-      </div>
-      <p className="entry-content">"{entry.content}"</p>
-      <div className="entry-footer">
-        {entry.sentiment && (
-          <span className={`sentiment-chip ${getSentimentColor(entry.sentiment.label)}`}>
-            {entry.sentiment.label} {entry.sentiment.score}%
-          </span>
-        )}
-        {entry.emotion && <span className="emotion-chip">{entry.emotion}</span>}
-      </div>
-    </div>
+        </Badge>
+      </CardHeader>
+      <CardContent className="entry-card-body">
+        <p className="entry-content">"{entry.content}"</p>
+        <div className="entry-footer">
+          {entry.sentiment && (
+            <Badge className={`sentiment-chip ${getSentimentVariant(entry.sentiment.label)}`}>
+              {entry.sentiment.label} {entry.sentiment.score}%
+            </Badge>
+          )}
+          {entry.emotion && (
+            <Badge className="emotion-chip">{entry.emotion}</Badge>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
+// pilihan mood
 function MoodPicker({ selected, onSelect }) {
   return (
     <div className="mood-picker">
@@ -115,6 +128,7 @@ function MoodPicker({ selected, onSelect }) {
   );
 }
 
+// selector tag/kategori
 function TagSelector({ selected, onToggle }) {
   return (
     <div className="tag-selector">
@@ -122,9 +136,7 @@ function TagSelector({ selected, onToggle }) {
         <button
           key={tag}
           onClick={() => onToggle(tag)}
-          className={`tag-chip ${
-            selected.includes(tag) ? "tag-chip-active" : ""
-          }`}
+          className={`tag-chip ${selected.includes(tag) ? "tag-chip-active" : ""}`}
         >
           {tag}
         </button>
@@ -133,10 +145,10 @@ function TagSelector({ selected, onToggle }) {
   );
 }
 
-// main page
-
+// mock data (false = pakai api)
 const USE_MOCK = false;
 
+// halaman utama jurnal
 export default function JournalPage() {
   const navigate = useNavigate();
 
@@ -149,12 +161,14 @@ export default function JournalPage() {
   const [loadingEntries, setLoadingEntries] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  // autosave draft setiap konten berubah
   useEffect(() => {
     if (!content) return;
     const timer = setTimeout(() => setSaveStatus("saved"), 500);
     return () => clearTimeout(timer);
   }, [content]);
 
+  // load entri jurnal saat halaman pertama dibuka
   useEffect(() => {
     async function loadEntries() {
       setLoadingEntries(true);
@@ -167,7 +181,7 @@ export default function JournalPage() {
           setEntries(data.entries || data);
         }
       } catch (err) {
-        console.error("Gagal memuat entri:", err);
+        console.error("gagal memuat entri:", err);
       } finally {
         setLoadingEntries(false);
       }
@@ -175,12 +189,14 @@ export default function JournalPage() {
     loadEntries();
   }, []);
 
+  // toggle aktif/nonaktif tag
   function toggleTag(tag) {
     setSelectedTags((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   }
 
+  // simpan entri jurnal baru ke server atau mock
   async function handleSave() {
     if (!selectedMood || !content.trim()) return;
     setIsSaving(true);
@@ -197,32 +213,34 @@ export default function JournalPage() {
         };
         setEntries((prev) => [newEntry, ...prev]);
       } else {
-        // const newEntry = await createJournalEntry(payload);
-        // setEntries((prev) => [newEntry, ...prev]);
         const response = await createJournalEntry(payload);
         setEntries((prev) => [response.entry, ...prev]);
       }
+      // reset form setelah berhasil simpan
       setSelectedMood(null);
       setContent("");
       setSelectedTags([]);
       setSaveStatus(null);
     } catch (err) {
-      console.error("Gagal menyimpan jurnal:", err);
+      console.error("gagal menyimpan jurnal:", err);
       setSaveStatus("error");
     } finally {
       setIsSaving(false);
     }
   }
 
+  // tombol simpan hanya aktif jika mood dan konten sudah diisi
   const canSave = selectedMood && content.trim().length > 0;
 
   return (
     <div className={"journal-layout" + (sidebarCollapsed ? " collapsed" : "")}>
 
       <Sidebar entryCount={entries.length} />
-      
+
       <main className="journal-main fade-up">
         <div className="journal-form-area">
+
+          {/* header halaman dengan tombol navigasi ke chatbot */}
           <div className="journal-header">
             <div>
               <h1 className="journal-title">Bagaimana harimu?</h1>
@@ -238,7 +256,7 @@ export default function JournalPage() {
             </Button>
           </div>
 
-          {/* Step 1: Mood */}
+          {/* langkah 1: pilih mood */}
           <section className="journal-section">
             <div className="section-step">
               <span className="step-num">1</span>
@@ -252,7 +270,7 @@ export default function JournalPage() {
             )}
           </section>
 
-          {/* Step 2: Content */}
+          {/* langkah 2: tulis isi jurnal */}
           <section className="journal-section">
             <div className="section-step">
               <span className="step-num">2</span>
@@ -264,7 +282,7 @@ export default function JournalPage() {
               <button className="toolbar-btn"><RiListUnordered /></button>
               <button className="toolbar-btn"><RiTable2 /></button>
             </div>
-            <textarea
+            <Textarea
               className="journal-textarea"
               placeholder="Mulailah menulis apa yang ada di pikiranmu..."
               value={content}
@@ -273,15 +291,16 @@ export default function JournalPage() {
             />
           </section>
 
-          {/* Tags */}
+          {/* pilih tag/kategori */}
           <section className="journal-section journal-section-tags">
             <div className="tags-label">
               <RiPriceTag3Line className="tags-label-icon" />
-              Tambahkan tagar
+              Tagar
             </div>
             <TagSelector selected={selectedTags} onToggle={toggleTag} />
           </section>
 
+          {/* status autosave draf */}
           {saveStatus === "saved" && (
             <div className="draft-status">
               ● Tersimpan sebagai draf pukul{" "}
@@ -289,6 +308,7 @@ export default function JournalPage() {
             </div>
           )}
 
+          {/* aksi: batal atau simpan */}
           <div className="journal-actions">
             <Button
               variant="outline"
@@ -311,7 +331,7 @@ export default function JournalPage() {
         </div>
       </main>
 
-      {/* sidebar kanan khusus journal */}
+      {/* sidebar kanan: entri jurnal sebelumnya */}
       <aside className={"journal-entries-sidebar" + (sidebarCollapsed ? " collapsed" : "")}>
         <button
           className="sidebar-toggle"
@@ -319,6 +339,7 @@ export default function JournalPage() {
         >
           {sidebarCollapsed ? <RiArrowLeftLine /> : <RiArrowRightLine />}
         </button>
+
         <div className="entries-header">
           <h3 className="entries-title">Entri Sebelumnya</h3>
         </div>
@@ -329,12 +350,14 @@ export default function JournalPage() {
           <div className="entries-empty">Belum ada entri. Mulai tulis hari ini!</div>
         ) : (
           <>
-            {entries.slice(0, 4).map((entry) => (
-              <EntryCard key={entry.id} entry={entry} />
+            {entries.slice(0, 4).map((entry, index) => (
+              <div key={entry.id}>
+                <EntryCard entry={entry} />
+                {index < Math.min(entries.length, 4) - 1 && (
+                  <Separator className="entry-separator" />
+                )}
+              </div>
             ))}
-            {/* <button className="see-all-btn">
-              Lihat semua entri <RiArrowRightLine className="see-all-icon" />
-            </button> */}
           </>
         )}
       </aside>

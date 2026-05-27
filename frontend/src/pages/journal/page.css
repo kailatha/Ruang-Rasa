@@ -38,6 +38,7 @@
   margin: 0;
 }
 
+/* override shadcn button untuk tombol chatbot */
 .chatbot-btn {
   display: flex;
   align-items: center;
@@ -55,8 +56,7 @@
   color: var(--green-dark) !important;
 }
 
-/* section */
-
+/* section form */
 .journal-section {
   margin-bottom: 28px;
 }
@@ -94,7 +94,6 @@
 }
 
 /* mood picker */
-
 .mood-picker {
   display: flex;
   gap: 12px;
@@ -142,6 +141,7 @@
   color: var(--text-body);
 }
 
+/* override shadcn button untuk tombol simpan mood */
 .save-mood-btn {
   margin-top: 14px;
   background: var(--green-dark) !important;
@@ -157,8 +157,7 @@
   background: var(--green-mid) !important;
 }
 
-/* editor */
-
+/* toolbar editor teks */
 .editor-toolbar {
   display: flex;
   gap: 4px;
@@ -190,35 +189,35 @@
   color: var(--green-dark);
 }
 
+/* override shadcn textarea untuk area tulis jurnal */
 .journal-textarea {
   width: 100%;
   display: block;
-  padding: 14px 16px;
-  border: 1.5px solid var(--border);
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-  background: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  color: var(--text-dark);
-  line-height: 1.7;
+  padding: 14px 16px !important;
+  border: 1.5px solid var(--border) !important;
+  border-top: none !important;
+  border-radius: 0 0 10px 10px !important;
+  background: var(--white) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--text-dark) !important;
+  line-height: 1.7 !important;
   resize: none;
   min-height: 200px;
   outline: none;
   transition: border-color 0.2s;
+  box-shadow: none !important;
 }
 
 .journal-textarea::placeholder {
   color: var(--text-muted);
-  text-align: left;
 }
 
 .journal-textarea:focus {
-  border-color: var(--green-mid);
+  border-color: var(--green-mid) !important;
 }
 
-/* tags di jurnal */
-
+/* tags/kategori */
 .tags-label {
   display: flex;
   align-items: center;
@@ -263,62 +262,14 @@
   font-weight: 500;
 }
 
-.tag-close-icon {
-  font-size: 13px;
-  opacity: 0.6;
-}
-
-.tag-chip-add {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  border-style: dashed;
-  color: var(--text-muted);
-}
-
-.custom-tag-input {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.custom-tag-field {
-  border: 1.5px solid var(--green-dark);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  background: var(--white);
-  color: var(--text-dark);
-}
-
-.custom-tag-confirm {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--green-dark);
-  color: var(--white);
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* draft dan actions */
-
+/* status autosave draf */
 .draft-status {
   font-size: 11.5px;
   color: var(--text-muted);
   margin-bottom: 16px;
 }
 
+/* tombol aksi bawah form */
 .journal-actions {
   display: flex;
   justify-content: flex-end;
@@ -326,6 +277,7 @@
   padding-top: 8px;
 }
 
+/* override shadcn button untuk tombol simpan jurnal */
 .save-journal-btn {
   background: var(--green-dark) !important;
   color: var(--white) !important;
@@ -346,8 +298,7 @@
   cursor: not-allowed;
 }
 
-/* SIDEBAR KANAN */
-
+/* sidebar kanan entri sebelumnya */
 .journal-entries-sidebar {
   width: 320px;
   min-width: 320px;
@@ -410,22 +361,32 @@
   padding: 40px 0;
 }
 
-/* entry card */
-
+/* override shadcn card untuk kartu entri jurnal */
 .entry-card {
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(61, 92, 74, 0.06);
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 14px 0 !important;
 }
 
-.entry-card:last-of-type {
-  border-bottom: none;
-}
-
+/* override shadcn card-header untuk header kartu entri */
 .entry-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 !important;
   margin-bottom: 8px;
+}
+
+/* override shadcn card-content untuk body kartu entri */
+.entry-card-body {
+  padding: 0 !important;
+}
+
+.entry-separator {
+  margin: 0;
+  background: rgba(61, 92, 74, 0.06);
 }
 
 .entry-time {
@@ -433,21 +394,23 @@
   color: var(--text-muted);
 }
 
+/* override shadcn badge untuk badge mood */
 .mood-badge {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 12px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 3px 8px !important;
+  border-radius: 12px !important;
+  border: none !important;
 }
 
-.mood-senang { background: #fef9e7; color: #b7791f; }
-.mood-netral { background: rgba(61, 92, 74, 0.08); color: var(--text-body); }
-.mood-sedih  { background: #ebf8ff; color: #2b6cb0; }
-.mood-marah  { background: #fff5f5; color: #c53030; }
-.mood-stress { background: #faf5ff; color: #6b46c1; }
+.mood-senang { background: #fef9e7 !important; color: #b7791f !important; }
+.mood-netral { background: rgba(61, 92, 74, 0.08) !important; color: var(--text-body) !important; }
+.mood-sedih  { background: #ebf8ff !important; color: #2b6cb0 !important; }
+.mood-marah  { background: #fff5f5 !important; color: #c53030 !important; }
+.mood-stress { background: #faf5ff !important; color: #6b46c1 !important; }
 
 .entry-content {
   font-size: 12.5px;
@@ -467,49 +430,26 @@
   gap: 6px;
 }
 
+/* override shadcn badge untuk chip sentimen dan emosi */
 .sentiment-chip,
 .emotion-chip {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 10px;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  padding: 2px 8px !important;
+  border-radius: 10px !important;
+  border: none !important;
 }
 
-.sentiment-positive { background: #c6f6d5; color: #22543d; }
-.sentiment-negative { background: #fed7d7; color: #822727; }
-.sentiment-neutral  { background: var(--border); color: var(--text-body); }
+.sentiment-positive { background: #c6f6d5 !important; color: #22543d !important; }
+.sentiment-negative { background: #fed7d7 !important; color: #822727 !important; }
+.sentiment-neutral  { background: var(--border) !important; color: var(--text-body) !important; }
 
 .emotion-chip {
-  background: rgba(61, 92, 74, 0.08);
-  color: var(--green-dark);
+  background: rgba(61, 92, 74, 0.08) !important;
+  color: var(--green-dark) !important;
 }
 
-.see-all-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  margin-top: 16px;
-  font-size: 13px;
-  color: var(--green-dark);
-  font-weight: 500;
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  transition: opacity 0.15s;
-}
-
-.see-all-btn:hover {
-  opacity: 0.7;
-}
-
-.see-all-icon {
-  font-size: 14px;
-}
-
-/* Dark Mode */
-
+/* dark mode */
 html.dark .mood-option {
   background: var(--white);
   border-color: var(--border);
@@ -536,13 +476,13 @@ html.dark .toolbar-btn:hover {
 }
 
 html.dark .journal-textarea {
-  background: var(--white);
-  border-color: var(--border);
-  color: var(--text-dark);
+  background: var(--white) !important;
+  border-color: var(--border) !important;
+  color: var(--text-dark) !important;
 }
 
 html.dark .journal-textarea:focus {
-  border-color: var(--green-mid);
+  border-color: var(--green-mid) !important;
 }
 
 html.dark .tag-chip {
@@ -561,12 +501,6 @@ html.dark .tag-chip-active {
   color: var(--green-dark);
 }
 
-html.dark .custom-tag-field {
-  border-color: var(--green-dark);
-  background: var(--white);
-  color: var(--text-dark);
-}
-
 html.dark .journal-entries-sidebar {
   background: var(--white);
   border-left-color: rgba(255, 255, 255, 0.06);
@@ -577,21 +511,21 @@ html.dark .journal-entries-sidebar .sidebar-toggle {
   background: var(--white);
 }
 
-html.dark .entry-card {
-  border-bottom-color: rgba(255, 255, 255, 0.04);
+html.dark .entry-separator {
+  background: rgba(255, 255, 255, 0.04);
 }
 
-html.dark .mood-senang { background: #3a3518; color: #d4c54a; }
-html.dark .mood-netral { background: rgba(126, 200, 150, 0.06); color: var(--text-body); }
-html.dark .mood-sedih  { background: #1e2840; color: #6a9ad8; }
-html.dark .mood-marah  { background: #3a1e1e; color: #e07070; }
-html.dark .mood-stress { background: #301e3a; color: #c080e0; }
+html.dark .mood-senang { background: #3a3518 !important; color: #d4c54a !important; }
+html.dark .mood-netral { background: rgba(126, 200, 150, 0.06) !important; color: var(--text-body) !important; }
+html.dark .mood-sedih  { background: #1e2840 !important; color: #6a9ad8 !important; }
+html.dark .mood-marah  { background: #3a1e1e !important; color: #e07070 !important; }
+html.dark .mood-stress { background: #301e3a !important; color: #c080e0 !important; }
 
-html.dark .sentiment-positive { background: #1e3a24; color: #7ec896; }
-html.dark .sentiment-negative { background: #3a1e1e; color: #e07070; }
-html.dark .sentiment-neutral  { background: rgba(255, 255, 255, 0.05); color: var(--text-body); }
+html.dark .sentiment-positive { background: #1e3a24 !important; color: #7ec896 !important; }
+html.dark .sentiment-negative { background: #3a1e1e !important; color: #e07070 !important; }
+html.dark .sentiment-neutral  { background: rgba(255, 255, 255, 0.05) !important; color: var(--text-body) !important; }
 
 html.dark .emotion-chip {
-  background: rgba(126, 200, 150, 0.10);
-  color: var(--green-dark);
+  background: rgba(126, 200, 150, 0.10) !important;
+  color: var(--green-dark) !important;
 }
