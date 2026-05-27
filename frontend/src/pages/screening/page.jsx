@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
 
-import Sidebar from "@/components/layout/sidebar";
-
-import "@/components/layout/sidebar.css";
 import "./page.css";
+import Sidebar from "@/components/layout/sidebar";
+import "@/components/layout/sidebar.css";
 
-// React Icons - keterangan
+// react icons
 import { FiHeart, FiFeather, FiZap, FiAlertTriangle, FiX, FiStar, FiSun } from "react-icons/fi";
+
+// shadcn ui
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 const SCALE_LEVELS = [
   {
@@ -56,18 +60,21 @@ const QUESTIONS = [
 
 const SCALE_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-// sub components
-
+// sub-component
+// level kondisi emosional
 function LevelCard({ level, isActive }) {
   return (
-    <div className={`level-card ${level.color} ${isActive || level.active ? "level-card-active" : ""}`}>
-      <span className="level-icon">{level.icon}</span>
-      <div className="level-label">{level.label}</div>
-      <div className="level-range">{level.range}</div>
-    </div>
+    <Card className={`level-card ${level.color} ${isActive ? "level-card-active" : ""}`}>
+      <CardContent className="level-card-content">
+        <span className="level-icon">{level.icon}</span>
+        <div className="level-label">{level.label}</div>
+        <div className="level-range">{level.range}</div>
+      </CardContent>
+    </Card>
   );
 }
 
+// pertanyaan dengan skala 1–10
 function QuestionStep({ question, index, total, value, onChange, onNext, onPrev, isSubmitting }) {
   return (
     <div className="question-wrapper fade-up">
@@ -80,6 +87,7 @@ function QuestionStep({ question, index, total, value, onChange, onNext, onPrev,
       <div className="question-counter">{index + 1} / {total}</div>
       <p className="question-text">{question}</p>
 
+      {/* tombol skala (lingkaran) */}
       <div className="scale-options">
         {SCALE_OPTIONS.map((opt) => (
           <button
@@ -88,14 +96,18 @@ function QuestionStep({ question, index, total, value, onChange, onNext, onPrev,
             onClick={() => onChange(opt)}
           >
             <span className="scale-num">{opt}</span>
-            <span className="scale-label">{opt.label}</span>
           </button>
         ))}
       </div>
 
       <div className="question-actions">
         {index > 0 && (
-          <Button variant="outline" onClick={onPrev} className="screening-btn-outline" disabled={isSubmitting}>
+          <Button
+            variant="outline"
+            onClick={onPrev}
+            className="screening-btn-outline"
+            disabled={isSubmitting}
+          >
             Kembali
           </Button>
         )}
@@ -111,14 +123,17 @@ function QuestionStep({ question, index, total, value, onChange, onNext, onPrev,
   );
 }
 
+// modal rekomendasi aktivitas dan afirmasi setelah hasil screening
 function RecommendationModal({ backendResult, onClose }) {
   const activityDetail = backendResult?.activityDetail;
   const affirmation = backendResult?.affirmation;
 
   const activityTitle = activityDetail?.title || activityDetail?.name || null;
   const activityDesc = activityDetail?.description || null;
-  const affirmationText = affirmation?.text || affirmation?.content || 
-    (typeof affirmation === 'string' ? affirmation : null);
+  const affirmationText =
+    affirmation?.text ||
+    affirmation?.content ||
+    (typeof affirmation === "string" ? affirmation : null);
 
   return (
     <div className="reco-modal-overlay" onClick={onClose}>
@@ -132,37 +147,47 @@ function RecommendationModal({ backendResult, onClose }) {
           Berdasarkan hasil screening, berikut saran yang bisa kamu coba.
         </p>
 
+        {/* kartu aktivitas yang disarankan */}
         {activityTitle && (
-          <div className="reco-card reco-card-activity">
-            <div className="reco-card-icon"><FiStar /></div>
-            <div className="reco-card-content">
-              <div className="reco-card-label">Aktivitas yang Disarankan</div>
-              <div className="reco-card-title">{activityTitle}</div>
-              {activityDesc && <p className="reco-card-desc">{activityDesc}</p>}
-            </div>
-          </div>
+          <Card className="reco-card reco-card-activity">
+            <CardContent className="reco-card-inner">
+              <div className="reco-card-icon"><FiStar /></div>
+              <div className="reco-card-content">
+                <div className="reco-card-label">Aktivitas yang Disarankan</div>
+                <div className="reco-card-title">{activityTitle}</div>
+                {activityDesc && <p className="reco-card-desc">{activityDesc}</p>}
+              </div>
+            </CardContent>
+          </Card>
         )}
 
+        {/* kartu afirmasi positif */}
         {affirmationText && (
-          <div className="reco-card reco-card-affirmation">
-            <div className="reco-card-icon"><FiSun /></div>
-            <div className="reco-card-content">
-              <div className="reco-card-label">Afirmasi Positif</div>
-              <p className="reco-card-desc reco-affirmation-text">
-                "{affirmationText}"
-              </p>
-            </div>
-          </div>
+          <Card className="reco-card reco-card-affirmation">
+            <CardContent className="reco-card-inner">
+              <div className="reco-card-icon"><FiSun /></div>
+              <div className="reco-card-content">
+                <div className="reco-card-label">Afirmasi Positif</div>
+                <p className="reco-card-desc reco-affirmation-text">
+                  "{affirmationText}"
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
+        {/* fallback jika tidak ada aktivitas maupun afirmasi */}
         {!activityTitle && !affirmationText && (
-          <div className="reco-card">
-            <div className="reco-card-content">
-              <p className="reco-card-desc">
-                {backendResult?.recommendation || 'Tetap jaga kesehatan mentalmu dengan istirahat cukup, olahraga, dan berbagi cerita dengan orang terdekat.'}
-              </p>
-            </div>
-          </div>
+          <Card className="reco-card">
+            <CardContent className="reco-card-inner">
+              <div className="reco-card-content">
+                <p className="reco-card-desc">
+                  {backendResult?.recommendation ||
+                    "Tetap jaga kesehatan mentalmu dengan istirahat cukup, olahraga, dan berbagi cerita dengan orang terdekat."}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         <Button className="screening-btn-primary reco-modal-btn" onClick={onClose}>
@@ -173,15 +198,16 @@ function RecommendationModal({ backendResult, onClose }) {
   );
 }
 
+// hasil screening dengan skor, badge level, dan breakdown jawaban
 function ResultView({ answers, backendResult, onReset, onShowRecommendation }) {
-  // Mapping dari backend level ke UI Card
+  // mapping level dari backend ke data tampilan ui
   const getLevelUI = (levelStr) => {
     switch (levelStr) {
-      case "Minimal": return SCALE_LEVELS[0];
-      case "Ringan": return SCALE_LEVELS[1];
-      case "Sedang": return SCALE_LEVELS[2];
-      case "Berat": return SCALE_LEVELS[3];
-      default: return SCALE_LEVELS[1];
+      case "Minimal":  return SCALE_LEVELS[0];
+      case "Ringan":   return SCALE_LEVELS[1];
+      case "Sedang":   return SCALE_LEVELS[2];
+      case "Berat":    return SCALE_LEVELS[3];
+      default:         return SCALE_LEVELS[1];
     }
   };
 
@@ -190,6 +216,7 @@ function ResultView({ answers, backendResult, onReset, onShowRecommendation }) {
 
   return (
     <div className="result-wrapper fade-up">
+      {/* skor visual */}
       <div className="result-score-ring">
         <svg viewBox="0 0 100 100" className="ring-svg">
           <circle cx="50" cy="50" r="40" className="ring-bg" />
@@ -205,26 +232,32 @@ function ResultView({ answers, backendResult, onReset, onShowRecommendation }) {
         </div>
       </div>
 
-      <div className={`result-badge ${result.color}`}>
+      {/* badge level hasil screening menggunakan shadcn badge */}
+      <Badge className={`result-badge ${result.color}`}>
         <span>{result.icon}</span> {backendResult?.level || result.label}
-      </div>
+      </Badge>
+
       <p className="result-desc">{backendResult?.recommendation || result.description}</p>
 
-      <div className="result-breakdown">
-        <div className="breakdown-title">Jawaban kamu</div>
-        {answers.map((ans, i) => (
-          <div key={i} className="breakdown-row">
-            <span className="breakdown-q">P{i + 1}</span>
-            <div className="breakdown-bar-wrap">
-              <div
-                className="breakdown-bar-fill"
-                style={{ width: `${(ans / 10) * 100}%` }}
-              />
+      {/* breakdown jawaban per pertanyaan menggunakan shadcn card */}
+      <Card className="result-breakdown">
+        <CardContent className="result-breakdown-content">
+          <div className="breakdown-title">Jawaban kamu</div>
+          <Separator className="breakdown-separator" />
+          {answers.map((ans, i) => (
+            <div key={i} className="breakdown-row">
+              <span className="breakdown-q">P{i + 1}</span>
+              <div className="breakdown-bar-wrap">
+                <div
+                  className="breakdown-bar-fill"
+                  style={{ width: `${(ans / 10) * 100}%` }}
+                />
+              </div>
+              <span className="breakdown-val">{ans}</span>
             </div>
-            <span className="breakdown-val">{ans}</span>
-          </div>
-        ))}
-      </div>
+          ))}
+        </CardContent>
+      </Card>
 
       <div className="result-actions">
         <Button variant="outline" className="screening-btn-outline" onClick={onReset}>
@@ -238,8 +271,7 @@ function ResultView({ answers, backendResult, onReset, onShowRecommendation }) {
   );
 }
 
-// main
-
+// halaman utama screening (main)
 export default function ScreeningPage() {
   const navigate = useNavigate();
   const [phase, setPhase] = useState("intro"); // "intro" | "questions" | "result"
@@ -249,6 +281,7 @@ export default function ScreeningPage() {
   const [backendResult, setBackendResult] = useState(null);
   const [showRecommendation, setShowRecommendation] = useState(false);
 
+  // simpan jawaban untuk pertanyaan saat ini
   function handleAnswer(val) {
     setAnswers((prev) => {
       const next = [...prev];
@@ -257,6 +290,7 @@ export default function ScreeningPage() {
     });
   }
 
+  // lanjut ke pertanyaan berikutnya & submit
   async function handleNext() {
     if (currentQ < QUESTIONS.length - 1) {
       setCurrentQ((q) => q + 1);
@@ -273,7 +307,7 @@ export default function ScreeningPage() {
           body: JSON.stringify({ answers }),
         });
         const data = await res.json();
-        
+
         if (res.ok) {
           setBackendResult(data.data);
           setPhase("result");
@@ -289,10 +323,12 @@ export default function ScreeningPage() {
     }
   }
 
+  // kembali ke pertanyaan sebelumnya
   function handlePrev() {
     setCurrentQ((q) => q - 1);
   }
 
+  // reset ke kondisi awal
   function handleReset() {
     setPhase("intro");
     setCurrentQ(0);
@@ -305,6 +341,7 @@ export default function ScreeningPage() {
       <Sidebar />
 
       <main className="screening-main">
+        {/* fase intro: penjelasan screening dan keterangan level */}
         {phase === "intro" && (
           <div className="screening-intro fade-up">
             <h1 className="screening-title">
@@ -316,9 +353,9 @@ export default function ScreeningPage() {
               seminggu sekali.
             </p>
             <p className="screening-desc">
-              Screening terdiri dari 10 pertanyaan yang harus dijawab dengan memilih skala berdasarkan
-              apa yang Anda alami atau rasakan. Pastikan menjawab pertanyaan dengan jujur untuk
-              mendapatkan hasil yang sesuai.
+              Screening terdiri dari 10 pertanyaan yang harus dijawab dengan memilih skala
+              berdasarkan apa yang Anda alami atau rasakan. Pastikan menjawab pertanyaan dengan
+              jujur untuk mendapatkan hasil yang sesuai.
             </p>
 
             <h2 className="screening-keterangan-title">Keterangan</h2>
@@ -337,6 +374,7 @@ export default function ScreeningPage() {
           </div>
         )}
 
+        {/* fase pertanyaan: satu pertanyaan per langkah */}
         {phase === "questions" && (
           <QuestionStep
             question={QUESTIONS[currentQ]}
@@ -350,10 +388,11 @@ export default function ScreeningPage() {
           />
         )}
 
+        {/* fase hasil: tampilkan skor, level, dan opsi rekomendasi */}
         {phase === "result" && (
           <>
-            <ResultView 
-              answers={answers.map((a) => a ?? 1)} 
+            <ResultView
+              answers={answers.map((a) => a ?? 1)}
               backendResult={backendResult}
               onReset={handleReset}
               onShowRecommendation={() => setShowRecommendation(true)}

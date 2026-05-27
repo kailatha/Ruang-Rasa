@@ -9,19 +9,9 @@ import "@/components/layout/sidebar.css";
 
 // react icons
 // editor
-import { RiBold } from "react-icons/ri";
-import { RiItalic } from "react-icons/ri";
-import { RiListUnordered } from "react-icons/ri";
-import { RiTable2 } from "react-icons/ri";
-import { RiPriceTag3Line } from "react-icons/ri";
-import { RiArrowRightLine } from "react-icons/ri";
-import { RiArrowLeftLine } from "react-icons/ri";
+import { RiBold, RiItalic, RiListUnordered, RiTable2, RiPriceTag3Line, RiArrowRightLine, RiArrowLeftLine } from "react-icons/ri";
 // mood
-import { RiEmotionHappyLine } from "react-icons/ri";
-import { RiEmotionNormalLine } from "react-icons/ri";
-import { RiEmotionUnhappyLine } from "react-icons/ri";
-import { RiEmotionLine } from "react-icons/ri";
-import { RiEmotionSadLine } from "react-icons/ri";
+import { RiEmotionHappyLine, RiEmotionNormalLine, RiEmotionUnhappyLine, RiEmotionLine, RiEmotionSadLine } from "react-icons/ri";
 // chatbot
 import { RiChat3Line } from "react-icons/ri";
 
@@ -148,7 +138,7 @@ function TagSelector({ selected, onToggle }) {
 // mock data (false = pakai api)
 const USE_MOCK = false;
 
-// halaman utama jurnal
+// halaman utama jurnal (main)
 export default function JournalPage() {
   const navigate = useNavigate();
 
@@ -347,7 +337,7 @@ export default function JournalPage() {
         {loadingEntries ? (
           <div className="entries-loading">Memuat...</div>
         ) : entries.length === 0 ? (
-          <div className="entries-empty">Belum ada entri. Mulai tulis hari ini!</div>
+          <div className="entries-empty">Belum ada jurnal. Mulai tulis hari ini!</div>
         ) : (
           <>
             {entries.slice(0, 4).map((entry, index) => (
