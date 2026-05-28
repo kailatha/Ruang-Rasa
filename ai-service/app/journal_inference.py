@@ -361,5 +361,17 @@ def predict_journal(text):
     recommendation_result = recommend_for_journal(
         prediction_result
     )
+    # Merge prediction metadata with recommendation payload so callers
+    # receive a single comprehensive result containing emotion, confidence,
+    # sentiment scores AND recommended activities/affirmations.
+    combined = {
+        # prediction fields
+        "emotion": prediction_result.get("emotion"),
+        "confidence": prediction_result.get("confidence"),
+        "sentiment_score": prediction_result.get("sentiment_score"),
+        "sentiment_label": prediction_result.get("sentiment_label"),
+        # recommendation fields
+        **recommendation_result,
+    }
 
-    return recommendation_result
+    return combined

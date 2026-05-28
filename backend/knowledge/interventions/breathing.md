@@ -3,6 +3,11 @@ id: intervention_breathing
 title: Slow Breathing / Paced Breathing
 category: emotional_regulation
 type: intervention
+chatbot_suggestion: >
+  Coba tarik napas perlahan dulu. Kita tidak perlu langsung menyelesaikan semuanya sekarang.
+
+reflection_prompt: >
+  Setelah beberapa napas perlahan, apakah ada sedikit perubahan di tubuhmu?
 
 suitable_for:
   - Fear

@@ -27,6 +27,9 @@ const EMOTION_KEYWORDS = {
     "gagal",
     "putus asa",
     "tidak berharga",
+    "cape",
+    "capek",
+    "cape banget"
   ],
   Fear: [
     "cemas",
@@ -68,6 +71,17 @@ const EMOTION_KEYWORDS = {
     "puas",
     "bangga",
     "semangat",
+    "seneng",
+    "happy",
+    "excited",
+    "hore",
+    "asyik",
+    "seruuu",
+    "gembira",
+    "lega banget",
+    "akhirnya",
+    "alhamdulillah",
+    "seneng banget",
   ],
   Love: [
     "sayang",
@@ -399,7 +413,16 @@ export function retrieveRelevantKnowledge({
     getJournalContextValue(journalContext, "intensity_label") ||
     inferIntensityFromMessage(userMessage);
 
-  const safetyLevel = getSafetyLevelFromJournalContext(journalContext);
+  const safetyLevel =
+  getSafetyLevelFromJournalContext(
+    journalContext
+  ) ||
+
+  (
+    safetyFromText.hasSafetyRisk
+      ? "red"
+      : "green"
+  );
   const blockRecommend = getBlockRecommendFromJournalContext(journalContext);
 
   const retrievalQuery = buildRetrievalQuery({
@@ -424,6 +447,11 @@ export function retrieveRelevantKnowledge({
     }))
     .sort((a, b) => b.score - a.score);
 
+  const effectiveLimit = Math.min(
+    documents.length,
+    Math.max(limit, REQUIRED_CORE_FILES.length + 1)
+  );
+
   const selectedMap = new Map();
 
   for (const doc of coreDocuments) {
@@ -431,7 +459,8 @@ export function retrieveRelevantKnowledge({
   }
 
   for (const doc of scoredDocuments) {
-    if (selectedMap.size >= limit) break;
+    if (selectedMap.size >= effectiveLimit) break;
+    if (selectedMap.has(doc.relativePath)) continue;
     selectedMap.set(doc.relativePath, doc);
   }
 

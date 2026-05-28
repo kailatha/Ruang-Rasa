@@ -27,7 +27,7 @@ export async function sendChatbotMessage(req, res, next) {
     // 1. Dapatkan atau Buat ChatSession Baru
     let session;
     if (sessionId) {
-      session = await prisma.chatSession.findUnique({
+      session = await prisma.chatSession.findFirst({
         where: { id: sessionId, userId: userId },
       });
       if (!session) {
@@ -63,7 +63,7 @@ export async function sendChatbotMessage(req, res, next) {
         data: {
           sessionId: session.id,
           role: "bot",
-          content: crisisReply,
+          content: crisisReply.answer,
           safetyLevel: safety.level,
           source: "crisis",
         },
@@ -73,7 +73,7 @@ export async function sendChatbotMessage(req, res, next) {
         success: true,
         data: {
           sessionId: session.id,
-          answer: crisisReply,
+          answer: crisisReply.answer,
           safety_level: safety.level,
           source: "crisis",
         },
@@ -94,7 +94,24 @@ export async function sendChatbotMessage(req, res, next) {
       journalContext,
       knowledgeText,
     });
-    const answer = await generateGeminiReply(prompt);
+    let answer = "";
+
+    try {
+
+      answer = await generateGeminiReply(
+        prompt
+      );
+
+    } catch (error) {
+
+      console.error(
+        "Gemini Error:",
+        error
+      );
+
+      answer =
+        "Maaf, aku sedang mengalami kendala sebentar. Terima kasih sudah tetap bercerita hari ini.";
+    }
 
     // 6. Simpan respon BOT ke database
     await prisma.chatMessage.create({
@@ -106,7 +123,7 @@ export async function sendChatbotMessage(req, res, next) {
         source: "gemini",
       },
     });
-
+    
     return res.json({
       success: true,
       data: {
@@ -123,6 +140,10 @@ export async function sendChatbotMessage(req, res, next) {
       },
     });
   } catch (error) {
+    console.error(
+      "Chatbot Controller Error:",
+      error
+    );
     next(error);
   }
 }

@@ -3,6 +3,11 @@ id: intervention_behavioral_activation
 title: Behavioral Activation
 category: behavioral_intervention
 type: intervention
+chatbot_suggestion: >
+  Kita tidak perlu melakukan hal besar sekarang. Satu langkah kecil saja sudah cukup.
+
+reflection_prompt: >
+  Apa satu hal kecil yang terasa paling mungkin dilakukan hari ini?
 
 suitable_for:
   - Sadness

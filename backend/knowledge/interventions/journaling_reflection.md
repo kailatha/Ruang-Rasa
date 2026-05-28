@@ -3,6 +3,11 @@ id: intervention_journaling_reflection
 title: Journaling Reflection / Expressive Writing
 category: emotional_processing
 type: intervention
+chatbot_suggestion: >
+  Kalau kamu mau, coba tuliskan satu hal yang paling terasa hari ini tanpa perlu menghakimi diri sendiri.
+
+reflection_prompt: >
+  Emosi apa yang sebenarnya paling membutuhkan ruang saat ini?
 
 suitable_for:
   - Sadness
