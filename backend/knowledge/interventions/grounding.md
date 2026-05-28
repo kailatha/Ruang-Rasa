@@ -3,6 +3,11 @@ id: intervention_grounding
 title: Grounding Technique
 category: emotional_regulation
 type: intervention
+chatbot_suggestion: >
+  Kita coba pelan pelan fokus ke hal kecil di sekitarmu dulu ya.
+
+reflection_prompt: >
+  Bagian tubuh mana yang terasa sedikit lebih ringan sekarang?
 
 suitable_for:
   - Fear

@@ -47,6 +47,63 @@ export async function getEntries(req, res) {
   }
 }
 
+// ─── ANALYZE EXISTING ENTRY ─────────────────────────────────────
+export async function analyzeEntry(req, res) {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    const entry = await prisma.journal.findFirst({ where: { id, userId } });
+
+    if (!entry) {
+      return res.status(404).json({ success: false, message: "Entri tidak ditemukan." });
+    }
+
+    const aiUrl = (process.env.AI_API_URL || "http://localhost:8000").replace(/\/$/, "") + "/journal/analyze";
+
+    try {
+      const aiRes = await fetch(aiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: entry.content }),
+      });
+
+      if (!aiRes.ok) {
+        console.warn("AI service returned non-OK", await aiRes.text());
+        return res.status(502).json({ success: false, message: "AI service error" });
+      }
+
+      const aiData = await aiRes.json();
+
+      // derive sentiment_label if missing
+      let sentimentLabel = aiData.sentiment_label || aiData.sentiment || null;
+      if (!sentimentLabel && typeof aiData.sentiment_score === "number") {
+        const s = aiData.sentiment_score;
+        sentimentLabel = s >= 0.55 ? "positive" : s <= 0.45 ? "negative" : "neutral";
+      }
+
+      const updated = await prisma.journal.update({
+        where: { id },
+        data: {
+          emotion: aiData.emotion || null,
+          sentiment_label: sentimentLabel,
+          sentiment_score: aiData.sentiment_score || null,
+          confidence: aiData.confidence || null,
+          analysis: aiData,
+        },
+      });
+
+      res.status(200).json({ success: true, message: "Analisis berhasil diperbarui.", entry: updated });
+    } catch (err) {
+      console.warn("Failed to call AI service:", err.message || err);
+      res.status(500).json({ success: false, message: "Gagal memanggil AI service." });
+    }
+  } catch (err) {
+    console.error("[journalController] analyzeEntry:", err);
+    res.status(500).json({ success: false, message: "Gagal menganalisis entri." });
+  }
+}
+
 // ─── GET SINGLE ENTRY ────────────────────────────────────────────
 export async function getEntry(req, res) {
   try {
@@ -122,6 +179,48 @@ export async function createEntry(req, res) {
       },
     });
 
+    // Attempt to call AI Service to analyze the journal and save analysis back to DB
+    try {
+      const aiUrl = (process.env.AI_API_URL || "http://localhost:8000").replace(/\/$/, "") + "/journal/analyze";
+
+      const aiRes = await fetch(aiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: content.trim() }),
+      });
+
+      if (aiRes.ok) {
+        const aiData = await aiRes.json();
+
+        // derive sentiment_label if missing
+        let sentimentLabel = aiData.sentiment_label || aiData.sentiment || null;
+        if (!sentimentLabel && typeof aiData.sentiment_score === "number") {
+          const s = aiData.sentiment_score;
+          sentimentLabel = s >= 0.55 ? "positive" : s <= 0.45 ? "negative" : "neutral";
+        }
+
+        // update journal with analysis
+        const updated = await prisma.journal.update({
+          where: { id: entry.id },
+          data: {
+            emotion: aiData.emotion || aiData.prediction?.emotion || null,
+            sentiment_label: sentimentLabel,
+            sentiment_score: aiData.sentiment_score || aiData.prediction?.sentiment_score || null,
+            confidence: aiData.confidence || aiData.prediction?.confidence || null,
+            analysis: aiData,
+          },
+        });
+
+        res.status(201).json({ success: true, message: "Jurnal berhasil disimpan.", entry: updated });
+        return;
+      } else {
+        console.warn("AI service returned non-OK", await aiRes.text());
+      }
+    } catch (err) {
+      console.warn("Failed to call AI service:", err.message || err);
+    }
+
+    // Fallback: return the created entry even if AI analysis failed
     res.status(201).json({
       success: true,
       message: "Jurnal berhasil disimpan.",

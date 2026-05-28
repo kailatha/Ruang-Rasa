@@ -4,6 +4,7 @@ import {
   getEntries,
   getEntry,
   createEntry,
+  analyzeEntry,
   updateEntry,
   deleteEntry,
 } from "../controllers/journalController.js";
@@ -44,6 +45,13 @@ router.get("/:id", getEntry);
  * }
  */
 router.post("/", createEntry);
+
+/**
+ * @route   POST /api/journal/:id/analyze
+ * @desc    Re-run AI analysis for an existing journal entry
+ * @access  Private
+ */
+router.post("/:id/analyze", analyzeEntry);
 
 /**
  * @route   PUT /api/journal/:id

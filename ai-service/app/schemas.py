@@ -44,10 +44,20 @@ class JournalResponse(BaseModel):
 
     emotion: str
 
-    sentiment: str
+    confidence: float
 
-    recommended_activities: List[Dict[str, Any]]
+    sentiment_score: float
 
-    recommended_affirmations: List[Dict[str, Any]]
+    chatbot_reply: str | None = None
 
-    disclaimer: str
+    recommended_intervention: str | None = None
+
+    intensity: str | None = None
+    
+class ChatRequest(BaseModel):
+    message: str
+    journal_context: dict | None = None
+    
+class ChatResponse(BaseModel):
+    reply: str
+    emotion: str

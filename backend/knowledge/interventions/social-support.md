@@ -3,6 +3,11 @@ id: intervention_social_support
 title: Social Support Encouragement
 category: interpersonal_support
 type: intervention
+chatbot_suggestion: >
+  Kamu tidak harus menghadapi semuanya sendirian. Kadang menghubungi satu orang aman bisa membantu sedikit.
+
+reflection_prompt: >
+  Siapa orang yang terasa paling aman untuk dihubungi sekarang?
 
 suitable_for:
   - Sadness

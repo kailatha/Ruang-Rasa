@@ -36,6 +36,13 @@ model Journal {
   mood    String
   content String
   tags    String[]
+  
+  // Analysis fields produced by AI service
+  emotion String?
+  sentiment_label String?
+  sentiment_score Float?
+  confidence Float?
+  analysis Json?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

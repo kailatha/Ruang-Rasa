@@ -11,6 +11,17 @@ const crisisKeywords = [
   "tidak mau hidup",
   "melukai orang",
   "membunuh orang",
+
+  "pengen hilang",
+  "ingin hilang",
+  "aku pengen hilang",
+  "aku ingin hilang",
+  "lebih baik aku gak ada",
+  "aku capek hidup",
+  "hidupku selesai",
+  "aku ingin pergi selamanya",
+  "aku gak kuat hidup",
+  "aku ingin mengakhiri semuanya"
 ];
 
 export function detectSafetyRisk(message) {
