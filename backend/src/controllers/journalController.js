@@ -181,7 +181,7 @@ export async function createEntry(req, res) {
 
     // Attempt to call AI Service to analyze the journal and save analysis back to DB
     try {
-      const aiUrl = (process.env.AI_API_URL || "http://localhost:8000").replace(/\/$/, "") + "/journal/analyze";
+      const aiUrl = (process.env.AI_API_URL).trim().replace(/\/$/, "") + "/journal/analyze";
 
       const aiRes = await fetch(aiUrl, {
         method: "POST",
