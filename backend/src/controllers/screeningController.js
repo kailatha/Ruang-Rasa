@@ -40,7 +40,7 @@ const getFallbackResult = (score) => {
  * @returns {Object|null} - Hasil prediksi AI atau null jika gagal
  */
 const callAIService = async (features) => {
-  const AI_API_URL = process.env.AI_API_URL || 'http://localhost:8000';
+  const AI_API_URL = (process.env.AI_API_URL).trim().replace(/\/$/, "");
 
   try {
     const response = await fetch(`${AI_API_URL}/predict`, {
