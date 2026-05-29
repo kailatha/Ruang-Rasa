@@ -14,57 +14,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { getProfile, updateProfile, changePassword } from "@/services/profileService";
+import { getProfile, updateProfile, changePassword, getProfileStats } from "@/services/profileService";
+import { DatePicker } from "@/components/ui/date-picker";
+import "../page.css";
 import "./page.css";
 
-const FormField = ({ id, label, type = "text", placeholder, value, onChange, options }) => (
-  <div className="space-y-2">
-    <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-200">
+const FormField = ({ id, label, type = "text", placeholder, value, onChange, options, disabled }) => (
+  <div className="pr-form-group">
+    <Label htmlFor={id} className="pr-form-label">
       {label}
     </Label>
-    <div className="relative">
+    <div className="relative mt-2">
       {type === "select" ? (
         <select
           id={id}
           value={value}
           onChange={onChange}
-          className="w-full h-11 px-4 rounded-xl border border-slate-200 dark:border-[#2e3335] bg-white dark:bg-[#222628] text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-[#4a7c6d] focus:border-transparent outline-none transition-all appearance-none"
+          disabled={disabled}
+          className="pr-form-input w-full appearance-none"
         >
           <option value="" disabled>{placeholder || "Pilih..."}</option>
-          {options.map((opt) => (
+          {options?.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
           ))}
         </select>
       ) : type === "date" ? (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "w-full h-11 px-4 justify-start text-left font-normal rounded-xl border-slate-200 dark:border-[#2e3335] hover:bg-slate-50 dark:hover:bg-[#1a1d1e] dark:bg-[#222628] dark:text-slate-200",
-                !value && "text-muted-foreground dark:text-slate-400"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4 text-[#4a7c6d] dark:text-[#7EC896]" />
-              {value ? format(new Date(value), "PPP") : <span>{placeholder}</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-white dark:bg-[#1a1d1e] z-50 rounded-xl shadow-xl border-slate-100 dark:border-[#2e3335]" align="start">
-            <Calendar
-              mode="single"
-              selected={value ? new Date(value) : undefined}
-              onSelect={(date) => {
-                onChange({ target: { id, value: date ? format(date, "yyyy-MM-dd") : "" } });
-              }}
-              initialFocus
-              captionLayout="dropdown"
-              startMonth={new Date(1900, 0)}
-              endMonth={new Date()}
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePicker
+          value={value}
+          onChange={(val) => onChange({ target: { id, value: val } })}
+          placeholder={placeholder}
+          triggerClassName={cn("pr-form-input", !value && "text-[var(--text-muted)]")}
+        />
       ) : (
         <Input
           id={id}
@@ -72,19 +54,19 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="h-11 px-4 rounded-xl border-slate-200 dark:border-[#2e3335] dark:bg-[#222628] dark:text-slate-200 focus-visible:ring-[#4a7c6d]"
+          disabled={disabled}
+          className="pr-form-input"
         />
       )}
     </div>
   </div>
 );
 
-// Komponen field password dengan toggle show/hide
 const PasswordField = ({ id, label, placeholder, value, onChange }) => {
   const [show, setShow] = useState(false);
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id} className="text-sm font-medium text-slate-700 dark:text-slate-200">
+    <div className="space-y-1">
+      <Label htmlFor={id} className="pr-form-label">
         {label}
       </Label>
       <div className="relative">
@@ -94,12 +76,12 @@ const PasswordField = ({ id, label, placeholder, value, onChange }) => {
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="h-11 px-4 pr-12 rounded-xl border-slate-200 dark:border-[#2e3335] dark:bg-[#222628] dark:text-slate-200 focus-visible:ring-[#4a7c6d]"
+          className="pr-form-input pr-12"
         />
         <button
           type="button"
           onClick={() => setShow(!show)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+          className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-dark)] transition-colors"
         >
           {show ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
@@ -112,6 +94,7 @@ export default function EditProfilePage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [stats, setStats] = useState({ journalCount: 0 });
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -121,7 +104,6 @@ export default function EditProfilePage() {
     status: "",
   });
 
-  // State untuk ganti password
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -137,10 +119,13 @@ export default function EditProfilePage() {
       return;
     }
 
-    const fetchProfile = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getProfile();
-        const user = data.data || data;
+        const [profileRes, statsRes] = await Promise.all([
+          getProfile(),
+          getProfileStats()
+        ]);
+        const user = profileRes.data || profileRes;
         setFormData({
           name: user.name || "",
           email: user.email || "",
@@ -149,6 +134,7 @@ export default function EditProfilePage() {
           job: user.job || "",
           status: user.status || "",
         });
+        setStats(statsRes);
       } catch (err) {
         console.error(err);
       } finally {
@@ -156,7 +142,7 @@ export default function EditProfilePage() {
       }
     };
 
-    fetchProfile();
+    fetchData();
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -167,7 +153,6 @@ export default function EditProfilePage() {
   const handlePasswordChange = (e) => {
     const { id, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [id]: value }));
-    // Reset pesan saat user mengetik
     if (passwordMessage.text) setPasswordMessage({ type: "", text: "" });
   };
 
@@ -189,7 +174,6 @@ export default function EditProfilePage() {
   const handleChangePassword = async (e) => {
     e.preventDefault();
 
-    // Validasi frontend
     if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
       setPasswordMessage({ type: "error", text: "Semua field password wajib diisi" });
       return;
@@ -213,8 +197,15 @@ export default function EditProfilePage() {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword,
       });
-      setPasswordMessage({ type: "success", text: result.message || "Password berhasil diubah" });
+      setPasswordMessage({ type: "success", text: result.message || "Password berhasil diubah. Mengalihkan ke halaman login..." });
       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      
+      // Auto logout and redirect after 2 seconds
+      setTimeout(() => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      }, 2000);
+
     } catch (error) {
       setPasswordMessage({ type: "error", text: error.message || "Gagal mengubah password" });
     } finally {
@@ -224,220 +215,222 @@ export default function EditProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#f8f9f4]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#4a7c6d]" />
+      <div className="flex-1 flex items-center justify-center bg-[var(--cream)] min-h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--green-dark)]" />
       </div>
     );
   }
 
   return (
-    <div className="flex-1 bg-[#f8f9f4] dark:bg-[#151718] text-slate-700 dark:text-slate-200 w-full min-h-screen pb-12">
-      <div className="max-w-2xl mx-auto p-4 sm:p-8 space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={() => navigate("/profile")}
-            className="rounded-full hover:bg-white dark:hover:bg-[#1a1d1e]"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </Button>
-          <h1 className="text-2xl font-bold text-[#2d5a4c] dark:text-[#7EC896]">Edit Profil</h1>
-        </div>
+    <div className="pr-layout">
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Avatar Section */}
-          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
-            <CardContent className="p-8 flex flex-col items-center gap-4">
-              <div className="relative">
-                <Avatar className="w-28 h-28 border-4 border-[#e2f0e9] dark:border-[#2e3335] bg-[#eef7f6] dark:bg-[#222628] flex items-center justify-center">
-                  <AvatarFallback className="bg-transparent text-[#4a7c6d] dark:text-[#7EC896]">
-                    <User size={56} />
-                  </AvatarFallback>
-                </Avatar>
-                <button 
-                  type="button"
-                  className="absolute bottom-0 right-0 p-2 bg-[#4a7c6d] dark:bg-[#3a6d4a] text-white rounded-full border-2 border-white dark:border-[#1a1d1e] shadow-md hover:bg-[#3d665a] dark:hover:bg-[#4a8a5e] transition-colors"
-                >
-                  <Camera size={16} />
-                </button>
-              </div>
-              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">Klik ikon kamera untuk mengubah foto profil</p>
-            </CardContent>
-          </Card>
-
-          {/* Form Section */}
-          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-semibold text-slate-700 dark:text-slate-200">Informasi Pribadi</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <FormField
-                id="name"
-                label="Nama Lengkap"
-                placeholder="Masukkan nama lengkap"
-                value={formData.name}
-                onChange={handleChange}
-              />
-              
-              <FormField
-                id="email"
-                label="Email"
-                type="email"
-                placeholder="email@contoh.com"
-                value={formData.email}
-                onChange={handleChange}
-                disabled // Email usually not editable directly
-              />
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField
-                  id="gender"
-                  label="Jenis Kelamin"
-                  type="select"
-                  placeholder="Pilih jenis kelamin"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  options={[
-                    { label: "Laki-laki", value: "Laki-laki" },
-                    { label: "Perempuan", value: "Perempuan" },
-                  ]}
-                />
-                
-                <FormField
-                  id="dob"
-                  label="Tanggal Lahir"
-                  type="date"
-                  placeholder="Pilih tanggal"
-                  value={formData.dob}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField
-                  id="job"
-                  label="Pekerjaan"
-                  type="select"
-                  placeholder="Pilih pekerjaan"
-                  value={formData.job}
-                  onChange={handleChange}
-                  options={[
-                    { label: "Pelajar/Mahasiswa", value: "Pelajar/Mahasiswa" },
-                    { label: "Karyawan Swasta", value: "Karyawan Swasta" },
-                    { label: "PNS/BUMN", value: "PNS/BUMN" },
-                    { label: "Wiraswasta", value: "Wiraswasta" },
-                    { label: "Lainnya", value: "Lainnya" },
-                  ]}
-                />
-                
-                <FormField
-                  id="status"
-                  label="Status"
-                  type="select"
-                  placeholder="Pilih status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  options={[
-                    { label: "Lajang", value: "Lajang" },
-                    { label: "Menikah", value: "Menikah" },
-                    { label: "Cerai", value: "Cerai" },
-                  ]}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4">
-            <Button
-              type="button"
-              variant="outline"
-              className="flex-1 h-12 rounded-xl border-slate-200 dark:border-[#2e3335] text-slate-500 dark:text-slate-300 dark:hover:bg-[#222628] dark:hover:text-slate-200 font-medium"
-              onClick={() => navigate("/profile")}
-            >
-              Batal
-            </Button>
-            <Button
-              type="submit"
-              disabled={saving}
-              className="flex-1 h-12 rounded-xl bg-[#4a7c6d] dark:bg-[#3a6d4a] hover:bg-[#3d665a] dark:hover:bg-[#4a8a5e] text-white font-medium shadow-md shadow-emerald-900/10"
-            >
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Menyimpan...
-                </>
-              ) : (
-                "Simpan Perubahan"
-              )}
-            </Button>
-          </div>
-        </form>
-
-        {/* Change Password Section */}
-        <form onSubmit={handleChangePassword} className="space-y-6">
-          <Card className="border-none shadow-sm bg-white dark:bg-[#1a1d1e]">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                <Lock size={18} className="text-[#4a7c6d] dark:text-[#7EC896]" />
-                Ganti Password
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6 space-y-4">
-              <PasswordField
-                id="currentPassword"
-                label="Password Lama"
-                placeholder="Masukkan password lama"
-                value={passwordData.currentPassword}
-                onChange={handlePasswordChange}
-              />
-
-              <PasswordField
-                id="newPassword"
-                label="Password Baru"
-                placeholder="Minimal 6 karakter"
-                value={passwordData.newPassword}
-                onChange={handlePasswordChange}
-              />
-
-              <PasswordField
-                id="confirmPassword"
-                label="Konfirmasi Password Baru"
-                placeholder="Ulangi password baru"
-                value={passwordData.confirmPassword}
-                onChange={handlePasswordChange}
-              />
-
-              {/* Pesan feedback */}
-              {passwordMessage.text && (
-                <div className={`p-3 rounded-xl text-sm font-medium ${
-                  passwordMessage.type === "success" 
-                    ? "bg-[#e2f0e9] dark:bg-[#1a2e22] text-[#2d5a4c] dark:text-[#7EC896]" 
-                    : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400"
-                }`}>
-                  {passwordMessage.text}
-                </div>
-              )}
-
-              <Button
-                type="submit"
-                disabled={changingPassword}
-                className="w-full h-12 rounded-xl bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white font-medium"
+      <div className="pr-content mx-auto w-full max-w-5xl">
+        <main className="pr-main fade-up">
+          <div className="max-w-2xl mx-auto">
+            <div className="pr-greeting flex items-center gap-4 mb-6">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/profile")}
+                className="rounded-full hover:bg-[var(--white)] w-10 h-10"
               >
-                {changingPassword ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Mengubah Password...
-                  </>
-                ) : (
-                  "Ubah Password"
-                )}
+                <ChevronLeft className="w-6 h-6 text-[var(--green-dark)]" />
               </Button>
-            </CardContent>
-          </Card>
-        </form>
+              <h1 className="pr-title m-0">Edit Profil</h1>
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-6 mb-6">
+              {/* Avatar Section */}
+              <Card className="pr-section mb-6">
+                <CardContent className="pr-section-content flex flex-col items-center gap-4 py-8">
+                  <div className="pr-avatar-wrapper">
+                    <Avatar className="pr-avatar" style={{width: '112px', height: '112px'}}>
+                      <AvatarFallback className="pr-avatar-fallback">
+                        <User size={56} />
+                      </AvatarFallback>
+                    </Avatar>
+                    <button 
+                      type="button"
+                      className="pr-edit-btn"
+                    >
+                      <Camera size={16} />
+                    </button>
+                  </div>
+                  <p className="text-xs text-[var(--text-muted)] font-medium">Klik ikon kamera untuk mengubah foto profil</p>
+                </CardContent>
+              </Card>
+
+              {/* Form Section */}
+              <Card className="pr-section">
+                <CardHeader className="pb-2">
+                  <CardTitle className="pr-section-title">Informasi Pribadi</CardTitle>
+                </CardHeader>
+                <CardContent className="px-6 pb-6 pt-0 space-y-5">
+                  <FormField
+                    id="name"
+                    label="Nama Lengkap"
+                    placeholder="Masukkan nama lengkap"
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                  
+                  <FormField
+                    id="email"
+                    label="Email"
+                    type="email"
+                    placeholder="email@contoh.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled
+                  />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <FormField
+                      id="gender"
+                      label="Jenis Kelamin"
+                      type="select"
+                      placeholder="Pilih jenis kelamin"
+                      value={formData.gender}
+                      onChange={handleChange}
+                      options={[
+                        { label: "Laki-laki", value: "Laki-laki" },
+                        { label: "Perempuan", value: "Perempuan" },
+                      ]}
+                    />
+                    
+                    <FormField
+                      id="dob"
+                      label="Tanggal Lahir"
+                      type="date"
+                      placeholder="Pilih tanggal"
+                      value={formData.dob}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <FormField
+                      id="job"
+                      label="Pekerjaan"
+                      type="select"
+                      placeholder="Pilih pekerjaan"
+                      value={formData.job}
+                      onChange={handleChange}
+                      options={[
+                        { label: "Pelajar/Mahasiswa", value: "Pelajar/Mahasiswa" },
+                        { label: "Karyawan Swasta", value: "Karyawan Swasta" },
+                        { label: "PNS/BUMN", value: "PNS/BUMN" },
+                        { label: "Wiraswasta", value: "Wiraswasta" },
+                        { label: "Lainnya", value: "Lainnya" },
+                      ]}
+                    />
+                    
+                    <FormField
+                      id="status"
+                      label="Status"
+                      type="select"
+                      placeholder="Pilih status"
+                      value={formData.status}
+                      onChange={handleChange}
+                      options={[
+                        { label: "Lajang", value: "Lajang" },
+                        { label: "Menikah", value: "Menikah" },
+                        { label: "Cerai", value: "Cerai" },
+                      ]}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1 h-12 pr-btn-outline"
+                  onClick={() => navigate("/profile")}
+                >
+                  Batal
+                </Button>
+                <Button
+                  type="submit"
+                  disabled={saving}
+                  className="flex-1 h-12 pr-btn-primary"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Menyimpan...
+                    </>
+                  ) : (
+                    "Simpan Perubahan"
+                  )}
+                </Button>
+              </div>
+            </form>
+
+            {/* Change Password Section */}
+            <form onSubmit={handleChangePassword} className="space-y-6">
+              <Card className="pr-section">
+                <CardHeader className="pb-2">
+                  <CardTitle className="pr-section-title flex items-center gap-2">
+                    <Lock size={18} className="text-[var(--green-dark)]" />
+                    Ganti Password
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="px-6 pb-6 pt-0 space-y-5">
+                  <PasswordField
+                    id="currentPassword"
+                    label="Password Lama"
+                    placeholder="Masukkan password lama"
+                    value={passwordData.currentPassword}
+                    onChange={handlePasswordChange}
+                  />
+
+                  <PasswordField
+                    id="newPassword"
+                    label="Password Baru"
+                    placeholder="Minimal 6 karakter"
+                    value={passwordData.newPassword}
+                    onChange={handlePasswordChange}
+                  />
+
+                  <PasswordField
+                    id="confirmPassword"
+                    label="Konfirmasi Password Baru"
+                    placeholder="Ulangi password baru"
+                    value={passwordData.confirmPassword}
+                    onChange={handlePasswordChange}
+                  />
+
+                  {passwordMessage.text && (
+                    <div className={`p-3 rounded-xl text-sm font-medium ${
+                      passwordMessage.type === "success" 
+                        ? "pr-feedback-success" 
+                        : "pr-feedback-error"
+                    }`}>
+                      {passwordMessage.text}
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={changingPassword}
+                    className="w-full h-12 pr-btn-danger mt-2"
+                  >
+                    {changingPassword ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Mengubah Password...
+                      </>
+                    ) : (
+                      "Ubah Password"
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            </form>
+          </div>
+        </main>
       </div>
     </div>
   );
