@@ -33,6 +33,7 @@
     "jsonwebtoken": "^9.0.3",
     "nanoid": "^5.1.11",
     "node-pg-migrate": "^8.0.4",
+    "nodemailer": "^8.0.9",
     "pg": "^8.20.0",
     "prisma": "^6.19.3"
   }

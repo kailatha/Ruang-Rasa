@@ -107,3 +107,24 @@ export const updatePassword = async (userId, hashedPassword) => {
     },
   });
 };
+
+// simpan reset token ke user
+export const saveResetToken = async (email, token, expiry) => {
+  return await prisma.user.update({
+    where: { email },
+    data: {
+      resetToken: token,
+      resetTokenExpiry: expiry,
+    },
+  });
+};
+
+// cari user berdasar reset token
+export const findUserByResetToken = async (token) => {
+  return await prisma.user.findFirst({
+    where: {
+      resetToken: token,
+      resetTokenExpiry: { gt: new Date() }, // blm expired
+    },
+  });
+};

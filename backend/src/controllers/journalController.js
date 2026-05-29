@@ -1,8 +1,6 @@
-// src/controllers/journalController.js
-
 import prisma from "../lib/prisma.js";
 
-// ─── GET ALL ENTRIES ─────────────────────────────────────────────
+// ambil semua entri user
 export async function getEntries(req, res) {
   try {
     const userId = req.user.id;
@@ -47,7 +45,7 @@ export async function getEntries(req, res) {
   }
 }
 
-// ─── ANALYZE EXISTING ENTRY ─────────────────────────────────────
+// analisis entri yg udh ada
 export async function analyzeEntry(req, res) {
   try {
     const { id } = req.params;
@@ -104,7 +102,7 @@ export async function analyzeEntry(req, res) {
   }
 }
 
-// ─── GET SINGLE ENTRY ────────────────────────────────────────────
+// ambil detail entri
 export async function getEntry(req, res) {
   try {
     const { id } = req.params;
@@ -138,7 +136,7 @@ export async function getEntry(req, res) {
   }
 }
 
-// ─── CREATE ENTRY ────────────────────────────────────────────────
+// buat entri baru
 export async function createEntry(req, res) {
   try {
     const userId = req.user.id;
@@ -179,7 +177,6 @@ export async function createEntry(req, res) {
       },
     });
 
-    // Attempt to call AI Service to analyze the journal and save analysis back to DB
     try {
       const aiUrl = (process.env.AI_API_URL || "http://localhost:8000").replace(/\/$/, "") + "/journal/analyze";
 
@@ -220,7 +217,7 @@ export async function createEntry(req, res) {
       console.warn("Failed to call AI service:", err.message || err);
     }
 
-    // Fallback: return the created entry even if AI analysis failed
+    // fallback: return the created entry even if AI analysis failed
     res.status(201).json({
       success: true,
       message: "Jurnal berhasil disimpan.",
@@ -236,7 +233,7 @@ export async function createEntry(req, res) {
   }
 }
 
-// ─── UPDATE ENTRY ────────────────────────────────────────────────
+// update entri
 export async function updateEntry(req, res) {
   try {
     const { id } = req.params;
@@ -245,7 +242,7 @@ export async function updateEntry(req, res) {
 
     const { mood, content, tags } = req.body;
 
-    // cek entry
+    // cek entri
     const existingEntry = await prisma.journal.findFirst({
       where: {
         id,
@@ -265,11 +262,6 @@ export async function updateEntry(req, res) {
       where: {
         id,
       },
-      // data: {
-      //   mood,
-      //   content,
-      //   tags,
-      // },
       data: {
         ...(mood && { mood }),
         ...(content && { content: content.trim() }),
@@ -292,14 +284,14 @@ export async function updateEntry(req, res) {
   }
 }
 
-// ─── DELETE ENTRY ────────────────────────────────────────────────
+// delete entri
 export async function deleteEntry(req, res) {
   try {
     const { id } = req.params;
 
     const userId = req.user.id;
 
-    // cek entry
+    // cek entri
     const existingEntry = await prisma.journal.findFirst({
       where: {
         id,

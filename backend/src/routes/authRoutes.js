@@ -1,6 +1,7 @@
 import express from 'express';
 import { register, login, getProfile, updateProfile, getDashboard, changePassword, getProfileStats } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
+import { forgotPassword, resetPassword } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -16,5 +17,9 @@ router.get('/profile/stats', protect, getProfileStats);
 
 // Route dashboard
 router.get('/dashboard', protect, getDashboard);
+
+// route forgot & reset pass
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 export default router;

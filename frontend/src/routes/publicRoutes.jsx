@@ -3,6 +3,7 @@ import { HomePage, AboutPage } from "@/pages/home/page";
 import LoginPage from "@/pages/login/page";
 import RegisterPage from "@/pages/register/page";
 import ForgotPasswordPage from "@/pages/forgot-password/page";
+import ResetPasswordPage from "@/pages/reset-password/page";
 
 const publicRoutes = [
   <Route key="home" path="/" element={<HomePage />} />,
@@ -10,6 +11,7 @@ const publicRoutes = [
   <Route key="login" path="/login" element={<LoginPage />} />,
   <Route key="register" path="/register" element={<RegisterPage />} />,
   <Route key="forgot-password" path="/forgot-password" element={<ForgotPasswordPage />} />,
+  <Route path="/reset-password" element={<ResetPasswordPage />} />
 ];
 
 export default publicRoutes;

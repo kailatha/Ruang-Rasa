@@ -17,15 +17,19 @@ export default function ForgotPasswordPage() {
     setIsLoading(true);
 
     try {
-      // Simulasi request API
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      // Di sini nanti panggil API untuk send email reset password
-      // const response = await fetch('/api/forgot-password', { ... });
-      
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.message);
+
       setIsSuccess(true);
     } catch (error) {
-      console.error("Forgot password error:", error);
-      alert("Terjadi kesalahan koneksi ke server.");
+      alert(error.message || 'Terjadi kesalahan koneksi ke server.');
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +63,7 @@ export default function ForgotPasswordPage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="forgot-form">
-              {/* Email Field - Menggunakan reusable komponen bawaan UI */}
+              {/* Email Field - Menggunakan reusable komponen bawaan UI, adoh ini masi templet yak */}
               <div className="form-group">
                 <Label htmlFor="email" className="form-label">
                   Email

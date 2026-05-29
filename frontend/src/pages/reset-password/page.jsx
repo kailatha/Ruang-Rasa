@@ -1,0 +1,263 @@
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import "./page.css";
+
+export default function ResetPasswordPage() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [tokenValid, setTokenValid] = useState(true); // anggap valid dulu, backend yg validasi saat submit
+
+  const token = searchParams.get("token");
+
+  // Kalau tidak ada token di URL, langsung tandai invalid
+  useEffect(() => {
+    if (!token) {
+      setTokenValid(false);
+    }
+  }, [token]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (password.length < 6) {
+      setError("Kata sandi minimal 6 karakter.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Konfirmasi kata sandi tidak cocok.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/reset-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token, newPassword: password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Token expired atau tidak valid
+        if (response.status === 400) {
+          setTokenValid(false);
+        }
+        throw new Error(data.message || "Terjadi kesalahan.");
+      }
+
+      setIsSuccess(true);
+
+      // Redirect ke login otomatis setelah 3 detik
+      setTimeout(() => navigate("/login"), 3000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // --- State: token tidak ada / tidak valid ---
+  if (!tokenValid) {
+    return (
+      <main className="forgot-container">
+        <Card className="forgot-card">
+          <div className="forgot-header">
+            <div className="reset-icon reset-icon--error" aria-hidden="true">
+              ✕
+            </div>
+            <h1 className="forgot-title">Link Tidak Valid</h1>
+            <p className="forgot-subtitle">
+              Link reset kata sandi ini tidak valid <br />
+              atau sudah kadaluarsa.
+            </p>
+          </div>
+          <CardContent className="p-0">
+            <div className="forgot-success-message">
+              <p>Silakan minta link baru melalui halaman lupa kata sandi.</p>
+              <p className="mt-4">
+                <Link to="/forgot-password" className="forgot-back-link">
+                  Minta Link Baru
+                </Link>
+              </p>
+              <p className="mt-2">
+                <Link to="/login" className="reset-secondary-link">
+                  Kembali ke Halaman Masuk
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+          <div className="forgot-footer">
+            <p>Keamanan Anda adalah prioritas kami</p>
+          </div>
+        </Card>
+      </main>
+    );
+  }
+
+  // --- State: berhasil reset ---
+  if (isSuccess) {
+    return (
+      <main className="forgot-container">
+        <Card className="forgot-card">
+          <div className="forgot-header">
+            <div className="reset-icon reset-icon--success" aria-hidden="true">
+              ✓
+            </div>
+            <h1 className="forgot-title">Kata Sandi Diperbarui!</h1>
+            <p className="forgot-subtitle">
+              Kata sandi Anda berhasil diubah. <br />
+              Anda akan diarahkan ke halaman masuk.
+            </p>
+          </div>
+          <CardContent className="p-0">
+            <div className="forgot-success-message">
+              <p className="mt-4">
+                <Link to="/login" className="forgot-back-link">
+                  Masuk Sekarang
+                </Link>
+              </p>
+            </div>
+          </CardContent>
+          <div className="forgot-footer">
+            <p>Mengarahkan dalam 3 detik...</p>
+          </div>
+        </Card>
+      </main>
+    );
+  }
+
+  // --- State: form utama ---
+  return (
+    <main className="forgot-container">
+      <Card className="forgot-card">
+        {/* Header */}
+        <div className="forgot-header">
+          <h1 className="forgot-title">Buat Kata Sandi Baru</h1>
+          <p className="forgot-subtitle">
+            Pastikan kata sandi baru Anda <br />
+            mudah diingat namun sulit ditebak.
+          </p>
+          <p className="forgot-instruction">
+            Minimal 6 karakter.
+          </p>
+        </div>
+
+        {/* Form */}
+        <CardContent className="p-0">
+          <form onSubmit={handleSubmit} className="forgot-form">
+            {/* Password Baru */}
+            <div className="form-group">
+              <Label htmlFor="password" className="form-label">
+                Kata Sandi Baru
+              </Label>
+              <div className="reset-input-wrapper">
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Minimal 6 karakter"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError("");
+                  }}
+                  required
+                  className="form-input"
+                />
+                {/* Strength indicator */}
+                {password.length > 0 && (
+                  <div className="reset-strength">
+                    <div
+                      className={`reset-strength-bar ${
+                        password.length < 6
+                          ? "reset-strength-bar--weak"
+                          : password.length < 10
+                          ? "reset-strength-bar--medium"
+                          : "reset-strength-bar--strong"
+                      }`}
+                    />
+                    <span className="reset-strength-label">
+                      {password.length < 6
+                        ? "Terlalu pendek"
+                        : password.length < 10
+                        ? "Cukup"
+                        : "Kuat"}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Konfirmasi Password */}
+            <div className="form-group">
+              <Label htmlFor="confirmPassword" className="form-label">
+                Konfirmasi Kata Sandi
+              </Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="Ulangi kata sandi baru"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  setError("");
+                }}
+                required
+                className={`form-input ${
+                  confirmPassword.length > 0 && confirmPassword !== password
+                    ? "form-input--error"
+                    : ""
+                }`}
+              />
+              {confirmPassword.length > 0 && confirmPassword === password && (
+                <span className="reset-match-hint reset-match-hint--ok">
+                  Kata sandi cocok ✓
+                </span>
+              )}
+            </div>
+
+            {/* Error message */}
+            {error && (
+              <p className="reset-error-message" role="alert">
+                {error}
+              </p>
+            )}
+
+            {/* Submit */}
+            <Button
+              type="submit"
+              disabled={isLoading || !password || !confirmPassword}
+              className="submit-button"
+            >
+              {isLoading ? "Menyimpan..." : "Simpan Kata Sandi Baru"}
+            </Button>
+          </form>
+        </CardContent>
+
+        {/* Footer */}
+        <div className="forgot-footer">
+          <p>
+            Ingat kata sandi lama?{" "}
+            <Link to="/login" className="forgot-back-link">
+              Masuk
+            </Link>
+          </p>
+        </div>
+      </Card>
+    </main>
+  );
+}

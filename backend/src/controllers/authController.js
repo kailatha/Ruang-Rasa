@@ -2,6 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { createUser, findUserByEmail, findUserById, updateUser, updatePassword } from '../models/userModel.js';
 import prisma from '../lib/prisma.js';
+import crypto from 'crypto';
+import { sendPasswordResetEmail } from '../lib/emailService.js';
+import { saveResetToken, findUserByResetToken } from '../models/userModel.js';
 
 export const register = async (req, res) => {
   try {
@@ -237,5 +240,58 @@ export const getProfileStats = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Terjadi kesalahan pada server', error: error.message });
+  }
+};
+
+// forgot password
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ message: 'Email wajib diisi' });
+
+    const user = await findUserByEmail(email);
+    
+    // Selalu response 200 meski email tidak ada
+    if (!user) {
+      return res.json({ message: 'Jika email terdaftar, instruksi akan dikirim.' });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 jam
+
+    await saveResetToken(email, token, expiry);
+    await sendPasswordResetEmail(email, token);
+
+    res.json({ message: 'Jika email terdaftar, instruksi akan dikirim.' });
+  } catch (error) {
+    console.error("FORGOT PASSWORD ERROR:", error); // CEK ERROR APA DI TERMINAL
+    res.status(500).json({ message: 'Terjadi kesalahan', error: error.message });
+  }
+};
+
+// reset password
+export const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: 'Token dan password baru wajib diisi' });
+    }
+
+    const user = await findUserByResetToken(token);
+    if (!user) {
+      return res.status(400).json({ message: 'Token tidak valid atau sudah kadaluarsa' });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    await updatePassword(user.id, hashedPassword);
+
+    // Hapus token setelah dipakai
+    await saveResetToken(user.email, null, null);
+
+    res.json({ message: 'Kata sandi berhasil direset' });
+  } catch (error) {
+    res.status(500).json({ message: 'Terjadi kesalahan', error: error.message });
   }
 };
