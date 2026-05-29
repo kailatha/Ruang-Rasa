@@ -21,6 +21,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useNotification } from "@/context/NotificationContext";
 
 const MOOD_ICONS = {
   Senang: <RiEmotionHappyLine />,
@@ -179,6 +180,7 @@ function WeeklyChart({ data }) {
 // halaman utama dashboard (main)
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { checkAndNotify } = useNotification();
 
   const [userName, setUserName] = useState("User");
   const [journalEntries, setJournalEntries] = useState([]);
@@ -322,6 +324,9 @@ export default function DashboardPage() {
         last7.forEach((d) => (d.isHighest = d.score === maxScore && d.score > 0));
 
         setWeeklyData(last7);
+
+        // Trigger notification check
+        checkAndNotify(entries, navigate);
       } catch (err) {
         console.error("dashboard fetch error:", err);
       } finally {

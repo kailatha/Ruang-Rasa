@@ -1,35 +1,103 @@
 /* Edit Profile Page Styles */
 
-.edit-profile-container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-.edit-profile-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.edit-profile-header h1 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d5a4c;
-  margin: 0;
-}
-
-/* Custom select styling to match input */
-select.w-full {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234a7c6d' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+/* Custom select styling */
+select.pr-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233D5C4A' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1rem;
 }
 
-@media (max-width: 640px) {
-  .edit-profile-container {
-    padding: 1rem;
-  }
+html.dark select.pr-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%237EC896' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+}
+
+.pr-form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark, #2C3830);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.register-input {
+  height: 52px !important;
+  border-radius: 26px !important;
+  border: 1px solid var(--border, #E0DDD7) !important;
+  background: var(--input-bg, #FAFAF8) !important;
+  color: var(--text-dark, #2C3830) !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 48px;
+}
+
+.register-input:focus {
+  border-color: var(--green-dark, #3D5C4A) !important;
+  box-shadow: 0 0 0 3px rgba(61, 92, 74, 0.1) !important;
+  outline: none;
+}
+
+.register-select {
+  height: 52px !important;
+  border-radius: 26px !important;
+  border: 1px solid var(--border, #E0DDD7) !important;
+  background: var(--input-bg, #FAFAF8) !important;
+  color: var(--text-dark, #2C3830) !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 48px;
+  appearance: none;
+}
+
+.register-select:focus {
+  border-color: var(--green-dark, #3D5C4A) !important;
+  box-shadow: 0 0 0 3px rgba(61, 92, 74, 0.1) !important;
+  outline: none;
+}
+
+.pr-btn-outline {
+  border-color: var(--border, #E0DDD7) !important;
+  color: var(--text-body, #4A5C52) !important;
+  border-radius: 12px !important;
+}
+
+.pr-btn-outline:hover {
+  background: rgba(61, 92, 74, 0.05) !important;
+}
+
+.pr-btn-primary {
+  background: var(--green-dark, #3D5C4A) !important;
+  color: var(--white, #FFFFFF) !important;
+  border-radius: 12px !important;
+}
+
+.pr-btn-primary:hover {
+  background: var(--green-mid, #5A7A65) !important;
+}
+
+.pr-btn-danger {
+  background: var(--text-dark, #2C3830) !important;
+  color: var(--white, #FFFFFF) !important;
+  border-radius: 12px !important;
+}
+
+.pr-btn-danger:hover {
+  background: var(--text-body, #4A5C52) !important;
+}
+
+html.dark .register-input:focus,
+html.dark .register-select:focus {
+  border-color: var(--green-dark) !important;
+  box-shadow: 0 0 0 3px rgba(126, 200, 150, 0.12) !important;
+}
+
+.pr-feedback-success {
+  background: rgba(61, 92, 74, 0.08);
+  color: var(--green-dark);
+}
+.pr-feedback-error {
+  background: rgba(220, 38, 38, 0.08);
+  color: #DC2626;
 }

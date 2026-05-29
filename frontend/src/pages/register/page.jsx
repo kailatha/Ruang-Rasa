@@ -9,11 +9,7 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { DatePicker } from "@/components/ui/date-picker";
 import "./page.css";
 
 import { Button } from "@/components/ui/button";
@@ -51,32 +47,12 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           </div>
         </>
       ) : type === "date" ? (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={"outline"}
-              className={cn(
-                "register-input justify-start text-left font-normal hover:bg-[#F4F3EE]",
-                !value && "text-muted-foreground"
-              )}
-            >
-              {value ? format(new Date(value), "PPP") : <span>{placeholder}</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0 bg-white z-50 rounded-xl" align="start">
-            <Calendar
-              mode="single"
-              selected={value ? new Date(value) : undefined}
-              onSelect={(date) => {
-                onChange({ target: { id, value: date ? format(date, "yyyy-MM-dd") : "" } });
-              }}
-              initialFocus
-              captionLayout="dropdown"
-              startMonth={new Date(1900, 0)}
-              endMonth={new Date()}
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePicker
+          value={value}
+          onChange={(val) => onChange({ target: { id, value: val } })}
+          placeholder={placeholder}
+          triggerClassName={cn("register-input hover:bg-[var(--cream, #F5F2EC)]", !value && "text-[var(--text-muted, #7A8F82)]")}
+        />
       ) : (
         <Input
           id={id}
@@ -94,11 +70,6 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           onClick={onRightIconClick}
         >
           <RightIcon size={18} />
-        </div>
-      )}
-      {type === "date" && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7A8F82] pointer-events-none">
-          <CalendarIcon size={18} />
         </div>
       )}
     </div>
