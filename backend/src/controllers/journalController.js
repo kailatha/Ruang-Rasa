@@ -178,7 +178,7 @@ export async function createEntry(req, res) {
     });
 
     try {
-      const aiUrl = (process.env.AI_API_URL || "http://localhost:8000").replace(/\/$/, "") + "/journal/analyze";
+      const aiUrl = (process.env.AI_API_URL).trim().replace(/\/$/, "") + "/journal/analyze";
 
       const aiRes = await fetch(aiUrl, {
         method: "POST",
