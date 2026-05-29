@@ -51,6 +51,7 @@ export const register = async (req, res) => {
         dob: newUser.dob,
         job: newUser.job,
         status: newUser.status,
+        avatarUrl: newUser.avatarUrl,
         createdAt: newUser.createdAt
       }
     });
@@ -97,6 +98,7 @@ export const login = async (req, res) => {
         dob: user.dob,
         job: user.job,
         status: user.status,
+        avatarUrl: user.avatarUrl,
         createdAt: user.createdAt
       }
     });
@@ -120,6 +122,7 @@ export const getProfile = async (req, res) => {
       dob: user.dob,
       job: user.job,
       status: user.status,
+      avatarUrl: user.avatarUrl,
       createdAt: user.createdAt
     });
   } catch (error) {
@@ -128,14 +131,15 @@ export const getProfile = async (req, res) => {
 };
 export const updateProfile = async (req, res) => {
   try {
-    const { name, gender, dob, job, status } = req.body;
+      const { name, gender, dob, job, status, avatarUrl } = req.body;
     
     const updatedUser = await updateUser(req.user.id, {
       name,
       gender,
       dob,
       job,
-      status
+      status,
+      avatarUrl
     });
 
     if (!updatedUser) {
@@ -152,6 +156,7 @@ export const updateProfile = async (req, res) => {
         dob: updatedUser.dob,
         job: updatedUser.job,
         status: updatedUser.status,
+        avatarUrl: updatedUser.avatarUrl,
         createdAt: updatedUser.createdAt
       }
     });

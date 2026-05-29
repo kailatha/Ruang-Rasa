@@ -18,6 +18,7 @@ model User {
   dob       DateTime?
   job       String?
   status    String?
+  avatarUrl String?
 
   journals          Journal[]
   screeningResults  ScreeningResult[]

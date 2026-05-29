@@ -7,7 +7,7 @@ import "./page.css";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { getProfile, getProfileStats } from "@/services/profileService";
 import { useNotification } from "@/context/NotificationContext";
@@ -113,6 +113,7 @@ export default function ProfilePage() {
               <div className="flex items-center gap-6">
                 <div className="pr-avatar-wrapper">
                   <Avatar className="pr-avatar">
+                    {userData.avatarUrl && <AvatarImage src={userData.avatarUrl} alt="Avatar" style={{ objectFit: 'cover' }} />}
                     <AvatarFallback className="pr-avatar-fallback">
                       <User size={48} />
                     </AvatarFallback>
