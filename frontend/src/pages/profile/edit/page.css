@@ -20,18 +20,38 @@ html.dark select.pr-select {
   display: block;
 }
 
-.pr-form-input {
-  height: 48px !important;
-  border-radius: 12px !important;
+.register-input {
+  height: 52px !important;
+  border-radius: 26px !important;
   border: 1px solid var(--border, #E0DDD7) !important;
   background: var(--input-bg, #FAFAF8) !important;
   color: var(--text-dark, #2C3830) !important;
   transition: all 0.2s ease !important;
   width: 100%;
-  padding: 0 16px;
+  padding-left: 20px;
+  padding-right: 48px;
 }
 
-.pr-form-input:focus {
+.register-input:focus {
+  border-color: var(--green-dark, #3D5C4A) !important;
+  box-shadow: 0 0 0 3px rgba(61, 92, 74, 0.1) !important;
+  outline: none;
+}
+
+.register-select {
+  height: 52px !important;
+  border-radius: 26px !important;
+  border: 1px solid var(--border, #E0DDD7) !important;
+  background: var(--input-bg, #FAFAF8) !important;
+  color: var(--text-dark, #2C3830) !important;
+  transition: all 0.2s ease !important;
+  width: 100%;
+  padding-left: 20px;
+  padding-right: 48px;
+  appearance: none;
+}
+
+.register-select:focus {
   border-color: var(--green-dark, #3D5C4A) !important;
   box-shadow: 0 0 0 3px rgba(61, 92, 74, 0.1) !important;
   outline: none;
@@ -67,7 +87,8 @@ html.dark select.pr-select {
   background: var(--text-body, #4A5C52) !important;
 }
 
-html.dark .pr-form-input:focus {
+html.dark .register-input:focus,
+html.dark .register-select:focus {
   border-color: var(--green-dark) !important;
   box-shadow: 0 0 0 3px rgba(126, 200, 150, 0.12) !important;
 }

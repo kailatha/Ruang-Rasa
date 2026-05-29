@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Camera, Loader2, Calendar as CalendarIcon, Eye, EyeOff, Lock, User } from "lucide-react";
+import { ChevronLeft, Camera, Loader2, Calendar as CalendarIcon, Eye, EyeOff, Lock, User, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
@@ -26,26 +26,31 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
     </Label>
     <div className="relative mt-2">
       {type === "select" ? (
-        <select
-          id={id}
-          value={value}
-          onChange={onChange}
-          disabled={disabled}
-          className="pr-form-input w-full appearance-none"
-        >
-          <option value="" disabled>{placeholder || "Pilih..."}</option>
-          {options?.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
+        <>
+          <select
+            id={id}
+            value={value}
+            onChange={onChange}
+            disabled={disabled}
+            className="register-select"
+          >
+            <option value="" disabled>{placeholder || "Pilih..."}</option>
+            {options?.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--text-muted)]">
+            <ChevronDown size={18} />
+          </div>
+        </>
       ) : type === "date" ? (
         <DatePicker
           value={value}
           onChange={(val) => onChange({ target: { id, value: val } })}
           placeholder={placeholder}
-          triggerClassName={cn("pr-form-input", !value && "text-[var(--text-muted)]")}
+          triggerClassName={cn("register-input", !value && "text-[var(--text-muted)]")}
         />
       ) : (
         <Input
@@ -55,7 +60,7 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
           value={value}
           onChange={onChange}
           disabled={disabled}
-          className="pr-form-input"
+          className="register-input"
         />
       )}
     </div>
@@ -76,7 +81,7 @@ const PasswordField = ({ id, label, placeholder, value, onChange }) => {
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className="pr-form-input pr-12"
+          className="register-input pr-12"
         />
         <button
           type="button"
@@ -317,9 +322,7 @@ export default function EditProfilePage() {
                       onChange={handleChange}
                       options={[
                         { label: "Pelajar/Mahasiswa", value: "Pelajar/Mahasiswa" },
-                        { label: "Karyawan Swasta", value: "Karyawan Swasta" },
-                        { label: "PNS/BUMN", value: "PNS/BUMN" },
-                        { label: "Wiraswasta", value: "Wiraswasta" },
+                        { label: "Pekerja", value: "Pekerja" },
                         { label: "Lainnya", value: "Lainnya" },
                       ]}
                     />
@@ -332,9 +335,8 @@ export default function EditProfilePage() {
                       value={formData.status}
                       onChange={handleChange}
                       options={[
-                        { label: "Lajang", value: "Lajang" },
+                        { label: "Belum Menikah", value: "Belum Menikah" },
                         { label: "Menikah", value: "Menikah" },
-                        { label: "Cerai", value: "Cerai" },
                       ]}
                     />
                   </div>

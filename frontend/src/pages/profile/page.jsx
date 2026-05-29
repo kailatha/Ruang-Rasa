@@ -10,9 +10,11 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { getProfile, getProfileStats } from "@/services/profileService";
+import { useNotification } from "@/context/NotificationContext";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  const { moodNotifEnabled, journalNotifEnabled, toggleMoodNotif, toggleJournalNotif } = useNotification();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
   const [stats, setStats] = useState({ screeningCount: 0, journalCount: 0 });
@@ -176,7 +178,10 @@ export default function ProfilePage() {
                       </div>
                       <span className="text-sm font-medium">Pengingat Mood Check In</span>
                     </div>
-                    <Switch defaultChecked />
+                    <Switch 
+                      checked={moodNotifEnabled} 
+                      onCheckedChange={toggleMoodNotif} 
+                    />
                   </div>
                   <div className="pr-notification-item">
                     <div className="flex items-center gap-3">
@@ -185,7 +190,10 @@ export default function ProfilePage() {
                       </div>
                       <span className="text-sm font-medium">Pengingat Jurnal</span>
                     </div>
-                    <Switch />
+                    <Switch 
+                      checked={journalNotifEnabled} 
+                      onCheckedChange={toggleJournalNotif} 
+                    />
                   </div>
                 </div>
               </CardContent>
