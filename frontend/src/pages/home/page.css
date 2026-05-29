@@ -8,6 +8,7 @@
   padding: 0;
 }
 
+/* global css */
 :root {
   --cream: #F5F2EC;
   --green-dark: #3D5C4A;
@@ -23,6 +24,19 @@
   --shadow: 0 4px 24px rgba(61, 92, 74, 0.10);
   --shadow-lg: 0 8px 40px rgba(61, 92, 74, 0.15);
 
+  /* mood colors */
+  --mood-senang-bg:    #fef9e7;
+  --mood-senang-text:  #b7791f;
+  --mood-netral-bg:    rgba(61, 92, 74, 0.08);
+  --mood-netral-text:  var(--text-body);
+  --mood-sedih-bg:     #ebf8ff;
+  --mood-sedih-text:   #2b6cb0;
+  --mood-marah-bg:     #fff5f5;
+  --mood-marah-text:   #c53030;
+  --mood-stres-bg:     #faf5ff;
+  --mood-stres-text:   #6b46c1;
+
+  /* font families */
   --font-body: 'DM Sans', sans-serif;
   --font-heading: 'Playfair Display', serif;
 }
@@ -42,6 +56,19 @@ html.dark {
   --input-bg: #222628;
   --shadow: 0 4px 24px rgba(0, 0, 0, 0.30);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.40);
+
+  /* mood colors */
+  --mood-senang-bg:    #3a3518;
+  --mood-senang-text:  #d4c54a;
+  --mood-netral-bg:    rgba(126, 200, 150, 0.06);
+  --mood-netral-text:  var(--text-body);
+  --mood-sedih-bg:     #1e2840;
+  --mood-sedih-text:   #6a9ad8;
+  --mood-marah-bg:     #3a1e1e;
+  --mood-marah-text:   #e07070;
+  --mood-stres-bg:     #301e3a;
+  --mood-stres-text:   #c080e0;
+
   color-scheme: dark;
 }
 
@@ -415,11 +442,11 @@ body {
   border: none;
 }
 
-.chip-senang { background: #e8e3c4; color: #8b833c; }
-.chip-netral { background: #d4dee0; color: #616161; }
-.chip-sedih  { background: #d4dae8; color: #3d518b; }
-.chip-marah  { background: #e8d4d4; color: #6b2d2d; }
-.chip-stres  { background: #e5d4e8; color: #6b2d69; }
+.chip-senang { background: var(--mood-senang-bg); color: var(--mood-senang-text); }
+.chip-netral { background: var(--mood-netral-bg); color: var(--mood-netral-text); }
+.chip-sedih  { background: var(--mood-sedih-bg);  color: var(--mood-sedih-text);  }
+.chip-marah  { background: var(--mood-marah-bg);  color: var(--mood-marah-text);  }
+.chip-stres  { background: var(--mood-stres-bg);  color: var(--mood-stres-text);  }
 
 .bubble-user {
   align-self: flex-end;

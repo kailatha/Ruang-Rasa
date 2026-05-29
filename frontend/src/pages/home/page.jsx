@@ -1,10 +1,21 @@
 import { useNavigate } from "react-router-dom";
+
+// shadcn ui
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-import "./page.css";
-// shared components
+// react icons
+import {
+  RiEmotionHappyLine,
+  RiBookOpenLine,
+  RiSearchEyeLine,
+  RiChat3Line,
+  RiSparklingLine,
+} from "react-icons/ri";
 
+import "./page.css";
+
+// shared components
 function ChatPreview() {
   return (
     <div className="chat-preview">
@@ -72,27 +83,27 @@ function StatsBar() {
 function FeaturesSection() {
   const features = [
     {
-      icon: "",
+      icon: <RiEmotionHappyLine />,
       name: "Mood Tracker",
       desc: "Catat mood harianmu dari hari pertama, hingga berapa waktu ke waktu. AI akan memahami tren emosimu untuk memberikan insight yang relevan.",
     },
     {
-      icon: "",
+      icon: <RiBookOpenLine />,
       name: "Jurnal",
       desc: "Tuangkan pikiranmu dalam jurnal digital. AI akan menganalisis sentimen dan emosi dari tulisanmu.",
     },
     {
-      icon: "",
+      icon: <RiSearchEyeLine />,
       name: "Screening Kesehatan Mental",
       desc: "Ikuti screening yang telah divalidasi secara ilmiah. Dapatkan gambaran kondisi emosionalmu dan rekomendasi langkah selanjutnya — bukan diagnosis, tetapi panduan yang aman.",
     },
     {
-      icon: "",
+      icon: <RiChat3Line />,
       name: "Chatbot Pendamping",
       desc: "Bicara dengan chatbot AI yang empatik kapan saja. Pilih modenya: sekadar bantu refleksi diri, cari saran praktis, atau solusi kegiatan yang tepat.",
     },
     {
-      icon: "",
+      icon: <RiSparklingLine />,
       name: "Rekomendasi",
       desc: "Berdasarkan pola mood, journaling, dan hasil screeningmu, AI akan merekomendasikan aktivitas sederhana dan afirmasi yang relevan dengan kondisimu saat ini.",
     },
@@ -231,7 +242,7 @@ export function AboutPage() {
   return (
     <>
       <div className="about-hero">
-        <h1 className="about-title">tentang kami</h1>
+        <h1 className="about-title">Tentang kami</h1>
       </div>
 
       <div className="about-card-section">
@@ -268,7 +279,7 @@ export function AboutPage() {
         </Card>
       </div>
 
-      <h2 className="about-section-title">tim kami</h2>
+      <h2 className="about-section-title">Tim kami</h2>
 
       <div className="about-card-section">
         <Card className="about-card">

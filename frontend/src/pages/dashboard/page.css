@@ -358,11 +358,11 @@
   border: none !important;
 }
 
-.mood-senang { background: #FEF9E7 !important; color: #B08A10 !important; }
-.mood-netral { background: rgba(61, 92, 74, 0.07) !important; color: var(--text-muted) !important; }
-.mood-sedih  { background: #EAF0FB !important; color: #3A6FB5 !important; }
-.mood-marah  { background: #FDECEA !important; color: #B03020 !important; }
-.mood-stress { background: #F5EAFB !important; color: #7A3AA0 !important; }
+.mood-senang { background: var(--mood-senang-bg) !important; color: var(--mood-senang-text) !important; }
+.mood-netral { background: var(--mood-netral-bg) !important; color: var(--mood-netral-text) !important; }
+.mood-sedih  { background: var(--mood-sedih-bg)  !important; color: var(--mood-sedih-text)  !important; }
+.mood-marah  { background: var(--mood-marah-bg)  !important; color: var(--mood-marah-text)  !important; }
+.mood-stress { background: var(--mood-stres-bg)  !important; color: var(--mood-stres-text)  !important; }
 
 .db-journal-content {
   font-size: 13px;
@@ -624,11 +624,11 @@ html.dark .db-journal-card:hover {
   background: rgba(126, 200, 150, 0.03) !important;
 }
 
-html.dark .mood-senang { background: #3a3518 !important; color: #d4c54a !important; }
-html.dark .mood-netral { background: rgba(126, 200, 150, 0.06) !important; color: var(--text-muted) !important; }
-html.dark .mood-sedih  { background: #1e2840 !important; color: #6a9ad8 !important; }
-html.dark .mood-marah  { background: #3a1e1e !important; color: #e07070 !important; }
-html.dark .mood-stress { background: #301e3a !important; color: #c080e0 !important; }
+html.dark .mood-senang { background: var(--mood-senang-bg) !important; color: var(--mood-senang-text) !important; }
+html.dark .mood-netral { background: var(--mood-netral-bg) !important; color: var(--mood-netral-text) !important; }
+html.dark .mood-sedih  { background: var(--mood-sedih-bg)  !important; color: var(--mood-sedih-text)  !important; }
+html.dark .mood-marah  { background: var(--mood-marah-bg)  !important; color: var(--mood-marah-text)  !important; }
+html.dark .mood-stress { background: var(--mood-stres-bg)  !important; color: var(--mood-stres-text)  !important; }
 
 html.dark .badge-active { background: #3a3018 !important; color: #d4a040 !important; }
 html.dark .badge-up     { background: rgba(126, 200, 150, 0.10) !important; }
