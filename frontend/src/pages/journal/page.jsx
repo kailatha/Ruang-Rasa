@@ -73,30 +73,66 @@ function getMoodColor(mood) {
 
 // sub-component
 // kartu entri jurnal sebelumnya
-function EntryCard({ entry, onClick }) {
+function EntryCard({ entry, isExpanded, onToggle }) {
   const moodIcon = MOODS.find((m) => m.label === entry.mood)?.icon;
+  const analysis = entry?.analysis || {};
+  const activities = analysis.recommended_activities || [];
+  const affirmations = analysis.recommended_affirmations || [];
 
   return (
-    <Card className="entry-card" onClick={onClick} style={{ cursor: "pointer", transition: "opacity 0.2s" }} onMouseOver={(e) => e.currentTarget.style.opacity = 0.7} onMouseOut={(e) => e.currentTarget.style.opacity = 1}>
-      <CardHeader className="entry-card-header">
-        <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
-        <Badge className={`mood-badge ${getMoodColor(entry.mood)}`}>
-          {moodIcon} {entry.mood}
-        </Badge>
-      </CardHeader>
-      <CardContent className="entry-card-body">
-        <p className="entry-content">"{entry.content}"</p>
-        <div className="entry-footer">
-          {entry.sentiment && (
-            <Badge className={`sentiment-chip ${getSentimentVariant(entry.sentiment.label)}`}>
-              {entry.sentiment.label} {entry.sentiment.score}%
-            </Badge>
+    <Card className="entry-card" style={{ transition: "all 0.2s" }}>
+      <div onClick={onToggle} style={{ cursor: "pointer", opacity: isExpanded ? 1 : 0.9 }} onMouseOver={(e) => e.currentTarget.style.opacity = 1} onMouseOut={(e) => e.currentTarget.style.opacity = isExpanded ? 1 : 0.9}>
+        <CardHeader className="entry-card-header">
+          <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
+          <Badge className={`mood-badge ${getMoodColor(entry.mood)}`}>
+            {moodIcon} {entry.mood}
+          </Badge>
+        </CardHeader>
+        <CardContent className="entry-card-body">
+          <p className="entry-content">"{entry.content}"</p>
+          <div className="entry-footer">
+            {entry.sentiment && (
+              <Badge className={`sentiment-chip ${getSentimentVariant(entry.sentiment.label)}`}>
+                {entry.sentiment.label} {entry.sentiment.score}%
+              </Badge>
+            )}
+            {entry.emotion && (
+              <Badge className="emotion-chip">{entry.emotion}</Badge>
+            )}
+          </div>
+        </CardContent>
+      </div>
+
+      {isExpanded && (activities.length > 0 || affirmations.length > 0) && (
+        <div style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px dashed var(--border)" }}>
+          <div style={{ fontSize: "11px", fontWeight: "700", color: "var(--text-muted)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+            Rekomendasi AI
+          </div>
+          
+          {activities.length > 0 && (
+            <div style={{ marginBottom: "12px" }}>
+              <div style={{ fontSize: "11px", color: "var(--green-dark)", fontWeight: "600", marginBottom: "6px" }}>Aktivitas:</div>
+              {activities.map((act, i) => (
+                <div key={i} style={{ padding: "10px", borderRadius: "8px", background: "var(--cream)", border: "1px solid var(--border)", marginBottom: "6px" }}>
+                  <div style={{ fontSize: "12px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "2px" }}>{act.title}</div>
+                  <div style={{ fontSize: "11px", color: "var(--text-body)" }}>{act.summary}</div>
+                </div>
+              ))}
+            </div>
           )}
-          {entry.emotion && (
-            <Badge className="emotion-chip">{entry.emotion}</Badge>
+
+          {affirmations.length > 0 && (
+            <div>
+              <div style={{ fontSize: "11px", color: "#b07d2b", fontWeight: "600", marginBottom: "6px" }}>Afirmasi:</div>
+              {affirmations.map((aff, i) => (
+                <div key={i} style={{ padding: "10px", borderRadius: "8px", background: "rgba(61, 92, 74, 0.04)", border: "1px solid rgba(61, 92, 74, 0.1)", marginBottom: "6px", fontStyle: "italic", fontSize: "12px", color: "var(--text-dark)" }}>
+                  "{aff.main_affirmation || aff.text || aff}"
+                </div>
+              ))}
+            </div>
           )}
         </div>
-      </CardContent>
+      )}
     </Card>
   );
 }
@@ -136,75 +172,6 @@ function TagSelector({ selected, onToggle }) {
   );
 }
 
-// Modal rekomendasi untuk melihat jurnal secara detail beserta rekomendasinya
-function JournalRecommendationModal({ entry, onClose }) {
-  const analysis = entry?.analysis || {};
-  const activities = analysis.recommended_activities || [];
-  const affirmations = analysis.recommended_affirmations || [];
-
-  return (
-    <div className="reco-modal-overlay" onClick={onClose}>
-      <div className="reco-modal" onClick={(e) => e.stopPropagation()}>
-        <button className="reco-modal-close" onClick={onClose}>
-          <FiX />
-        </button>
-
-        <h2 className="reco-modal-title">Rekomendasi Jurnal</h2>
-        <p className="reco-modal-subtitle">
-          Berdasarkan jurnal kamu sebelumnya, ini analisis dari AI.
-        </p>
-
-        {activities.length > 0 && (
-          <div style={{ marginBottom: "20px" }}>
-            <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-              Aktivitas Disarankan
-            </h3>
-            {activities.map((act, i) => (
-              <Card key={i} className="reco-card reco-card-activity">
-                <CardContent className="reco-card-inner">
-                  <div className="reco-card-icon"><FiStar /></div>
-                  <div className="reco-card-content">
-                    <div className="reco-card-label">Saran Aktivitas</div>
-                    <div className="reco-card-title">{act.title}</div>
-                    <p className="reco-card-desc">{act.summary}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {affirmations.length > 0 && (
-          <div style={{ marginBottom: "20px" }}>
-            <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-              Afirmasi Positif
-            </h3>
-            {affirmations.map((aff, i) => (
-              <Card key={i} className="reco-card reco-card-affirmation">
-                <CardContent className="reco-card-inner">
-                  <div className="reco-card-icon"><FiSun /></div>
-                  <div className="reco-card-content">
-                    <div className="reco-card-label">Afirmasi</div>
-                    <p className="reco-card-desc reco-affirmation-text">
-                      "{aff.main_affirmation || aff.text || aff}"
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {activities.length === 0 && affirmations.length === 0 && (
-          <div style={{ padding: "20px", textAlign: "center", color: "var(--text-muted)" }}>
-            Belum ada rekomendasi khusus untuk jurnal ini.
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // mock data (false = pakai api)
 const USE_MOCK = false;
 
@@ -221,7 +188,7 @@ export default function JournalPage() {
   const [loadingEntries, setLoadingEntries] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [submittedEntry, setSubmittedEntry] = useState(null);
-  const [viewingEntry, setViewingEntry] = useState(null);
+  const [expandedEntryId, setExpandedEntryId] = useState(null);
 
   // autosave draft setiap konten berubah
   useEffect(() => {
@@ -475,7 +442,11 @@ export default function JournalPage() {
           <>
             {entries.slice(0, 4).map((entry, index) => (
               <div key={entry.id}>
-                <EntryCard entry={entry} onClick={() => setViewingEntry(entry)} />
+                <EntryCard 
+                  entry={entry} 
+                  isExpanded={expandedEntryId === entry.id}
+                  onToggle={() => setExpandedEntryId(expandedEntryId === entry.id ? null : entry.id)} 
+                />
                 {index < Math.min(entries.length, 4) - 1 && (
                   <Separator className="entry-separator" />
                 )}
@@ -485,13 +456,6 @@ export default function JournalPage() {
         )}
       </aside>
 
-      {/* modal rekomendasi dari entri yang diklik */}
-      {viewingEntry && (
-        <JournalRecommendationModal
-          entry={viewingEntry}
-          onClose={() => setViewingEntry(null)}
-        />
-      )}
     </div>
   );
 }
