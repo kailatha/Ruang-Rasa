@@ -79,7 +79,7 @@ export const findUserById = async (userId) => {
 
 // UPDATE USER
 export const updateUser = async (userId, userData) => {
-  const { name, gender, dob, job, status } = userData;
+  const { name, gender, dob, job, status, avatarUrl } = userData;
 
   return await prisma.user.update({
     where: {
@@ -91,6 +91,7 @@ export const updateUser = async (userId, userData) => {
       dob: dob ? new Date(dob) : null,
       job,
       status,
+      avatarUrl,
     },
   });
 };

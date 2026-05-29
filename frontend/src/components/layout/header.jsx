@@ -22,7 +22,8 @@ export default function Header() {
 
     return (
       <nav className="app-navbar">
-        <span className="navbar-logo" onClick={() => navigate("/")}>
+        <span className="navbar-logo" onClick={() => navigate("/")} style={{ display: 'flex', alignItems: 'center' }}>
+          <img src="/logo.png" alt="RuangRasa Logo" style={{ width: '36px', height: '36px', marginRight: '10px' }} />
           RuangRasa
         </span>
         <div className="app-navbar-links">
@@ -95,7 +96,8 @@ export default function Header() {
 
   return (
     <nav className="navbar">
-      <span className="navbar-logo" onClick={() => handleNav("logo")}>
+      <span className="navbar-logo" onClick={() => handleNav("logo")} style={{ display: 'flex', alignItems: 'center' }}>
+        <img src="/logo.png" alt="RuangRasa Logo" style={{ width: '36px', height: '36px', marginRight: '10px' }} />
         RuangRasa
       </span>
       <div className="navbar-links">

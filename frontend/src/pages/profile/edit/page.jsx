@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Camera, Loader2, Calendar as CalendarIcon, Eye, EyeOff, Lock, User, ChevronDown } from "lucide-react";
 import { format } from "date-fns";
@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getProfile, updateProfile, changePassword, getProfileStats } from "@/services/profileService";
 import { DatePicker } from "@/components/ui/date-picker";
 import "../page.css";
@@ -100,6 +100,7 @@ export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [stats, setStats] = useState({ journalCount: 0 });
+  const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -107,6 +108,7 @@ export default function EditProfilePage() {
     dob: "",
     job: "",
     status: "",
+    avatarUrl: "",
   });
 
   const [passwordData, setPasswordData] = useState({
@@ -138,6 +140,7 @@ export default function EditProfilePage() {
           dob: user.dob ? format(new Date(user.dob), "yyyy-MM-dd") : "",
           job: user.job || "",
           status: user.status || "",
+          avatarUrl: user.avatarUrl || "",
         });
         setStats(statsRes);
       } catch (err) {
@@ -159,6 +162,21 @@ export default function EditProfilePage() {
     const { id, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [id]: value }));
     if (passwordMessage.text) setPasswordMessage({ type: "", text: "" });
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Ukuran gambar tidak boleh lebih dari 2MB.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, avatarUrl: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -249,18 +267,28 @@ export default function EditProfilePage() {
                 <CardContent className="pr-section-content flex flex-col items-center gap-4 py-8">
                   <div className="pr-avatar-wrapper">
                     <Avatar className="pr-avatar" style={{width: '112px', height: '112px'}}>
+                      {formData.avatarUrl && <AvatarImage src={formData.avatarUrl} alt="Avatar" style={{ objectFit: 'cover' }} />}
                       <AvatarFallback className="pr-avatar-fallback">
                         <User size={56} />
                       </AvatarFallback>
                     </Avatar>
+                    
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      hidden 
+                      ref={fileInputRef} 
+                      onChange={handleImageUpload} 
+                    />
                     <button 
                       type="button"
                       className="pr-edit-btn"
+                      onClick={() => fileInputRef.current?.click()}
                     >
                       <Camera size={16} />
                     </button>
                   </div>
-                  <p className="text-xs text-[var(--text-muted)] font-medium">Klik ikon kamera untuk mengubah foto profil</p>
+                  <p className="text-xs text-[var(--text-muted)] font-medium">Klik ikon kamera untuk mengubah foto profil (Maks 2MB)</p>
                 </CardContent>
               </Card>
 
