@@ -529,3 +529,214 @@ html.dark .emotion-chip {
   background: rgba(126, 200, 150, 0.10) !important;
   color: var(--green-dark) !important;
 }
+
+.reco-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reco-modal {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px 32px;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+  animation: slideUp 0.35s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.reco-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--text-muted);
+  transition: background 0.2s, color 0.2s;
+}
+
+.reco-modal-close:hover {
+  background: var(--cream);
+  color: var(--text-dark);
+}
+
+.reco-modal-title {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.reco-modal-subtitle {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.reco-card {
+  background: var(--cream) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 14px !important;
+  margin-bottom: 14px;
+}
+
+.reco-card-activity   { border-left: 3px solid var(--green-dark) !important; }
+.reco-card-affirmation { border-left: 3px solid #b07d2b !important; }
+
+.reco-card-inner {
+  padding: 20px !important;
+  display: flex;
+  gap: 16px;
+}
+
+.reco-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  color: var(--green-dark);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.reco-card-affirmation .reco-card-icon {
+  color: #b07d2b;
+}
+
+.reco-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.reco-card-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.reco-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.reco-card-desc {
+  font-size: 13px;
+  color: var(--text-body);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.reco-affirmation-text {
+  font-style: italic;
+  font-size: 14px;
+  color: var(--text-dark);
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .journal-main {
+    padding: 24px 20px 85px !important; /* padding bottom for bottom nav */
+  }
+
+  .journal-entries-sidebar {
+    display: none;
+  }
+
+  .reco-modal-overlay {
+    align-items: flex-end;
+  }
+
+  .reco-modal {
+    max-width: 100vw;
+    width: 100%;
+    margin: 0;
+    border-radius: 24px 24px 0 0;
+    padding: 32px 20px 20px;
+    max-height: 90vh;
+    animation: slideUpMobile 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .reco-modal-close {
+    top: 12px;
+    right: 12px;
+  }
+
+  .reco-card-inner {
+    padding: 16px !important;
+    gap: 12px;
+  }
+}
+
+@keyframes slideUpMobile {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+html.dark .reco-modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+html.dark .reco-modal {
+  background: var(--white);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+html.dark .reco-modal-close {
+  border-color: var(--border);
+  background: var(--white);
+  color: var(--text-muted);
+}
+
+html.dark .reco-modal-close:hover {
+  background: var(--input-bg);
+  color: var(--text-dark);
+}
+
+html.dark .reco-card {
+  background: var(--input-bg) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark .reco-card-icon {
+  background: var(--white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}

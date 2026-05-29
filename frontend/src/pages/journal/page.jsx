@@ -13,7 +13,8 @@ import { RiBold, RiItalic, RiListUnordered, RiTable2, RiPriceTag3Line, RiArrowRi
 // mood
 import { RiEmotionHappyLine, RiEmotionNormalLine, RiEmotionUnhappyLine, RiEmotionLine, RiEmotionSadLine } from "react-icons/ri";
 // chatbot
-import { RiChat3Line } from "react-icons/ri";
+import { RiChat3Line, RiCheckLine, RiSparklingLine } from "react-icons/ri";
+import { FiX, FiStar, FiSun } from "react-icons/fi";
 
 // shadcn ui
 import { Button } from "@/components/ui/button";
@@ -72,11 +73,11 @@ function getMoodColor(mood) {
 
 // sub-component
 // kartu entri jurnal sebelumnya
-function EntryCard({ entry }) {
+function EntryCard({ entry, onClick }) {
   const moodIcon = MOODS.find((m) => m.label === entry.mood)?.icon;
 
   return (
-    <Card className="entry-card">
+    <Card className="entry-card" onClick={onClick} style={{ cursor: "pointer", transition: "opacity 0.2s" }} onMouseOver={(e) => e.currentTarget.style.opacity = 0.7} onMouseOut={(e) => e.currentTarget.style.opacity = 1}>
       <CardHeader className="entry-card-header">
         <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
         <Badge className={`mood-badge ${getMoodColor(entry.mood)}`}>
@@ -135,6 +136,75 @@ function TagSelector({ selected, onToggle }) {
   );
 }
 
+// Modal rekomendasi untuk melihat jurnal secara detail beserta rekomendasinya
+function JournalRecommendationModal({ entry, onClose }) {
+  const analysis = entry?.analysis || {};
+  const activities = analysis.recommended_activities || [];
+  const affirmations = analysis.recommended_affirmations || [];
+
+  return (
+    <div className="reco-modal-overlay" onClick={onClose}>
+      <div className="reco-modal" onClick={(e) => e.stopPropagation()}>
+        <button className="reco-modal-close" onClick={onClose}>
+          <FiX />
+        </button>
+
+        <h2 className="reco-modal-title">Rekomendasi Jurnal</h2>
+        <p className="reco-modal-subtitle">
+          Berdasarkan jurnal kamu sebelumnya, ini analisis dari AI.
+        </p>
+
+        {activities.length > 0 && (
+          <div style={{ marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              Aktivitas Disarankan
+            </h3>
+            {activities.map((act, i) => (
+              <Card key={i} className="reco-card reco-card-activity">
+                <CardContent className="reco-card-inner">
+                  <div className="reco-card-icon"><FiStar /></div>
+                  <div className="reco-card-content">
+                    <div className="reco-card-label">Saran Aktivitas</div>
+                    <div className="reco-card-title">{act.title}</div>
+                    <p className="reco-card-desc">{act.summary}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {affirmations.length > 0 && (
+          <div style={{ marginBottom: "20px" }}>
+            <h3 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+              Afirmasi Positif
+            </h3>
+            {affirmations.map((aff, i) => (
+              <Card key={i} className="reco-card reco-card-affirmation">
+                <CardContent className="reco-card-inner">
+                  <div className="reco-card-icon"><FiSun /></div>
+                  <div className="reco-card-content">
+                    <div className="reco-card-label">Afirmasi</div>
+                    <p className="reco-card-desc reco-affirmation-text">
+                      "{aff.main_affirmation || aff.text || aff}"
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {activities.length === 0 && affirmations.length === 0 && (
+          <div style={{ padding: "20px", textAlign: "center", color: "var(--text-muted)" }}>
+            Belum ada rekomendasi khusus untuk jurnal ini.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // mock data (false = pakai api)
 const USE_MOCK = false;
 
@@ -150,6 +220,8 @@ export default function JournalPage() {
   const [entries, setEntries] = useState([]);
   const [loadingEntries, setLoadingEntries] = useState(true);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [submittedEntry, setSubmittedEntry] = useState(null);
+  const [viewingEntry, setViewingEntry] = useState(null);
 
   // autosave draft setiap konten berubah
   useEffect(() => {
@@ -199,12 +271,22 @@ export default function JournalPage() {
           ...payload,
           sentiment: { label: "Positif", score: Math.floor(Math.random() * 40) + 60 },
           emotion: null,
+          analysis: {
+            recommended_activities: [
+              { title: "Jeda napas 3 menit", summary: "Latihan napas singkat untuk membantu tubuh merasa lebih stabil." }
+            ],
+            recommended_affirmations: [
+              { text: "Saya mengizinkan diri saya untuk beristirahat." }
+            ]
+          },
           createdAt: new Date().toISOString(),
         };
         setEntries((prev) => [newEntry, ...prev]);
+        setSubmittedEntry(newEntry);
       } else {
         const response = await createJournalEntry(payload);
         setEntries((prev) => [response.entry, ...prev]);
+        setSubmittedEntry(response.entry);
       }
       // reset form setelah berhasil simpan
       setSelectedMood(null);
@@ -246,78 +328,129 @@ export default function JournalPage() {
             </Button>
           </div>
 
-          {/* langkah 1: pilih mood */}
-          <section className="journal-section">
-            <div className="section-step">
-              <span className="step-num">1</span>
-              <h2 className="step-title">Pilih mood kamu sekarang</h2>
-            </div>
-            <MoodPicker selected={selectedMood} onSelect={setSelectedMood} />
-            {selectedMood && (
-              <Button className="save-mood-btn" onClick={() => {}} variant="default">
-                Simpan Mood
-              </Button>
-            )}
-          </section>
+          {submittedEntry ? (
+            <section className="journal-section" style={{ background: "var(--white)", padding: "32px", borderRadius: "16px", border: "1px solid var(--border)" }}>
+              <div style={{ textAlign: "center", marginBottom: "24px" }}>
+                <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "rgba(61, 92, 74, 0.1)", color: "var(--green-dark)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "32px", margin: "0 auto 16px" }}>
+                  <RiCheckLine />
+                </div>
+                <h2 className="step-title" style={{ marginBottom: "8px" }}>Jurnal Berhasil Disimpan!</h2>
+                <p className="journal-subtitle">Terima kasih sudah berbagi hari ini. Berikut adalah beberapa rekomendasi dari AI untukmu.</p>
+              </div>
 
-          {/* langkah 2: tulis isi jurnal */}
-          <section className="journal-section">
-            <div className="section-step">
-              <span className="step-num">2</span>
-              <h2 className="step-title">Apa yang sedang kamu pikirkan?</h2>
-            </div>
-            <div className="editor-toolbar">
-              <button className="toolbar-btn"><RiBold /></button>
-              <button className="toolbar-btn"><RiItalic /></button>
-              <button className="toolbar-btn"><RiListUnordered /></button>
-              <button className="toolbar-btn"><RiTable2 /></button>
-            </div>
-            <Textarea
-              className="journal-textarea"
-              placeholder="Mulailah menulis apa yang ada di pikiranmu..."
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              rows={8}
-            />
-          </section>
+              {submittedEntry.analysis?.recommended_activities?.length > 0 && (
+                <div style={{ marginBottom: "24px" }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <RiSparklingLine color="var(--green-dark)" /> Aktivitas Disarankan
+                  </h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {submittedEntry.analysis.recommended_activities.map((act, i) => (
+                      <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "var(--cream)", border: "1px solid var(--border)" }}>
+                        <h4 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", margin: "0 0 4px" }}>{act.title}</h4>
+                        <p style={{ fontSize: "13px", color: "var(--text-body)", margin: "0" }}>{act.summary}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* pilih tag/kategori */}
-          <section className="journal-section journal-section-tags">
-            <div className="tags-label">
-              <RiPriceTag3Line className="tags-label-icon" />
-              Tagar
-            </div>
-            <TagSelector selected={selectedTags} onToggle={toggleTag} />
-          </section>
+              {submittedEntry.analysis?.recommended_affirmations?.length > 0 && (
+                <div style={{ marginBottom: "32px" }}>
+                  <h3 style={{ fontSize: "15px", fontWeight: "600", color: "var(--text-dark)", marginBottom: "12px", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <RiSparklingLine color="var(--green-dark)" /> Afirmasi Positif
+                  </h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                    {submittedEntry.analysis.recommended_affirmations.map((aff, i) => (
+                      <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "rgba(61, 92, 74, 0.04)", border: "1px solid rgba(61, 92, 74, 0.1)", fontStyle: "italic", color: "var(--green-dark)" }}>
+                        "{aff.main_affirmation || aff}"
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-          {/* status autosave draf */}
-          {saveStatus === "saved" && (
-            <div className="draft-status">
-              ● Tersimpan sebagai draf pukul{" "}
-              {new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
-            </div>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Button onClick={() => setSubmittedEntry(null)} className="save-journal-btn">
+                  Tulis Jurnal Baru
+                </Button>
+              </div>
+            </section>
+          ) : (
+            <>
+              {/* langkah 1: pilih mood */}
+              <section className="journal-section">
+                <div className="section-step">
+                  <span className="step-num">1</span>
+                  <h2 className="step-title">Pilih mood kamu sekarang</h2>
+                </div>
+                <MoodPicker selected={selectedMood} onSelect={setSelectedMood} />
+                {selectedMood && (
+                  <Button className="save-mood-btn" onClick={() => {}} variant="default">
+                    Simpan Mood
+                  </Button>
+                )}
+              </section>
+
+              {/* langkah 2: tulis isi jurnal */}
+              <section className="journal-section">
+                <div className="section-step">
+                  <span className="step-num">2</span>
+                  <h2 className="step-title">Apa yang sedang kamu pikirkan?</h2>
+                </div>
+                <div className="editor-toolbar">
+                  <button className="toolbar-btn"><RiBold /></button>
+                  <button className="toolbar-btn"><RiItalic /></button>
+                  <button className="toolbar-btn"><RiListUnordered /></button>
+                  <button className="toolbar-btn"><RiTable2 /></button>
+                </div>
+                <Textarea
+                  className="journal-textarea"
+                  placeholder="Mulailah menulis apa yang ada di pikiranmu..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  rows={8}
+                />
+              </section>
+
+              {/* pilih tag/kategori */}
+              <section className="journal-section journal-section-tags">
+                <div className="tags-label">
+                  <RiPriceTag3Line className="tags-label-icon" />
+                  Tagar
+                </div>
+                <TagSelector selected={selectedTags} onToggle={toggleTag} />
+              </section>
+
+              {/* status autosave draf */}
+              {saveStatus === "saved" && (
+                <div className="draft-status">
+                  ● Tersimpan sebagai draf pukul{" "}
+                  {new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" })}
+                </div>
+              )}
+
+              {/* aksi: batal atau simpan */}
+              <div className="journal-actions">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setSelectedMood(null);
+                    setContent("");
+                    setSelectedTags([]);
+                  }}
+                >
+                  Batal
+                </Button>
+                <Button
+                  className="save-journal-btn"
+                  disabled={!canSave || isSaving}
+                  onClick={handleSave}
+                >
+                  {isSaving ? "Menyimpan..." : "Simpan Jurnal"}
+                </Button>
+              </div>
+            </>
           )}
-
-          {/* aksi: batal atau simpan */}
-          <div className="journal-actions">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSelectedMood(null);
-                setContent("");
-                setSelectedTags([]);
-              }}
-            >
-              Batal
-            </Button>
-            <Button
-              className="save-journal-btn"
-              disabled={!canSave || isSaving}
-              onClick={handleSave}
-            >
-              {isSaving ? "Menyimpan..." : "Simpan Jurnal"}
-            </Button>
-          </div>
         </div>
       </main>
 
@@ -342,7 +475,7 @@ export default function JournalPage() {
           <>
             {entries.slice(0, 4).map((entry, index) => (
               <div key={entry.id}>
-                <EntryCard entry={entry} />
+                <EntryCard entry={entry} onClick={() => setViewingEntry(entry)} />
                 {index < Math.min(entries.length, 4) - 1 && (
                   <Separator className="entry-separator" />
                 )}
@@ -351,6 +484,14 @@ export default function JournalPage() {
           </>
         )}
       </aside>
+
+      {/* modal rekomendasi dari entri yang diklik */}
+      {viewingEntry && (
+        <JournalRecommendationModal
+          entry={viewingEntry}
+          onClose={() => setViewingEntry(null)}
+        />
+      )}
     </div>
   );
 }
