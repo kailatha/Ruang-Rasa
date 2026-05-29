@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+// shadcn ui
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+
 import "./page.css";
 
 export default function ForgotPasswordPage() {
@@ -38,60 +40,65 @@ export default function ForgotPasswordPage() {
   return (
     <main className="forgot-container">
       <Card className="forgot-card">
-        {/* Header Section */}
-        <div className="forgot-header">
-          <h1 className="forgot-title">Lupa Kata Sandi Anda?</h1>
-          <p className="forgot-subtitle">
-            Jangan khawatir, <br />
-            kami akan membantu Anda.
-          </p>
-          <p className="forgot-instruction">
-            Masukkan email yang terdaftar di bawah ini.
-          </p>
-        </div>
-
-        {/* Form Section */}
-        <CardContent className="p-0">
-          {isSuccess ? (
-            <div className="forgot-success-message">
-              <p>Instruksi pemulihan kata sandi telah dikirim ke <strong>{email}</strong>.</p>
-              <p className="mt-4">
-                <Link to="/login" className="forgot-back-link">
-                  Kembali ke Halaman Masuk
-                </Link>
+        {isSuccess ? (
+          // seluruh tampilan sukses, termasuk header-nya sendiri
+          <>
+            <div className="forgot-header">
+              <h1 className="forgot-title">Email Terkirim!</h1>
+              <p className="forgot-subtitle">
+                Instruksi pemulihan kata sandi telah dikirim ke <br />
+                <strong>{email}</strong>
               </p>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="forgot-form">
-              {/* Email Field - Menggunakan reusable komponen bawaan UI, adoh ini masi templet yak */}
-              <div className="form-group">
-                <Label htmlFor="email" className="form-label">
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="nama@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="form-input"
-                />
+            <CardContent className="p-0">
+              <div className="forgot-success-message">
+                <p className="mt-4">
+                  <Link to="/login" className="forgot-back-link">
+                    Kembali ke Halaman Masuk
+                  </Link>
+                </p>
               </div>
+            </CardContent>
+          </>
+        ) : (
+          // form lupa sandi
+          <>
+            <div className="forgot-header">
+              <h1 className="forgot-title">Lupa Kata Sandi Anda?</h1>
+              <p className="forgot-subtitle">
+                Jangan khawatir, <br />
+                kami akan membantu Anda.
+              </p>
+              <p className="forgot-instruction">
+                Masukkan email yang terdaftar di bawah ini.
+              </p>
+            </div>
+            <CardContent className="p-0">
+              <form onSubmit={handleSubmit} className="forgot-form">
+                <div className="form-group">
+                  <Label htmlFor="email" className="form-label">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="nama@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="form-input"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isLoading || !email}
+                  className="submit-button"
+                >
+                  {isLoading ? "Mengirim..." : "Kirim Email"}
+                </Button>
+              </form>
+            </CardContent>
+          </>
+        )}
 
-              {/* Submit Button */}
-              <Button
-                type="submit"
-                disabled={isLoading || !email}
-                className="submit-button"
-              >
-                {isLoading ? "Mengirim..." : "Kirim Email"}
-              </Button>
-            </form>
-          )}
-        </CardContent>
-
-        {/* Footer Section */}
         <div className="forgot-footer">
           <p>Keamanan Anda adalah prioritas kami</p>
         </div>

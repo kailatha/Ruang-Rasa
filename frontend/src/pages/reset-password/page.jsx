@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+// shadcn ui
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+
+// react icons
+import { RiCheckLine, RiCloseLine, RiCheckboxCircleLine, RiCloseCircleLine } from "react-icons/ri";
+
 import "./page.css";
 
 export default function ResetPasswordPage() {
@@ -16,15 +21,12 @@ export default function ResetPasswordPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [tokenValid, setTokenValid] = useState(true); // anggap valid dulu, backend yg validasi saat submit
+  const [tokenValid, setTokenValid] = useState(true);
 
   const token = searchParams.get("token");
 
-  // Kalau tidak ada token di URL, langsung tandai invalid
   useEffect(() => {
-    if (!token) {
-      setTokenValid(false);
-    }
+    if (!token) setTokenValid(false);
   }, [token]);
 
   const handleSubmit = async (e) => {
@@ -37,7 +39,7 @@ export default function ResetPasswordPage() {
     }
 
     if (password !== confirmPassword) {
-      setError("Konfirmasi kata sandi tidak cocok.");
+      setError("Kata sandi tidak cocok.");
       return;
     }
 
@@ -53,16 +55,11 @@ export default function ResetPasswordPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        // Token expired atau tidak valid
-        if (response.status === 400) {
-          setTokenValid(false);
-        }
+        if (response.status === 400) setTokenValid(false);
         throw new Error(data.message || "Terjadi kesalahan.");
       }
 
       setIsSuccess(true);
-
-      // Redirect ke login otomatis setelah 3 detik
       setTimeout(() => navigate("/login"), 3000);
     } catch (err) {
       setError(err.message);
@@ -71,14 +68,14 @@ export default function ResetPasswordPage() {
     }
   };
 
-  // --- State: token tidak ada / tidak valid ---
+  // state: token tidak ada / tidak valid
   if (!tokenValid) {
     return (
       <main className="forgot-container">
         <Card className="forgot-card">
           <div className="forgot-header">
             <div className="reset-icon reset-icon--error" aria-hidden="true">
-              ✕
+              <RiCloseCircleLine size={24} />
             </div>
             <h1 className="forgot-title">Link Tidak Valid</h1>
             <p className="forgot-subtitle">
@@ -88,7 +85,7 @@ export default function ResetPasswordPage() {
           </div>
           <CardContent className="p-0">
             <div className="forgot-success-message">
-              <p>Silakan minta link baru melalui halaman lupa kata sandi.</p>
+              <p>Silakan minta link baru melalui halaman berikut.</p>
               <p className="mt-4">
                 <Link to="/forgot-password" className="forgot-back-link">
                   Minta Link Baru
@@ -109,14 +106,14 @@ export default function ResetPasswordPage() {
     );
   }
 
-  // --- State: berhasil reset ---
+  // state: berhasil reset
   if (isSuccess) {
     return (
       <main className="forgot-container">
         <Card className="forgot-card">
           <div className="forgot-header">
             <div className="reset-icon reset-icon--success" aria-hidden="true">
-              ✓
+              <RiCheckboxCircleLine size={24} />
             </div>
             <h1 className="forgot-title">Kata Sandi Diperbarui!</h1>
             <p className="forgot-subtitle">
@@ -141,23 +138,19 @@ export default function ResetPasswordPage() {
     );
   }
 
-  // --- State: form utama ---
+  // state: form utama
   return (
     <main className="forgot-container">
       <Card className="forgot-card">
-        {/* Header */}
         <div className="forgot-header">
           <h1 className="forgot-title">Buat Kata Sandi Baru</h1>
           <p className="forgot-subtitle">
             Pastikan kata sandi baru Anda <br />
             mudah diingat namun sulit ditebak.
           </p>
-          <p className="forgot-instruction">
-            Minimal 6 karakter.
-          </p>
+          <p className="forgot-instruction">Minimal 6 karakter.</p>
         </div>
 
-        {/* Form */}
         <CardContent className="p-0">
           <form onSubmit={handleSubmit} className="forgot-form">
             {/* Password Baru */}
@@ -178,7 +171,6 @@ export default function ResetPasswordPage() {
                   required
                   className="form-input"
                 />
-                {/* Strength indicator */}
                 {password.length > 0 && (
                   <div className="reset-strength">
                     <div
@@ -225,7 +217,11 @@ export default function ResetPasswordPage() {
               />
               {confirmPassword.length > 0 && confirmPassword === password && (
                 <span className="reset-match-hint reset-match-hint--ok">
-                  Kata sandi cocok ✓
+                  <RiCheckLine
+                    size={13}
+                    style={{ display: "inline", verticalAlign: "middle", marginRight: 3 }}
+                  />
+                  Kata sandi cocok
                 </span>
               )}
             </div>
@@ -233,11 +229,14 @@ export default function ResetPasswordPage() {
             {/* Error message */}
             {error && (
               <p className="reset-error-message" role="alert">
+                <RiCloseLine
+                  size={15}
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }}
+                />
                 {error}
               </p>
             )}
 
-            {/* Submit */}
             <Button
               type="submit"
               disabled={isLoading || !password || !confirmPassword}
@@ -248,13 +247,13 @@ export default function ResetPasswordPage() {
           </form>
         </CardContent>
 
-        {/* Footer */}
         <div className="forgot-footer">
           <p>
             Ingat kata sandi lama?{" "}
             <Link to="/login" className="forgot-back-link">
               Masuk
             </Link>
+            {/* blm: yg Daftar Sekarang di login disamain sama ini ya */}
           </p>
         </div>
       </Card>

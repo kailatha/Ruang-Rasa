@@ -251,13 +251,13 @@ export const forgotPassword = async (req, res) => {
 
     const user = await findUserByEmail(email);
     
-    // Selalu response 200 meski email tidak ada
+    // always response 200 meski email tidak ada
     if (!user) {
       return res.json({ message: 'Jika email terdaftar, instruksi akan dikirim.' });
     }
 
     const token = crypto.randomBytes(32).toString('hex');
-    const expiry = new Date(Date.now() + 60 * 60 * 1000); // 1 jam
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 menit aja
 
     await saveResetToken(email, token, expiry);
     await sendPasswordResetEmail(email, token);
@@ -287,7 +287,7 @@ export const resetPassword = async (req, res) => {
 
     await updatePassword(user.id, hashedPassword);
 
-    // Hapus token setelah dipakai
+    // hapus token setelah dipakai
     await saveResetToken(user.email, null, null);
 
     res.json({ message: 'Kata sandi berhasil direset' });

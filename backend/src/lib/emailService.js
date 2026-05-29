@@ -9,7 +9,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendPasswordResetEmail = async (toEmail, resetToken) => {
-  console.log("Mencoba kirim email ke:", toEmail);
+  console.log("Mencoba kirim email ke:", toEmail); // debug
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;
 
   await transporter.sendMail({
@@ -18,13 +18,13 @@ export const sendPasswordResetEmail = async (toEmail, resetToken) => {
     subject: 'Reset Kata Sandi - RuangRasa',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: auto;">
-        <h2>Reset Kata Sandi</h2>
-        <p>Klik tombol di bawah untuk mereset kata sandi kamu. Link berlaku <strong>1 jam</strong>.</p>
+        <h2>Reset Kata Sandi Anda</h2>
+        <p>Klik tombol di bawah untuk mereset kata sandi kamu. Link berlaku <strong>10 menit</strong>.</p>
         <a href="${resetUrl}" style="display:inline-block;padding:12px 24px;background:#45624E;color:#fff;border-radius:24px;text-decoration:none;">
           Reset Kata Sandi
         </a>
         <p style="margin-top:16px;color:#888;font-size:13px;">
-          Jika kamu tidak merasa meminta ini, abaikan email ini.
+          Jika kamu tidak merasa meminta reset kata sandi akun RuangRasa, abaikan email ini.
         </p>
       </div>
     `,
