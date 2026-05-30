@@ -406,11 +406,11 @@
   border: none !important;
 }
 
-.mood-senang { background: #fef9e7 !important; color: #b7791f !important; }
-.mood-netral { background: rgba(61, 92, 74, 0.08) !important; color: var(--text-body) !important; }
-.mood-sedih  { background: #ebf8ff !important; color: #2b6cb0 !important; }
-.mood-marah  { background: #fff5f5 !important; color: #c53030 !important; }
-.mood-stress { background: #faf5ff !important; color: #6b46c1 !important; }
+.mood-senang { background: var(--mood-senang-bg) !important; color: var(--mood-senang-text) !important; }
+.mood-netral { background: var(--mood-netral-bg) !important; color: var(--mood-netral-text) !important; }
+.mood-sedih  { background: var(--mood-sedih-bg)  !important; color: var(--mood-sedih-text)  !important; }
+.mood-marah  { background: var(--mood-marah-bg)  !important; color: var(--mood-marah-text)  !important; }
+.mood-stress { background: var(--mood-stres-bg)  !important; color: var(--mood-stres-text)  !important; }
 
 .entry-content {
   font-size: 12.5px;
@@ -515,11 +515,11 @@ html.dark .entry-separator {
   background: rgba(255, 255, 255, 0.04);
 }
 
-html.dark .mood-senang { background: #3a3518 !important; color: #d4c54a !important; }
-html.dark .mood-netral { background: rgba(126, 200, 150, 0.06) !important; color: var(--text-body) !important; }
-html.dark .mood-sedih  { background: #1e2840 !important; color: #6a9ad8 !important; }
-html.dark .mood-marah  { background: #3a1e1e !important; color: #e07070 !important; }
-html.dark .mood-stress { background: #301e3a !important; color: #c080e0 !important; }
+html.dark .mood-senang { background: var(--mood-senang-bg) !important; color: var(--mood-senang-text) !important; }
+html.dark .mood-netral { background: var(--mood-netral-bg) !important; color: var(--mood-netral-text) !important; }
+html.dark .mood-sedih  { background: var(--mood-sedih-bg)  !important; color: var(--mood-sedih-text)  !important; }
+html.dark .mood-marah  { background: var(--mood-marah-bg)  !important; color: var(--mood-marah-text)  !important; }
+html.dark .mood-stress { background: var(--mood-stres-bg)  !important; color: var(--mood-stres-text)  !important; }
 
 html.dark .sentiment-positive { background: #1e3a24 !important; color: #7ec896 !important; }
 html.dark .sentiment-negative { background: #3a1e1e !important; color: #e07070 !important; }
