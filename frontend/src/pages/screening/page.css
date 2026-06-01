@@ -597,7 +597,7 @@
 /* responsif mobile */
 @media (max-width: 768px) {
   .screening-main {
-    padding: 32px 24px;
+    padding: 32px 24px 85px;
   }
 
   .level-cards-grid {

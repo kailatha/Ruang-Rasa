@@ -226,6 +226,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .pr-main {
+    padding-bottom: 85px;
+  }
+}
+
 html.dark .pr-avatar { border-color: rgba(126, 200, 150, 0.2); background: rgba(126, 200, 150, 0.08) !important; }
 html.dark .pr-avatar-fallback { color: var(--green-dark) !important; }
 html.dark .pr-edit-btn { background: var(--green-dark); border-color: var(--white); }
