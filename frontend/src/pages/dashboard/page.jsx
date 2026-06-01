@@ -200,8 +200,6 @@ export default function DashboardPage() {
     screeningCount: 0,
   });
 
-  const [chartMode, setChartMode] = useState("week"); // "day" | "week" | "month"
-
   // ambil semua data dashboard saat halaman pertama dimuat
   useEffect(() => {
     async function fetchAll() {
@@ -441,22 +439,7 @@ export default function DashboardPage() {
               <div className="db-section-header">
                 <div>
                   <h2 className="db-section-title">Progress Mingguan</h2>
-                  <p className="db-section-sub">Skor emosional harian</p>
-                </div>
-                <div className="db-chart-tabs">
-                  {[
-                    ["month", "Bulan"],
-                    ["week", "7 Hari Terakhir"],
-                    ["day", "Hari ini"],
-                  ].map(([key, label]) => (
-                    <button
-                      key={key}
-                      className={`db-chart-tab ${chartMode === key ? "db-chart-tab-active" : ""}`}
-                      onClick={() => setChartMode(key)}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                  <p className="db-section-sub">Skor emosional 7 hari terakhir</p>
                 </div>
               </div>
 
