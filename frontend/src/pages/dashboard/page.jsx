@@ -139,18 +139,22 @@ function JournalCard({ entry }) {
           </Badge>
         </div>
 
-        <p className="db-journal-content">"{entry.content}"</p>
+        {/* konten atau placeholder kalau kosong */}
+        {entry.content
+          ? <p className="db-journal-content">"{entry.content}"</p>
+          : <p className="db-journal-content" style={{ color: "var(--text-muted)", fontStyle: "italic" }}>Tidak ada catatan.</p>
+        }
 
-        <div className="db-journal-footer">
-          {entry.sentiment && (
-            <Badge className={`db-sentiment-chip ${SENTIMENT_CLASS[entry.sentiment.label] || "sentiment-neutral"}`}>
-              {entry.sentiment.label} {entry.sentiment.score}%
-            </Badge>
-          )}
-          {entry.emotion && (
-            <Badge className="db-emotion-chip">{entry.emotion}</Badge>
-          )}
-        </div>
+        {/* tags */}
+        {entry.tags?.length > 0 && (
+          <div className="db-journal-footer" style={{ justifyContent: "center" }}>
+            {entry.tags.map((tag) => (
+              <Badge key={tag} variant="outline" className="db-emotion-chip">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
