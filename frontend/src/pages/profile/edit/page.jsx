@@ -372,9 +372,15 @@ export default function EditProfilePage() {
                       value={formData.job}
                       onChange={handleChange}
                       options={[
-                        { label: "Pelajar/Mahasiswa", value: "Pelajar/Mahasiswa" },
-                        { label: "Pekerja", value: "Pekerja" },
-                        { label: "Lainnya", value: "Lainnya" },
+                        { value: "Pelajar", label: "Pelajar" },
+                        { value: "Mahasiswa", label: "Mahasiswa" },
+                        { value: "PNS / Pegawai Pemerintahan", label: "PNS / Pegawai Pemerintahan" },
+                        { value: "Karyawan Swasta", label: "Karyawan Swasta" },
+                        { value: "Wirausaha", label: "Wirausaha / Pemilik Usaha" },
+                        { value: "Pekerja Lepas / Freelancer", label: "Pekerja Lepas / Freelancer" },
+                        { value: "Ibu Rumah Tangga", label: "Ibu Rumah Tangga" },
+                        { value: "Belum / Tidak Bekerja", label: "Belum / Tidak Bekerja" },
+                        { value: "Lainnya", label: "Lainnya" },
                       ]}
                     />
                     
