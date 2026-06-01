@@ -145,6 +145,10 @@ AI Service jalan di `http://localhost:8000`
 | `POST` | `/api/login` | Login |
 | `GET` | `/api/profile` | Ambil profil (auth) |
 | `PUT` | `/api/profile` | Update profil (auth) |
+| `PUT` | `/api/change-password` | Ubah password (auth) |
+| `GET` | `/api/profile/stats` | Statistik profil (auth) |
+| `POST` | `/api/forgot-password` | Lupa password |
+| `POST` | `/api/reset-password` | Reset password |
 | `GET` | `/api/dashboard` | Data dashboard (auth) |
 
 ### Screening
