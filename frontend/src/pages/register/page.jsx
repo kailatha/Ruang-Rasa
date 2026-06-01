@@ -97,7 +97,11 @@ export default function RegisterPage() {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Nama wajib diisi";
+    if (!formData.name.trim()) {
+      newErrors.name = "Nama wajib diisi";
+    } else if (/\d/.test(formData.name)) {
+      newErrors.name = "Nama tidak boleh mengandung angka";
+    }
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email) {
@@ -106,10 +110,11 @@ export default function RegisterPage() {
       newErrors.email = "Format email tidak valid";
     }
 
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
     if (!formData.password) {
       newErrors.password = "Kata sandi wajib diisi";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Kata sandi minimal 8 karakter";
+    } else if (!passwordRegex.test(formData.password)) {
+      newErrors.password = "Kata sandi min. 8 karakter, huruf besar, angka & karakter unik";
     }
 
     if (!formData.confirmPassword) {
@@ -118,7 +123,16 @@ export default function RegisterPage() {
       newErrors.confirmPassword = "Kata sandi dan konfirmasi tidak cocok";
     }
 
-    if (!formData.dob) newErrors.dob = "Tanggal lahir wajib diisi";
+    if (!formData.dob) {
+      newErrors.dob = "Tanggal lahir wajib diisi";
+    } else {
+      const selectedDate = new Date(formData.dob);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate > today) {
+        newErrors.dob = "Tanggal lahir tidak boleh lebih dari hari ini";
+      }
+    }
     if (!formData.gender) newErrors.gender = "Jenis kelamin wajib diisi";
     if (!formData.job) newErrors.job = "Pekerjaan wajib diisi";
     if (!formData.status) newErrors.status = "Status wajib diisi";

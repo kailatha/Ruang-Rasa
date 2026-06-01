@@ -15,6 +15,11 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: 'Nama, email, dan kata sandi wajib diisi' });
     }
 
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: 'Kata sandi min. 8 karakter, huruf besar, angka & karakter unik' });
+    }
+
     // Cek apakah email sudah terdaftar
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
@@ -197,8 +202,9 @@ export const changePassword = async (req, res) => {
       return res.status(400).json({ message: 'Password lama dan password baru wajib diisi' });
     }
 
-    if (newPassword.length < 6) {
-      return res.status(400).json({ message: 'Password baru minimal 6 karakter' });
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({ message: 'Kata sandi baru min. 8 karakter, huruf besar, angka & karakter unik' });
     }
 
     // Ambil user dengan password
@@ -275,6 +281,11 @@ export const resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
     if (!token || !newPassword) {
       return res.status(400).json({ message: 'Token dan password baru wajib diisi' });
+    }
+
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({ message: 'Kata sandi baru min. 8 karakter, huruf besar, angka & karakter unik' });
     }
 
     const user = await findUserByResetToken(token);
