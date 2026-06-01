@@ -779,8 +779,13 @@ footer {
 
 /* responsive */
 @media (max-width: 640px) {
-  .navbar {
-    padding: 0 20px;
+  .navbar,
+  .app-navbar {
+    padding: 0 16px;
+  }
+
+  .app-navbar-links {
+    display: none;
   }
 
   .navbar-links {

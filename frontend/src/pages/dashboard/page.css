@@ -586,6 +586,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .db-main {
+    padding-bottom: 85px;
+  }
+}
+
 /* dark mode */
 html.dark .db-hero-mood      { background: #7a5a38; }
 html.dark .db-hero-screening { background: #2a4a34; }
