@@ -33,8 +33,9 @@ export default function ResetPasswordPage() {
     e.preventDefault();
     setError("");
 
-    if (password.length < 6) {
-      setError("Kata sandi minimal 6 karakter.");
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!passwordRegex.test(password)) {
+      setError("Kata sandi min. 8 karakter, huruf besar, angka & karakter unik.");
       return;
     }
 
@@ -148,7 +149,7 @@ export default function ResetPasswordPage() {
             Pastikan kata sandi baru Anda <br />
             mudah diingat namun sulit ditebak.
           </p>
-          <p className="forgot-instruction">Minimal 6 karakter.</p>
+          <p className="forgot-instruction">Min. 8 karakter, huruf besar, angka & unik.</p>
         </div>
 
         <CardContent className="p-0">
@@ -162,7 +163,7 @@ export default function ResetPasswordPage() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Minimal 6 karakter"
+                  placeholder="Min. 8 karakter"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);

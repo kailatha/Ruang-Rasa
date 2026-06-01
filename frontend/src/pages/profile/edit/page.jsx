@@ -181,6 +181,28 @@ export default function EditProfilePage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.name.trim()) {
+      alert("Nama wajib diisi");
+      return;
+    } else if (/\d/.test(formData.name)) {
+      alert("Nama tidak boleh mengandung angka");
+      return;
+    }
+
+    if (!formData.dob) {
+      alert("Tanggal lahir wajib diisi");
+      return;
+    } else {
+      const selectedDate = new Date(formData.dob);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectedDate > today) {
+        alert("Tanggal lahir tidak boleh lebih dari hari ini");
+        return;
+      }
+    }
+
     setSaving(true);
 
     try {
@@ -202,8 +224,9 @@ export default function EditProfilePage() {
       return;
     }
 
-    if (passwordData.newPassword.length < 6) {
-      setPasswordMessage({ type: "error", text: "Password baru minimal 6 karakter" });
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+    if (!passwordRegex.test(passwordData.newPassword)) {
+      setPasswordMessage({ type: "error", text: "Password baru min. 8 karakter, huruf besar, angka & karakter unik" });
       return;
     }
 
