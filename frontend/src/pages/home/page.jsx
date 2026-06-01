@@ -11,6 +11,7 @@ import {
   RiSearchEyeLine,
   RiChat3Line,
   RiSparklingLine,
+  RiRobot2Line,
 } from "react-icons/ri";
 
 import "./page.css";
@@ -27,17 +28,12 @@ function ChatPreview() {
       </div>
       <div className="chat-body">
         <div className="chat-bubble-ai">
-          <div className="chat-avatar" />
+          <div className="chat-avatar">
+            <RiRobot2Line size={14} color="white" />
+          </div>
           <div>
             <div className="bubble-ai">
-              Hei, selamat datang kembali. Bagaimana kabarmu hari ini?
-            </div>
-            <div className="mood-chips">
-              <button className="mood-chip chip-senang">Senang</button>
-              <button className="mood-chip chip-netral">Netral</button>
-              <button className="mood-chip chip-sedih">Sedih</button>
-              <button className="mood-chip chip-marah">Marah</button>
-              <button className="mood-chip chip-stres">Stres</button>
+              Halo, senang bertemu kamu di sini. Aku ada untuk menemani dan mendengarkan apapun yang sedang kamu rasakan. Bagaimana perasaanmu hari ini?
             </div>
           </div>
         </div>
@@ -47,9 +43,11 @@ function ChatPreview() {
         </div>
 
         <div className="chat-bubble-ai">
-          <div className="chat-avatar" />
+          <div className="chat-avatar">
+            <RiRobot2Line size={14} color="white" />
+          </div>
           <div className="bubble-ai">
-            Bagaimana kalau melakukan hobi kamu?
+            Aku bisa menangkap kamu sedang merasa suntuk dan bingung mau melakukan apa, ya. Perasaan seperti itu wajar kok, kadang kita memang butuh waktu untuk menyadari apa yang sebenarnya sedang dirasakan.
           </div>
         </div>
       </div>
@@ -131,6 +129,15 @@ function FeaturesSection() {
               <div className="feature-icon-wrap">{f.icon}</div>
               <div className="feature-name">{f.name}</div>
               <div className="feature-desc">{f.desc}</div>
+              {i === 0 && (
+                <div className="mood-chips">
+                  <button className="mood-chip chip-senang">Senang</button>
+                  <button className="mood-chip chip-netral">Netral</button>
+                  <button className="mood-chip chip-sedih">Sedih</button>
+                  <button className="mood-chip chip-marah">Marah</button>
+                  <button className="mood-chip chip-stres">Stres</button>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}

@@ -365,7 +365,7 @@ body {
   border-radius: 16px;
   box-shadow: var(--shadow-lg);
   width: 100%;
-  max-width: 460px;
+  max-width: 600px;
   overflow: hidden;
   animation: fadeUp 0.8s 0.4s ease both;
 }
@@ -409,6 +409,9 @@ body {
 }
 
 .chat-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -420,9 +423,10 @@ body {
   background: #F0F5F2;
   border-radius: 0 12px 12px 12px;
   padding: 10px 14px;
+  text-align: left;
   font-size: 13px;
   color: var(--text-dark);
-  max-width: 260px;
+  max-width: 320px;
   line-height: 1.5;
 }
 
@@ -454,8 +458,9 @@ body {
   color: var(--white);
   border-radius: 12px 0 12px 12px;
   padding: 10px 14px;
+  text-align: left;
   font-size: 13px;
-  max-width: 240px;
+  max-width: 320px;
   line-height: 1.5;
 }
 
