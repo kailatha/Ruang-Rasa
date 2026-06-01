@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon --watch src --watch server.js server.js",
-    "start": "node server.js",
+    "start": "npx prisma generate && npx prisma db push --accept-data-loss && node server.js",
     "lint": "eslint ./src",
     "migrate": "node-pg-migrate",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Edit2, ChevronRight, LayoutDashboard, BarChart2, BookOpen, Loader2, User, LogOut } from 'lucide-react';
+import { FaSmile } from 'react-icons/fa';
 
 import "./page.css";
 
@@ -175,7 +176,7 @@ export default function ProfilePage() {
                   <div className="pr-notification-item">
                     <div className="flex items-center gap-3">
                       <div className="pr-history-icon">
-                        <span className="text-xl leading-none">😊</span>
+                        <FaSmile size={18} />
                       </div>
                       <span className="text-sm font-medium">Pengingat Mood Check In</span>
                     </div>
