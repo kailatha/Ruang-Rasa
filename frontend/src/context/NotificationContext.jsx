@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useRef } from "react";
+import { FaSmile, FaBookOpen } from "react-icons/fa";
 
 const NotificationContext = createContext(null);
 
@@ -75,7 +76,7 @@ export function NotificationProvider({ children }) {
 
       if (moodNotifEnabled) {
         showToast({
-          icon: "😊",
+          icon: <FaSmile />,
           iconClass: "toast-icon-mood",
           title: "Pengingat Mood Check-in",
           description:
@@ -89,7 +90,7 @@ export function NotificationProvider({ children }) {
 
       if (journalNotifEnabled) {
         showToast({
-          icon: "📝",
+          icon: <FaBookOpen />,
           iconClass: "toast-icon-journal",
           title: "Pengingat Jurnal Harian",
           description:

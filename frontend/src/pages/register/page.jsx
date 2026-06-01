@@ -20,7 +20,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 
-const FormField = ({ id, label, type = "text", placeholder, value, onChange, options, rightIcon: RightIcon, onRightIconClick }) => (
+const FormField = ({ id, label, type = "text", placeholder, value, onChange, options, rightIcon: RightIcon, onRightIconClick, error }) => (
   <div className="register-form-content">
     <Label htmlFor={id} className="register-label">
       {label}
@@ -73,6 +73,7 @@ const FormField = ({ id, label, type = "text", placeholder, value, onChange, opt
         </div>
       )}
     </div>
+    {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
   </div>
 );
 
@@ -92,6 +93,40 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Nama wajib diisi";
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email) {
+      newErrors.email = "Email wajib diisi";
+    } else if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Format email tidak valid";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Kata sandi wajib diisi";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Kata sandi minimal 8 karakter";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Konfirmasi kata sandi wajib diisi";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Kata sandi dan konfirmasi tidak cocok";
+    }
+
+    if (!formData.dob) newErrors.dob = "Tanggal lahir wajib diisi";
+    if (!formData.gender) newErrors.gender = "Jenis kelamin wajib diisi";
+    if (!formData.job) newErrors.job = "Pekerjaan wajib diisi";
+    if (!formData.status) newErrors.status = "Status wajib diisi";
+    if (!formData.agree) newErrors.agree = "Anda harus menyetujui syarat & ketentuan";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
@@ -104,9 +139,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validasi konfirmasi password
-    if (formData.password !== formData.confirmPassword) {
-      alert("Kata sandi dan konfirmasi kata sandi tidak cocok!");
+    if (!validateForm()) {
       return;
     }
 
@@ -158,7 +191,7 @@ export default function RegisterPage() {
       </div>
 
       <Card className="register-card">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <CardContent className="pt-6 px-4 md:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
               
@@ -168,6 +201,7 @@ export default function RegisterPage() {
                 placeholder="Masukkan nama lengkap"
                 value={formData.name}
                 onChange={handleChange}
+                error={errors.name}
               />
 
               <FormField
@@ -177,6 +211,7 @@ export default function RegisterPage() {
                 placeholder="email@contoh.com"
                 value={formData.email}
                 onChange={handleChange}
+                error={errors.email}
               />
 
               <FormField
@@ -188,6 +223,7 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 rightIcon={showPassword ? EyeOff : Eye}
                 onRightIconClick={() => setShowPassword(!showPassword)}
+                error={errors.password}
               />
 
               <FormField
@@ -199,6 +235,7 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 rightIcon={showConfirmPassword ? EyeOff : Eye}
                 onRightIconClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                error={errors.confirmPassword}
               />
 
               <FormField
@@ -208,6 +245,7 @@ export default function RegisterPage() {
                 placeholder="mm / dd / yyyy"
                 value={formData.dob}
                 onChange={handleChange}
+                error={errors.dob}
               />
 
               <FormField
@@ -217,6 +255,7 @@ export default function RegisterPage() {
                 placeholder="Pilih Jenis Kelamin"
                 value={formData.gender}
                 onChange={handleChange}
+                error={errors.gender}
                 options={[
                   { value: "laki-laki", label: "Laki-laki" },
                   { value: "perempuan", label: "Perempuan" },
@@ -230,6 +269,7 @@ export default function RegisterPage() {
                 placeholder="Pilih Pekerjaan"
                 value={formData.job}
                 onChange={handleChange}
+                error={errors.job}
                 options={[
                   { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
                   { value: "Pekerja", label: "Pekerja" },
@@ -244,6 +284,7 @@ export default function RegisterPage() {
                 placeholder="Pilih Status"
                 value={formData.status}
                 onChange={handleChange}
+                error={errors.status}
                 options={[
                   { value: "Belum Menikah", label: "Belum Menikah" },
                   { value: "Menikah", label: "Menikah" },
@@ -252,18 +293,20 @@ export default function RegisterPage() {
 
             </div>
 
-            <div className="register-checkbox-wrap">
-              <input
-                type="checkbox"
-                id="agree"
-                checked={formData.agree}
-                onChange={handleChange}
-                required
-                className="w-4 h-4 rounded border-gray-300 text-[#3D5C4A] focus:ring-[#3D5C4A] mt-1"
-              />
-              <Label htmlFor="agree" className="register-checkbox-text cursor-pointer select-none">
-                Saya menyetujui Kebijakan Privasi dan Syarat & Ketentuan yang berlaku di RuangRasa.
-              </Label>
+            <div>
+              <div className="register-checkbox-wrap">
+                <input
+                  type="checkbox"
+                  id="agree"
+                  checked={formData.agree}
+                  onChange={handleChange}
+                  className="w-4 h-4 rounded border-gray-300 text-[#3D5C4A] focus:ring-[#3D5C4A] mt-1"
+                />
+                <Label htmlFor="agree" className="register-checkbox-text cursor-pointer select-none">
+                  Saya menyetujui Kebijakan Privasi dan Syarat & Ketentuan yang berlaku di RuangRasa.
+                </Label>
+              </div>
+              {errors.agree && <p className="text-red-500 text-xs mt-1">{errors.agree}</p>}
             </div>
 
             <Button
