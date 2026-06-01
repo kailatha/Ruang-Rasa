@@ -95,59 +95,75 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) {
-      newErrors.name = "Nama wajib diisi";
-    } else if (/\d/.test(formData.name)) {
-      newErrors.name = "Nama tidak boleh mengandung angka";
+  const validateField = (id, value, currentFormData) => {
+    let error = "";
+    if (id === "name") {
+      if (!value.trim()) error = "Nama wajib diisi";
+      else if (/\d/.test(value)) error = "Nama tidak boleh mengandung angka";
     }
-    
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email) {
-      newErrors.email = "Email wajib diisi";
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = "Format email tidak valid";
+    else if (id === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!value) error = "Email wajib diisi";
+      else if (!emailRegex.test(value)) error = "Format email tidak valid";
     }
-
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
-    if (!formData.password) {
-      newErrors.password = "Kata sandi wajib diisi";
-    } else if (!passwordRegex.test(formData.password)) {
-      newErrors.password = "Kata sandi min. 8 karakter, huruf besar, angka & karakter unik";
+    else if (id === "password") {
+      const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+      if (!value) error = "Kata sandi wajib diisi";
+      else if (!passwordRegex.test(value)) error = "Kata sandi min. 8 karakter, huruf besar, angka & karakter unik";
     }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = "Konfirmasi kata sandi wajib diisi";
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Kata sandi dan konfirmasi tidak cocok";
+    else if (id === "confirmPassword") {
+      if (!value) error = "Konfirmasi kata sandi wajib diisi";
+      else if (value !== currentFormData.password) error = "Kata sandi dan konfirmasi tidak cocok";
     }
-
-    if (!formData.dob) {
-      newErrors.dob = "Tanggal lahir wajib diisi";
-    } else {
-      const selectedDate = new Date(formData.dob);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      if (selectedDate > today) {
-        newErrors.dob = "Tanggal lahir tidak boleh lebih dari hari ini";
+    else if (id === "dob") {
+      if (!value) error = "Tanggal lahir wajib diisi";
+      else {
+        const selectedDate = new Date(value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate > today) error = "Tanggal lahir tidak boleh lebih dari hari ini";
       }
     }
-    if (!formData.gender) newErrors.gender = "Jenis kelamin wajib diisi";
-    if (!formData.job) newErrors.job = "Pekerjaan wajib diisi";
-    if (!formData.status) newErrors.status = "Status wajib diisi";
-    if (!formData.agree) newErrors.agree = "Anda harus menyetujui syarat & ketentuan";
+    else if (id === "gender" && !value) error = "Jenis kelamin wajib diisi";
+    else if (id === "job" && !value) error = "Pekerjaan wajib diisi";
+    else if (id === "status" && !value) error = "Status wajib diisi";
+    else if (id === "agree" && !value) error = "Anda harus menyetujui syarat & ketentuan";
 
+    return error;
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    Object.keys(formData).forEach(key => {
+      const error = validateField(key, formData[key], formData);
+      if (error) newErrors[key] = error;
+    });
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [id]: type === "checkbox" ? checked : value,
-    }));
+    const finalValue = type === "checkbox" ? checked : value;
+    
+    setFormData((prev) => {
+      const newData = { ...prev, [id]: finalValue };
+      const error = validateField(id, finalValue, newData);
+      
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        if (error) newErrors[id] = error;
+        else delete newErrors[id];
+        
+        if (id === "password" && newData.confirmPassword) {
+           const confirmError = validateField("confirmPassword", newData.confirmPassword, newData);
+           if (confirmError) newErrors.confirmPassword = confirmError;
+           else delete newErrors.confirmPassword;
+        }
+        return newErrors;
+      });
+      return newData;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -285,8 +301,14 @@ export default function RegisterPage() {
                 onChange={handleChange}
                 error={errors.job}
                 options={[
-                  { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
-                  { value: "Pekerja", label: "Pekerja" },
+                  { value: "Pelajar", label: "Pelajar" },
+                  { value: "Mahasiswa", label: "Mahasiswa" },
+                  { value: "PNS / Pegawai Pemerintahan", label: "PNS / Pegawai Pemerintahan" },
+                  { value: "Karyawan Swasta", label: "Karyawan Swasta" },
+                  { value: "Wirausaha", label: "Wirausaha / Pemilik Usaha" },
+                  { value: "Pekerja Lepas / Freelancer", label: "Pekerja Lepas / Freelancer" },
+                  { value: "Ibu Rumah Tangga", label: "Ibu Rumah Tangga" },
+                  { value: "Belum / Tidak Bekerja", label: "Belum / Tidak Bekerja" },
                   { value: "Lainnya", label: "Lainnya" },
                 ]}
               />
