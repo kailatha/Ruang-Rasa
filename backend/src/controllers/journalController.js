@@ -144,10 +144,10 @@ export async function createEntry(req, res) {
     const { mood, content, tags = [] } = req.body;
 
     // validasi kosong
-    if (!mood || !content?.trim()) {
+    if (!mood) {
       return res.status(400).json({
         success: false,
-        message: "Mood dan konten jurnal wajib diisi.",
+        message: "Mood wajib diisi.",
       });
     }
 
@@ -172,7 +172,7 @@ export async function createEntry(req, res) {
       data: {
         userId,
         mood,
-        content: content.trim(),
+        content: content?.trim() || "",
         tags,
       },
     });
@@ -183,7 +183,7 @@ export async function createEntry(req, res) {
       const aiRes = await fetch(aiUrl, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: content.trim() }),
+        body: JSON.stringify({ text: content?.trim() || `Mood hari ini: ${mood}` }),
       });
 
       if (aiRes.ok) {

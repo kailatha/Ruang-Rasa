@@ -89,7 +89,10 @@ function EntryCard({ entry, isExpanded, onToggle }) {
           </Badge>
         </CardHeader>
         <CardContent className="entry-card-body">
-          <p className="entry-content">"{entry.content}"</p>
+          {entry.content
+            ? <p className="entry-content">"{entry.content}"</p>
+            : <p className="entry-content entry-content-empty">Tidak ada catatan.</p>
+          }
           <div className="entry-footer">
             {entry.sentiment && (
               <Badge className={`sentiment-chip ${getSentimentVariant(entry.sentiment.label)}`}>
@@ -227,7 +230,7 @@ export default function JournalPage() {
 
   // simpan entri jurnal baru ke server atau mock
   async function handleSave() {
-    if (!selectedMood || !content.trim()) return;
+    if (!selectedMood) return;
     setIsSaving(true);
     try {
       const payload = { mood: selectedMood, content: content.trim(), tags: selectedTags };
@@ -268,8 +271,9 @@ export default function JournalPage() {
     }
   }
 
-  // tombol simpan hanya aktif jika mood dan konten sudah diisi
-  const canSave = selectedMood && content.trim().length > 0;
+  // tombol simpan hanya aktif jika mood sudah diisi
+  const canSave = !!selectedMood;
+  const hasContent = content.trim().length > 0;
 
   return (
     <div className={"journal-layout" + (sidebarCollapsed ? " collapsed" : "")}>
@@ -351,11 +355,6 @@ export default function JournalPage() {
                   <h2 className="step-title">Pilih mood kamu sekarang</h2>
                 </div>
                 <MoodPicker selected={selectedMood} onSelect={setSelectedMood} />
-                {selectedMood && (
-                  <Button className="save-mood-btn" onClick={() => {}} variant="default">
-                    Simpan Mood
-                  </Button>
-                )}
               </section>
 
               {/* langkah 2: tulis isi jurnal */}
@@ -413,7 +412,7 @@ export default function JournalPage() {
                   disabled={!canSave || isSaving}
                   onClick={handleSave}
                 >
-                  {isSaving ? "Menyimpan..." : "Simpan Jurnal"}
+                  {isSaving ? "Menyimpan..." : hasContent ? "Simpan Jurnal" : "Simpan Mood"}
                 </Button>
               </div>
             </>

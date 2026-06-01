@@ -424,6 +424,11 @@
   overflow: hidden;
 }
 
+.entry-content-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 .entry-footer {
   display: flex;
   flex-wrap: wrap;
