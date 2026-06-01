@@ -135,12 +135,14 @@
 }
 
 .cb-bubble--bot {
+  text-align: left;
   background: var(--white);
   border-bottom-left-radius: 3px;
   box-shadow: 0 2px 12px rgba(61, 92, 74, 0.08);
 }
 
 .cb-bubble--user {
+  text-align: left;
   background: var(--green-dark);
   color: var(--white);
   border-bottom-right-radius: 3px;

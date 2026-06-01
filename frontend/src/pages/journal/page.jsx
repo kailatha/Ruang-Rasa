@@ -32,6 +32,7 @@ const MOODS = [
 ];
 
 const TAGS_OPTIONS = [
+  "Personal",
   "Pekerjaan",
   "Keluarga",
   "Kesehatan",
@@ -82,25 +83,40 @@ function EntryCard({ entry, isExpanded, onToggle }) {
   return (
     <Card className="entry-card" style={{ transition: "all 0.2s" }}>
       <div onClick={onToggle} style={{ cursor: "pointer", opacity: isExpanded ? 1 : 0.9 }} onMouseOver={(e) => e.currentTarget.style.opacity = 1} onMouseOut={(e) => e.currentTarget.style.opacity = isExpanded ? 1 : 0.9}>
-        <CardHeader className="entry-card-header">
-          <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
+      <CardHeader className="entry-card-header">
+        <span className="entry-time">{formatRelativeTime(entry.createdAt)}</span>
+        <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
           <Badge className={`mood-badge ${getMoodColor(entry.mood)}`}>
             {moodIcon} {entry.mood}
           </Badge>
-        </CardHeader>
-        <CardContent className="entry-card-body">
-          <p className="entry-content">"{entry.content}"</p>
-          <div className="entry-footer">
-            {entry.sentiment && (
-              <Badge className={`sentiment-chip ${getSentimentVariant(entry.sentiment.label)}`}>
-                {entry.sentiment.label} {entry.sentiment.score}%
+          {/* {entry.sentiment_label && (
+            <Badge className={`mood-badge ${getSentimentVariant(entry.sentiment_label)}`}>
+              {entry.sentiment_label}
+            </Badge>
+          )} */}
+          {entry.emotion && (
+            <Badge className={`mood-badge ${getMoodColor(entry.mood)}`} style={{ opacity: 0.7 }}>
+              {entry.emotion}
+            </Badge>
+          )}
+        </div>
+      </CardHeader>
+
+      <CardContent className="entry-card-body">
+        {entry.content
+          ? <p className="entry-content">"{entry.content}"</p>
+          : <p className="entry-content entry-content-empty">Tidak ada catatan.</p>
+        }
+        {entry.tags?.length > 0 && (
+          <div className="entry-footer" style={{ justifyContent: "center" }}>
+            {entry.tags.map((tag) => (
+              <Badge key={tag} variant="outline" className="emotion-chip">
+                {tag}
               </Badge>
-            )}
-            {entry.emotion && (
-              <Badge className="emotion-chip">{entry.emotion}</Badge>
-            )}
+            ))}
           </div>
-        </CardContent>
+        )}
+      </CardContent>
       </div>
 
       {isExpanded && (activities.length > 0 || affirmations.length > 0) && (
@@ -227,7 +243,7 @@ export default function JournalPage() {
 
   // simpan entri jurnal baru ke server atau mock
   async function handleSave() {
-    if (!selectedMood || !content.trim()) return;
+    if (!selectedMood) return;
     setIsSaving(true);
     try {
       const payload = { mood: selectedMood, content: content.trim(), tags: selectedTags };
@@ -268,8 +284,9 @@ export default function JournalPage() {
     }
   }
 
-  // tombol simpan hanya aktif jika mood dan konten sudah diisi
-  const canSave = selectedMood && content.trim().length > 0;
+  // tombol simpan hanya aktif jika mood sudah diisi
+  const canSave = !!selectedMood;
+  const hasContent = content.trim().length > 0;
 
   return (
     <div className={"journal-layout" + (sidebarCollapsed ? " collapsed" : "")}>
@@ -351,11 +368,6 @@ export default function JournalPage() {
                   <h2 className="step-title">Pilih mood kamu sekarang</h2>
                 </div>
                 <MoodPicker selected={selectedMood} onSelect={setSelectedMood} />
-                {selectedMood && (
-                  <Button className="save-mood-btn" onClick={() => {}} variant="default">
-                    Simpan Mood
-                  </Button>
-                )}
               </section>
 
               {/* langkah 2: tulis isi jurnal */}
@@ -367,8 +379,6 @@ export default function JournalPage() {
                 <div className="editor-toolbar">
                   <button className="toolbar-btn"><RiBold /></button>
                   <button className="toolbar-btn"><RiItalic /></button>
-                  <button className="toolbar-btn"><RiListUnordered /></button>
-                  <button className="toolbar-btn"><RiTable2 /></button>
                 </div>
                 <Textarea
                   className="journal-textarea"
@@ -400,6 +410,7 @@ export default function JournalPage() {
               <div className="journal-actions">
                 <Button
                   variant="outline"
+                  className="cancel-btn"
                   onClick={() => {
                     setSelectedMood(null);
                     setContent("");
@@ -413,7 +424,7 @@ export default function JournalPage() {
                   disabled={!canSave || isSaving}
                   onClick={handleSave}
                 >
-                  {isSaving ? "Menyimpan..." : "Simpan Jurnal"}
+                  {isSaving ? "Menyimpan..." : hasContent ? "Simpan Jurnal" : "Simpan Mood"}
                 </Button>
               </div>
             </>
@@ -440,14 +451,14 @@ export default function JournalPage() {
           <div className="entries-empty">Belum ada jurnal. Mulai tulis hari ini!</div>
         ) : (
           <>
-            {entries.slice(0, 4).map((entry, index) => (
+            {entries.slice(0, 6).map((entry, index) => (
               <div key={entry.id}>
                 <EntryCard 
                   entry={entry} 
                   isExpanded={expandedEntryId === entry.id}
                   onToggle={() => setExpandedEntryId(expandedEntryId === entry.id ? null : entry.id)} 
                 />
-                {index < Math.min(entries.length, 4) - 1 && (
+                {index < Math.min(entries.length, 6) - 1 && (
                   <Separator className="entry-separator" />
                 )}
               </div>

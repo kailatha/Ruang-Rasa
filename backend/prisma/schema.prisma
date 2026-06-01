@@ -38,7 +38,7 @@ model Journal {
   user   User   @relation(fields: [userId], references: [id])
 
   mood    String
-  content String
+  content String @default("")
   tags    String[]
   
   // Analysis fields produced by AI service

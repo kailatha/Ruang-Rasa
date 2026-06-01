@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./sidebar.css";
 
 // React Icons - Navigation
-import { RiDashboardLine, RiSearchEyeLine, RiBookOpenLine, RiChat3Line, RiSparklingLine } from "react-icons/ri";
+import { RiDashboardLine, RiSearchEyeLine, RiBookOpenLine, RiChat3Line } from "react-icons/ri";
 import { FiMenu } from "react-icons/fi";
 import { RiMenuUnfold2Line } from "react-icons/ri";
 
@@ -12,7 +12,6 @@ const MENU_ITEMS = [
   { icon: <RiSearchEyeLine />, label: "Screening",   path: "/screening" },
   { icon: <RiBookOpenLine />,  label: "Journal",     path: "/journal" },
   { icon: <RiChat3Line />,     label: "Chatbot",     path: "/chatbot" },
-  { icon: <RiSparklingLine />, label: "Rekomendasi", path: "/rekomendasi" },
 ];
 
 const formatDate = (dateStr) => {

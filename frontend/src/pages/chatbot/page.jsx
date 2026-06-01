@@ -300,7 +300,7 @@ export default function ChatbotPage() {
       <footer className="cb-footer">
         <a
           className="cb-crisis-link"
-          href="link"
+          href="https://www.intothelightid.org/tentang-bunuh-diri/hotline-bunuh-diri-di-indonesia/#:~:text=Apakah%20Into%20The%20Light%20Indonesia,jiwa%20atau%20pencegahan%20bunuh%20diri."
           target="_blank"
           rel="noopener noreferrer"
         >

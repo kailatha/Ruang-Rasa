@@ -139,18 +139,22 @@ function JournalCard({ entry }) {
           </Badge>
         </div>
 
-        <p className="db-journal-content">"{entry.content}"</p>
+        {/* konten atau placeholder kalau kosong */}
+        {entry.content
+          ? <p className="db-journal-content">"{entry.content}"</p>
+          : <p className="db-journal-content" style={{ color: "var(--text-muted)", fontStyle: "italic" }}>Tidak ada catatan.</p>
+        }
 
-        <div className="db-journal-footer">
-          {entry.sentiment && (
-            <Badge className={`db-sentiment-chip ${SENTIMENT_CLASS[entry.sentiment.label] || "sentiment-neutral"}`}>
-              {entry.sentiment.label} {entry.sentiment.score}%
-            </Badge>
-          )}
-          {entry.emotion && (
-            <Badge className="db-emotion-chip">{entry.emotion}</Badge>
-          )}
-        </div>
+        {/* tags */}
+        {entry.tags?.length > 0 && (
+          <div className="db-journal-footer" style={{ justifyContent: "center" }}>
+            {entry.tags.map((tag) => (
+              <Badge key={tag} variant="outline" className="db-emotion-chip">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -195,8 +199,6 @@ export default function DashboardPage() {
     positiveMoodPct: 0,
     screeningCount: 0,
   });
-
-  const [chartMode, setChartMode] = useState("week"); // "day" | "week" | "month"
 
   // ambil semua data dashboard saat halaman pertama dimuat
   useEffect(() => {
@@ -437,22 +439,7 @@ export default function DashboardPage() {
               <div className="db-section-header">
                 <div>
                   <h2 className="db-section-title">Progress Mingguan</h2>
-                  <p className="db-section-sub">Skor emosional harian</p>
-                </div>
-                <div className="db-chart-tabs">
-                  {[
-                    ["month", "Bulan"],
-                    ["week", "7 Hari Terakhir"],
-                    ["day", "Hari ini"],
-                  ].map(([key, label]) => (
-                    <button
-                      key={key}
-                      className={`db-chart-tab ${chartMode === key ? "db-chart-tab-active" : ""}`}
-                      onClick={() => setChartMode(key)}
-                    >
-                      {label}
-                    </button>
-                  ))}
+                  <p className="db-section-sub">Skor emosional 7 hari terakhir</p>
                 </div>
               </div>
 
