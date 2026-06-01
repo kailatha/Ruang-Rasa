@@ -5,8 +5,8 @@
   align-items: center;
   justify-content: center;
   padding: 48px 16px;
-  background-color: #F8F7F4; /* Light beige matching design */
-  font-family: 'Manrope', 'DM Sans', sans-serif;
+  background-color: var(--cream);
+  font-family: var(--font-body);
   min-height: 100vh;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .register-title-main {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 46px;
   font-weight: 600;
   color: #1A1A1A;
@@ -27,7 +27,7 @@
 .register-title-main span {
   color: #6C8B76; /* Green for ruang rasa */
   font-style: italic;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
 }
 
 .register-subtitle-main {

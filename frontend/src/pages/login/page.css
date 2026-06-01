@@ -6,8 +6,8 @@
   align-items: center;
   justify-content: center;
   padding: 48px 16px;
-  background-color: #F8F7F4; /* Light beige matching the design */
-  font-family: 'Manrope', 'DM Sans', 'Inter', sans-serif;
+  background-color: var(--cream);
+  font-family: var(--font-body);
 }
 
 /* Card Styling */
@@ -57,6 +57,7 @@
 }
 
 .login-title {
+  font-family: var(--font-heading);
   font-size: 26px;
   font-weight: 500;
   color: #333333;
