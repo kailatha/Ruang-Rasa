@@ -32,6 +32,7 @@ const MOODS = [
 ];
 
 const TAGS_OPTIONS = [
+  "Personal",
   "Pekerjaan",
   "Keluarga",
   "Kesehatan",
@@ -378,8 +379,6 @@ export default function JournalPage() {
                 <div className="editor-toolbar">
                   <button className="toolbar-btn"><RiBold /></button>
                   <button className="toolbar-btn"><RiItalic /></button>
-                  <button className="toolbar-btn"><RiListUnordered /></button>
-                  <button className="toolbar-btn"><RiTable2 /></button>
                 </div>
                 <Textarea
                   className="journal-textarea"
@@ -411,6 +410,7 @@ export default function JournalPage() {
               <div className="journal-actions">
                 <Button
                   variant="outline"
+                  className="cancel-btn"
                   onClick={() => {
                     setSelectedMood(null);
                     setContent("");
