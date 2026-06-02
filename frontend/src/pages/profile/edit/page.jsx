@@ -282,7 +282,7 @@ export default function EditProfilePage() {
               >
                 <ChevronLeft className="w-6 h-6 text-[var(--green-dark)]" />
               </Button>
-              <h1 className="pr-title m-0">Edit Profil</h1>
+              <h1 className="pr-title">Edit Profil</h1>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6 mb-6">
               {/* Avatar Section */}

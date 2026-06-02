@@ -60,7 +60,9 @@ html.dark select.pr-select {
 .pr-btn-outline {
   border-color: var(--border, #E0DDD7) !important;
   color: var(--text-body, #4A5C52) !important;
-  border-radius: 12px !important;
+  border-radius: 24px !important;
+  padding: 10px 28px !important;
+  height: auto !important;
 }
 
 .pr-btn-outline:hover {
@@ -70,7 +72,9 @@ html.dark select.pr-select {
 .pr-btn-primary {
   background: var(--green-dark, #3D5C4A) !important;
   color: var(--white, #FFFFFF) !important;
-  border-radius: 12px !important;
+  border-radius: 24px !important;
+  padding: 10px 28px !important;
+  height: auto !important;
 }
 
 .pr-btn-primary:hover {
@@ -80,7 +84,9 @@ html.dark select.pr-select {
 .pr-btn-danger {
   background: var(--text-dark, #2C3830) !important;
   color: var(--white, #FFFFFF) !important;
-  border-radius: 12px !important;
+  border-radius: 24px !important;
+  padding: 14px 28px !important;
+  height: auto !important;
 }
 
 .pr-btn-danger:hover {

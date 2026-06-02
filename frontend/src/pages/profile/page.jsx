@@ -149,9 +149,9 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 items-stretch">
             {/* Ringkasan Aktivitas — Data Real */}
-            <Card className="pr-section mb-0">
+            <Card className="pr-section mb-0 h-full">
               <CardContent className="pr-section-content h-full flex flex-col justify-center">
                 <h3 className="pr-section-title text-center">Ringkasan Aktivitas</h3>
                 <div className="pr-stats-card mt-4">
@@ -169,7 +169,7 @@ export default function ProfilePage() {
             </Card>
 
             {/* Notifikasi */}
-            <Card className="pr-section mb-0">
+            <Card className="pr-section mb-0 h-full">
               <CardContent className="pr-section-content h-full">
                 <h3 className="pr-section-title">Notifikasi</h3>
                 <div className="space-y-3 mt-4">
@@ -246,13 +246,13 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              {screeningHistory.length > 0 && (
+              {/* {screeningHistory.length > 0 && (
                 <Link to="/screening" className="block mt-6">
                   <Button variant="outline" className="w-full border-dashed border-2 border-[var(--border)] text-[var(--green-dark)] bg-transparent hover:bg-[rgba(61,92,74,0.04)] h-12">
                     Lihat Semua Riwayat
                   </Button>
                 </Link>
-              )}
+              )} */}
             </CardContent>
           </Card>
         </main>
