@@ -280,6 +280,7 @@ export default function ScreeningPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [backendResult, setBackendResult] = useState(null);
   const [showRecommendation, setShowRecommendation] = useState(false);
+  const [refreshSidebar, setRefreshSidebar] = useState(0);
 
   // simpan jawaban untuk pertanyaan saat ini
   function handleAnswer(val) {
@@ -311,6 +312,7 @@ export default function ScreeningPage() {
         if (res.ok) {
           setBackendResult(data.data);
           setPhase("result");
+          setRefreshSidebar((prev) => prev + 1);
         } else {
           alert("Gagal menyimpan hasil: " + data.message);
         }
@@ -338,7 +340,7 @@ export default function ScreeningPage() {
 
   return (
     <div className="screening-layout">
-      <Sidebar />
+      <Sidebar refreshTrigger={refreshSidebar} />
 
       <main className="screening-main">
         {/* fase intro: penjelasan screening dan keterangan level */}

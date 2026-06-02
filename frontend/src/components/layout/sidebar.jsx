@@ -26,7 +26,7 @@ const formatDate = (dateStr) => {
   });
 };
 
-export default function LeftSidebar({ entryCount }) {
+export default function LeftSidebar({ entryCount, refreshTrigger }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -87,7 +87,7 @@ export default function LeftSidebar({ entryCount }) {
     };
 
     fetchLastScreening();
-  }, [location.pathname]);
+  }, [location.pathname, refreshTrigger]);
 
   // cooldown 7 hari
   const getDaysRemaining = () => {
