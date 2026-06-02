@@ -679,6 +679,37 @@ html.dark .emotion-chip {
   font-weight: 400;
 }
 
+.success-activity-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+}
+
+.success-activity-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin: 0 0 4px;
+}
+
+.success-activity-desc {
+  font-size: 13px;
+  color: var(--text-body);
+  margin: 0;
+}
+
+.success-affirmation-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(61, 92, 74, 0.04);
+  border: 1px solid rgba(61, 92, 74, 0.1);
+  font-style: italic;
+  color: var(--green-dark);
+  font-size: 13px;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .journal-main {
     padding: 24px 20px 85px !important; /* padding bottom for bottom nav */
