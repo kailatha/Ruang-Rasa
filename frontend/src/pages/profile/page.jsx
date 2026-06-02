@@ -153,11 +153,11 @@ export default function ProfilePage() {
             {/* Ringkasan Aktivitas — Data Real */}
             <Card className="pr-section mb-0">
               <CardContent className="pr-section-content h-full flex flex-col justify-center">
-                <h3 className="pr-section-title text-center mb-6">Ringkasan Aktivitas</h3>
-                <div className="pr-stats-card">
+                <h3 className="pr-section-title text-center">Ringkasan Aktivitas</h3>
+                <div className="pr-stats-card mt-4">
                   <div>
                     <h2 className="pr-stat-value">{stats.screeningCount}</h2>
-                    <p className="pr-stat-label">Skrining</p>
+                    <p className="pr-stat-label">Screening</p>
                   </div>
                   <div className="pr-divider" />
                   <div>
@@ -210,7 +210,7 @@ export default function ProfilePage() {
                   <div className="pr-history-icon">
                     <BarChart2 size={18} />
                   </div>
-                  <h3 className="pr-section-title mb-0">Riwayat Skrining</h3>
+                  <h3 className="pr-section-title mb-0">Riwayat Screening</h3>
                 </div>
               </div>
 
@@ -224,7 +224,7 @@ export default function ProfilePage() {
                         </div>
                         <div>
                           <h4 className="pr-history-title">
-                            Skrining Kesehatan Mental
+                            Screening Kesehatan Mental
                           </h4>
                           <p className="pr-history-date">
                             {new Date(item.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })} • Skor: {item.total_score} ({getLevelLabel(item.level)})
@@ -236,10 +236,10 @@ export default function ProfilePage() {
                   ))
                 ) : (
                   <div className="text-center py-8 text-[var(--text-muted)]">
-                    <p className="text-sm mb-3">Belum ada riwayat skrining</p>
+                    <p className="text-sm mb-3">Belum ada riwayat screening</p>
                     <Link to="/screening">
                       <Button variant="outline" className="border-[var(--green-dark)] text-[var(--green-dark)] hover:bg-[var(--green-dark)] hover:text-white transition-colors">
-                        Mulai Skrining
+                        Mulai Screening
                       </Button>
                     </Link>
                   </div>
