@@ -348,8 +348,8 @@ export default function EditProfilePage() {
                       value={formData.gender}
                       onChange={handleChange}
                       options={[
-                        { label: "Laki-laki", value: "Laki-laki" },
-                        { label: "Perempuan", value: "Perempuan" },
+                        { label: "Laki-laki", value: "laki-laki" },
+                        { label: "Perempuan", value: "perempuan" },
                       ]}
                     />
                     

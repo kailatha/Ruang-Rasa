@@ -1,3 +1,17 @@
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  family: 4, // Force IPv4
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
 export const sendPasswordResetEmail = async (toEmail, resetToken) => {
   console.log("Mencoba kirim email ke:", toEmail);
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`;

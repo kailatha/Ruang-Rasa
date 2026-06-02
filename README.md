@@ -126,9 +126,9 @@ AI Service jalan di `http://localhost:8000`
 |---|---|---|
 | `DATABASE_URL` | Connection string Prisma | `postgresql://user:pass@localhost:5432/ruang_rasa` |
 | `PORT` | Port backend | `5000` |
-| `JWT_SECRET` | Secret key JWT | `your_secret_key` (belum diisi)|
+| `JWT_SECRET` | Secret key JWT | `your_secret_key`|
 | `JWT_EXPIRES_IN` | Masa berlaku token | `7d` |
-| `AI_API_URL` | URL AI Service | `http://localhost:8000` (Kalau dideploy diganti urlnya) |
+| `AI_API_URL` | URL AI Service | `http://localhost:8000` |
 
 ### Frontend (`.env`)
 
@@ -236,7 +236,7 @@ python -m uvicorn app.main:app --reload --port 8000
 
 ## Tim
 
-**Kelompok Ruang Rasa** — Capstone Project DBS Foundation 2026
+**Capstone CC-PSU309**
 
 ## Kontribusi
 
