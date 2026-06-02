@@ -328,9 +328,9 @@ export default function JournalPage() {
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {submittedEntry.analysis.recommended_activities.map((act, i) => (
-                      <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "var(--cream)", border: "1px solid var(--border)" }}>
-                        <h4 style={{ fontSize: "14px", fontWeight: "600", color: "var(--text-dark)", margin: "0 0 4px" }}>{act.title}</h4>
-                        <p style={{ fontSize: "13px", color: "var(--text-body)", margin: "0" }}>{act.summary}</p>
+                      <div key={i} className="success-activity-card">
+                        <h4 className="success-activity-title">{act.title}</h4>
+                        <p className="success-activity-desc">{act.summary}</p>
                       </div>
                     ))}
                   </div>
@@ -344,7 +344,7 @@ export default function JournalPage() {
                   </h3>
                   <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                     {submittedEntry.analysis.recommended_affirmations.map((aff, i) => (
-                      <div key={i} style={{ padding: "16px", borderRadius: "12px", background: "rgba(61, 92, 74, 0.04)", border: "1px solid rgba(61, 92, 74, 0.1)", fontStyle: "italic", color: "var(--green-dark)" }}>
+                      <div key={i} className="success-affirmation-card">
                         "{aff.main_affirmation || aff}"
                       </div>
                     ))}
