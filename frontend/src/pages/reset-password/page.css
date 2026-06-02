@@ -52,7 +52,7 @@
 
 .form-input--error {
   border-color: #C0392B !important;
-  background-color: #FEF8F7 !important;
+  background-color: rgba(192, 57, 43, 0.05) !important;
 }
 
 .form-input--error:focus {
@@ -103,7 +103,10 @@ html.dark .reset-icon--error {
   color: #E08070;
 }
 
-html.dark .form-input--error   { border-color: #E07060 !important; }
+html.dark .form-input--error {
+  border-color: #E07060 !important;
+  background-color: rgba(192, 57, 43, 0.1) !important;
+}
 
 html.dark .reset-error-message {
   background-color: rgba(176, 64, 48, 0.15);
