@@ -57,7 +57,7 @@
 }
 
 .login-title {
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-size: 26px;
   font-weight: 500;
   color: #333333;

@@ -593,8 +593,8 @@
 }
 
 /* dark mode */
-html.dark .db-hero-mood      { background: #7a5a38; }
-html.dark .db-hero-screening { background: #2a4a34; }
+html.dark .db-hero-mood      { background: #7a5a38; color: #e0dfb0;}
+html.dark .db-hero-screening { background: #2a4a34; color: #b0e0ba; }
 html.dark .db-hero-journal   { background: #2a3844; color: #b0d0e0; }
 
 html.dark .db-chart-tabs {
@@ -656,3 +656,6 @@ html.dark .db-reco-item:hover {
 html.dark .db-audio-overlay {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.08) 60%);
 }
+
+html.dark .db-audio-title { color: #ffffff !important; }
+html.dark .db-audio-play { color: #ffffff !important; }

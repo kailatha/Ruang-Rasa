@@ -9,12 +9,11 @@ import "@/components/layout/sidebar.css";
 
 // react icons
 // editor
-import { RiBold, RiItalic, RiListUnordered, RiTable2, RiPriceTag3Line, RiArrowRightLine, RiArrowLeftLine } from "react-icons/ri";
+import { RiPriceTag3Line, RiArrowRightLine, RiArrowLeftLine } from "react-icons/ri";
 // mood
 import { RiEmotionHappyLine, RiEmotionNormalLine, RiEmotionUnhappyLine, RiEmotionLine, RiEmotionSadLine } from "react-icons/ri";
 // chatbot
 import { RiChat3Line, RiCheckLine, RiSparklingLine } from "react-icons/ri";
-import { FiX, FiStar, FiSun } from "react-icons/fi";
 
 // shadcn ui
 import { Button } from "@/components/ui/button";
@@ -375,10 +374,6 @@ export default function JournalPage() {
                 <div className="section-step">
                   <span className="step-num">2</span>
                   <h2 className="step-title">Apa yang sedang kamu pikirkan?</h2>
-                </div>
-                <div className="editor-toolbar">
-                  <button className="toolbar-btn"><RiBold /></button>
-                  <button className="toolbar-btn"><RiItalic /></button>
                 </div>
                 <Textarea
                   className="journal-textarea"
