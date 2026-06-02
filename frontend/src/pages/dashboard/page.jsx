@@ -39,6 +39,7 @@ const MOOD_CLASS = {
   Stress: "mood-stress",
 };
 
+// ini ga kepake karena sentiment labelnya beda sama mood, jadi buat safety aja
 const SENTIMENT_CLASS = {
   Positif: "sentiment-positive",
   Negatif: "sentiment-negative",
@@ -160,7 +161,7 @@ function JournalCard({ entry }) {
   );
 }
 
-// bar chart ini yg bulan masih error!!!!!!
+// bar chart 7 hari terakhir
 function WeeklyChart({ data }) {
   const max = Math.max(...data.map((d) => d.score), 1);
 
