@@ -31,6 +31,7 @@ Aplikasi web kesehatan mental yang membantu pengguna memahami kondisi emosionaln
 - 🔐 **Autentikasi** — Register, Login, JWT-based auth
 - 📋 **Screening** — 10 pertanyaan skala 1-10, hasil prediksi via AI
 - 📝 **Journal** — Tulis jurnal harian dengan mood tracking
+- 🤖 **Chatbot** — Asisten AI teman cerita untuk pengguna
 - 👤 **Profil** — Kelola data diri (nama, gender, dob, pekerjaan)
 - 📊 **Dashboard** — Ringkasan data pengguna
 
@@ -129,12 +130,24 @@ AI Service jalan di `http://localhost:8000`
 | `JWT_SECRET` | Secret key JWT | `your_secret_key`|
 | `JWT_EXPIRES_IN` | Masa berlaku token | `7d` |
 | `AI_API_URL` | URL AI Service | `http://localhost:8000` |
+| `GEMINI_API_KEY` | API Key untuk fitur Chatbot/AI | `isi_api_key_gemini_kamu` |
+| `GEMINI_MODEL` | Model Gemini yang digunakan | `gemini-2.5-flash` |
+| `FRONTEND_URL` | URL frontend untuk CORS & Email | `http://localhost:5173` |
+| `BREVO_API_KEY` | API Key Brevo untuk layanan email | `api_key_brevo_kamu` |
+| `EMAIL_FROM` | Alamat email pengirim | `email@domain_kamu.com` |
+
+> *Catatan: Terdapat juga variabel PostgreSQL legacy (`PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`) jika dibutuhkan.*
 
 ### Frontend (`.env`)
 
 | Variable | Keterangan | Contoh |
 |---|---|---|
 | `VITE_API_URL` | Base URL backend API | `http://localhost:5000/api` |
+| `VITE_APP_NAME` | Nama Aplikasi | `RuangRasa` |
+
+### AI Service (`.env`)
+
+Lihat file `ai-service/.env.example` untuk daftar environment variables yang diperlukan oleh AI Service, seperti path ke model dan data pendukung.
 
 ## API Endpoints
 
@@ -162,6 +175,15 @@ AI Service jalan di `http://localhost:8000`
 |---|---|---|
 | `GET` | `/api/journal` | Ambil semua jurnal (auth) |
 | `POST` | `/api/journal` | Buat jurnal baru (auth) |
+| `GET` | `/api/journal/:id` | Ambil detail jurnal (auth) |
+| `PUT` | `/api/journal/:id` | Update jurnal (auth) |
+| `DELETE` | `/api/journal/:id` | Hapus jurnal (auth) |
+| `POST` | `/api/journal/:id/analyze` | Analisis jurnal dengan AI (auth) |
+
+### Chatbot
+| Method | Endpoint | Keterangan |
+|---|---|---|
+| `POST` | `/api/chatbot/message` | Kirim pesan ke chatbot (auth) |
 
 ## Struktur Project
 
