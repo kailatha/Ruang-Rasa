@@ -1,6 +1,6 @@
 # Ruang Rasa 🌿
 
-Aplikasi web kesehatan mental yang membantu pengguna memahami kondisi emosionalnya melalui fitur screening berbasis AI, journaling, dan rekomendasi aktivitas.
+Aplikasi web kesehatan mental yang membantu pengguna memahami kondisi emosionalnya melalui fitur screening berbasis AI, journaling, dan rekomendasi aktivitas. Link model AI dapat diakses melalui link: https://drive.google.com/drive/folders/1MGKJeYBQ8vWPRFdkFTbrQhkKePKg1RSV?usp=sharing
 
 ## Tech Stack
 
